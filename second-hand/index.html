@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play in bridge (card-table green): defaults highlighted, nav, filter, print.">
+<meta name="description" content="Second-hand play in bridge (card-table green): consolidated verdicts, defaults, nav, filter, print.">
 <title>Second-Hand Play</title>
 <style>
   :root {
@@ -67,6 +67,7 @@
   .tile .s { font-weight:660; font-size:1.03rem; line-height:1.28; letter-spacing:-.005em; }
   .tile .v { flex:0 0 auto; font-size:.63rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:.3em .72em; white-space:nowrap; }
   .tile .v.hold { color:var(--hold); background:var(--hold-soft); }
+  .tile .meta { flex:0 0 auto; font-size:.6rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:.28em .68em; white-space:nowrap; }
   .tile.default { position:relative; border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), var(--shadow); }
   .tile.default::before { content:'The default'; position:absolute; top:-.6rem; left:1.05rem; font-size:.56rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--accent); background:var(--tile); padding:0 .4em; }
 
@@ -104,7 +105,7 @@
 </head>
 <body>
 
-<nav class="topbar"><a class="tb-brand" href="../">&spades; Bridge Notes</a><div class="tb-links"><a href="../second-hand/" data-topic="second-hand">2nd</a><a href="../third-hand/" data-topic="third-hand">3rd</a><a href="../opening-leads/" data-topic="opening-leads">Leads</a><a href="../signals/" data-topic="signals">Signals</a></div></nav>
+<nav class="topbar"><a class="tb-brand" href="../">&spades; Bridge Notes</a><div class="tb-links"><a href="../second-hand/" data-topic="second-hand">2nd</a><a href="../third-hand/" data-topic="third-hand">3rd</a><a href="../opening-leads/" data-topic="opening-leads">Leads</a><a href="../signals/" data-topic="signals">Signals</a><a href="../quiz/" data-topic="quiz">Quiz</a></div></nav>
 
 <div class="page">
 
@@ -136,7 +137,7 @@
     <div class="seclabel"><span class="num">I</span>A low card is led</div>
 
     <div class="tile default">
-      <div class="tile-top"><span class="s">No reason to rise</span><span class="v hold">Play low</span></div>
+      <div class="tile-top"><span class="s">No reason to rise</span><span class="v hold">Play Low</span></div>
       <div class="cases"><div class="case"><div class="deal">
         <div class="hand"><span class="pos">Dummy</span><span class="st">&spades;</span><span class="rw"><span class="k">J</span><span class="k">7</span><span class="k led">6</span></span></div>
         <div class="hand"><span class="pos">You</span><span class="st">&spades;</span><span class="rw"><span class="k">K</span><span class="k">10</span><span class="k play">4</span></span></div>
@@ -145,7 +146,7 @@
     </div>
 
     <div class="tile">
-      <div class="tile-top"><span class="s">You hold an ace over the lead</span><span class="v hold">Duck</span></div>
+      <div class="tile-top"><span class="s">You hold an ace over the lead</span><span class="v hold">Play Low</span></div>
       <div class="cases"><div class="case"><div class="deal">
         <div class="hand"><span class="pos">Dummy</span><span class="st r">&hearts;</span><span class="rw"><span class="k">K</span><span class="k">8</span><span class="k">6</span></span></div>
         <div class="hand"><span class="pos">You</span><span class="st r">&hearts;</span><span class="rw"><span class="k">A</span><span class="k">10</span><span class="k play">7</span></span></div>
@@ -163,13 +164,13 @@
     </div>
 
     <div class="tile">
-      <div class="tile-top"><span class="s">Only two honors, not three</span><span class="v hold">Play low</span></div>
+      <div class="tile-top"><span class="s">Only two honors, not three</span><span class="v hold">Play Low</span></div>
       <div class="cases"><div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st">&spades;</span><span class="rw"><span class="k">Q</span><span class="k">J</span><span class="k">8</span><span class="k play">3</span></span></div></div><div class="cap"><span class="lo">low led</span> &mdash; play the <b>3</b>.</div></div></div>
       <div class="why">Splitting from two wastes an honor and helps declarer set up the suit.</div>
     </div>
 
     <div class="tile">
-      <div class="tile-top"><span class="s">A winner will vanish, or an entry must die</span><span class="v">Rise</span></div>
+      <div class="tile-top"><span class="s">A winner will vanish, or an entry must die</span><span class="v">Play High</span></div>
       <div class="note">Go up only for a concrete reason: cash a winner about to be ruffed or discarded, deny declarer a free trick, or knock out dummy's only entry to a long suit.</div>
     </div>
 
@@ -197,7 +198,7 @@
     </div>
 
     <div class="tile wide">
-      <div class="tile-top"><span class="s">The led honor is supported</span><span class="v">Cover the last</span></div>
+      <div class="tile-top"><span class="s">The led honor is supported</span><span class="v">Cover</span></div>
       <div class="cases">
         <div class="case"><div class="deal">
           <div class="hand"><span class="pos">Dummy</span><span class="st">&spades;</span><span class="rw"><span class="k led">J</span><span class="k">10</span><span class="k">8</span></span></div>
@@ -215,7 +216,7 @@
     <div class="seclabel"><span class="num">III</span>When NOT to cover</div>
 
     <div class="tile">
-      <div class="tile-top"><span class="s">Dummy holds a solid run</span><span class="v hold">Don't cover</span></div>
+      <div class="tile-top"><span class="s">Dummy holds a solid run</span><span class="v hold">Play Low</span></div>
       <div class="cases"><div class="case"><div class="deal">
         <div class="hand"><span class="pos">Dummy</span><span class="st">&spades;</span><span class="rw"><span class="k led">Q</span><span class="k">J</span><span class="k">10</span><span class="k">9</span></span></div>
         <div class="hand"><span class="pos">You</span><span class="st">&spades;</span><span class="rw"><span class="k">K</span><span class="k">8</span><span class="k play">4</span></span></div>
@@ -224,7 +225,7 @@
     </div>
 
     <div class="tile">
-      <div class="tile-top"><span class="s">Small doubleton honor under strength</span><span class="v hold">Don't cover</span></div>
+      <div class="tile-top"><span class="s">Small doubleton honor under strength</span><span class="v hold">Play Low</span></div>
       <div class="cases"><div class="case"><div class="deal">
         <div class="hand"><span class="pos">Dummy</span><span class="st r">&diams;</span><span class="rw"><span class="k">A</span><span class="k">K</span><span class="k led">10</span><span class="k">9</span></span></div>
         <div class="hand"><span class="pos">You</span><span class="st r">&diams;</span><span class="rw"><span class="k">J</span><span class="k play">4</span></span></div>
@@ -233,7 +234,7 @@
     </div>
 
     <div class="tile">
-      <div class="tile-top"><span class="s">Partner is known short in the suit</span><span class="v hold">Don't cover</span></div>
+      <div class="tile-top"><span class="s">Partner is known short in the suit</span><span class="v hold">Play Low</span></div>
       <div class="note">When the bidding marks partner with a singleton or void &mdash; classically as declarer draws trumps &mdash; there's no partner's card to promote, so covering just gives up your own honor.</div>
     </div>
 
@@ -250,7 +251,7 @@
     </div>
 
     <div class="tile">
-      <div class="tile-top"><span class="s">No touching card in dummy</span><span class="v hold">Don't cover</span></div>
+      <div class="tile-top"><span class="s">No touching card in dummy</span><span class="v hold">Play Low</span></div>
       <div class="cases"><div class="case"><div class="deal">
         <div class="hand"><span class="pos">Dummy</span><span class="st">&spades;</span><span class="rw"><span class="k">A</span><span class="k">8</span><span class="k">6</span><span class="k">4</span></span></div>
         <div class="hand"><span class="pos">You</span><span class="st">&spades;</span><span class="rw"><span class="k">K</span><span class="k">7</span><span class="k play">2</span></span></div>
@@ -262,22 +263,22 @@
     <div class="seclabel"><span class="num">&#9670;</span>Fine print &mdash; where experts differ</div>
 
     <div class="tile wide">
-      <div class="tile-top"><span class="s">Split high or low</span><span class="v">Style</span></div>
+      <div class="tile-top"><span class="s">Split high or low</span><span class="meta">Style</span></div>
       <div class="note">You split the <b>lowest</b> of your sequence (&spades; Q J 10 &rarr; the 10) &mdash; the count-consistent, Kantar style. Plenty of experts split the <b>top</b> instead; both stop the finesse. It's a partnership agreement, not a right-or-wrong.</div>
     </div>
 
     <div class="tile">
-      <div class="tile-top"><span class="s">Covering the ten</span><span class="v">Careful</span></div>
+      <div class="tile-top"><span class="s">Covering the ten</span><span class="meta">Careful</span></div>
       <div class="note">Covering a ten (or nine) with a king is the most double-edged cover. Do it to promote partner's nine or jack &mdash; not when declarer rates to hold A-Q-J, where you'd just feed him.</div>
     </div>
 
     <div class="tile">
-      <div class="tile-top"><span class="s">Play in tempo</span><span class="v">Tell</span></div>
+      <div class="tile-top"><span class="s">Play in tempo</span><span class="meta">Tell</span></div>
       <div class="note">Decide before the card is led. A pause tells a sharp declarer you hold the card he's worried about.</div>
     </div>
 
     <div class="tile wide">
-      <div class="tile-top"><span class="s">Rising: more than the basics</span><span class="v">Advanced</span></div>
+      <div class="tile-top"><span class="s">Rising: more than the basics</span><span class="meta">Advanced</span></div>
       <div class="note">Also rise to knock out dummy's long suit before its entries are set, or to give partner a ruff. And the <b>surround play</b>: holding K&#8209;10&#8209;9 over dummy's jack, insert the <b>10</b> to trap it &mdash; an intermediate can beat dummy's honor.</div>
     </div>
 

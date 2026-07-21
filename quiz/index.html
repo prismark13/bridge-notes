@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Second-hand play quiz: 13 verified positions, pick your play.">
+<title>Second-Hand Quiz</title>
+<style>
+  :root {
+    --surface:#f2f0e9; --tile:#ffffff; --fg:#16181d; --muted:#5f6672; --line:#e7e4da; --edge:#d3d2c6; --panel:#f3f2ea;
+    --accent:#1f6b49; --accent-soft:#e0efe6; --suit:#b83a2c; --soft:#464c56; --hold:#4e6a78; --hold-soft:#e6eef2;
+    --good:#1f6b49; --good-soft:#e0efe6; --bad:#b0432a; --bad-soft:#f6e6df;
+    --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05);
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;
+    --mono:'SFMono-Regular',ui-monospace,Consolas,'Liberation Mono',Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --surface:#0e100d; --tile:#161915; --fg:#f2f3f5; --muted:#9ba2ad; --line:#242a24; --edge:#3a4038; --panel:#1a201a;
+      --accent:#5fc08c; --accent-soft:#16281e; --suit:#ea8072; --soft:#c4cad3; --hold:#86a6b6; --hold-soft:#17242a;
+      --good:#5fc08c; --good-soft:#16281e; --bad:#e0876a; --bad-soft:#2a1912; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
+  }
+  :root[data-theme="light"]{ --surface:#f2f0e9; --tile:#fff; --fg:#16181d; --muted:#5f6672; --line:#e7e4da; --edge:#d3d2c6; --panel:#f3f2ea; --accent:#1f6b49; --accent-soft:#e0efe6; --suit:#b83a2c; --soft:#464c56; --hold:#4e6a78; --hold-soft:#e6eef2; --good:#1f6b49; --good-soft:#e0efe6; --bad:#b0432a; --bad-soft:#f6e6df; --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05); }
+  :root[data-theme="dark"]{ --surface:#0e100d; --tile:#161915; --fg:#f2f3f5; --muted:#9ba2ad; --line:#242a24; --edge:#3a4038; --panel:#1a201a; --accent:#5fc08c; --accent-soft:#16281e; --suit:#ea8072; --soft:#c4cad3; --hold:#86a6b6; --hold-soft:#17242a; --good:#5fc08c; --good-soft:#16281e; --bad:#e0876a; --bad-soft:#2a1912; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
+
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--surface); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.56; -webkit-font-smoothing:antialiased; }
+  .page { max-width:34rem; margin:0 auto; padding:clamp(1.6rem,5vw,3rem) 1.2rem 5rem; }
+
+  .topbar { position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.55rem clamp(1.1rem,4vw,2rem); background:color-mix(in srgb, var(--surface) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .tb-brand { font-size:.82rem; font-weight:700; color:var(--fg); text-decoration:none; }
+  .tb-links { display:flex; gap:.2rem; min-width:0; overflow-x:auto; }
+  .tb-links a { font-size:.78rem; color:var(--muted); text-decoration:none; padding:.3em .7em; border-radius:999px; white-space:nowrap; }
+  .tb-links a:hover { color:var(--fg); }
+  .tb-links a.active { color:var(--accent); background:var(--accent-soft); }
+
+  .eyebrow { font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 .6rem; }
+  h1 { font-size:clamp(1.7rem,5vw,2.2rem); font-weight:680; letter-spacing:-.02em; margin:0 0 .5rem; }
+  .intro { color:var(--soft); font-size:1rem; margin:0 0 1.4rem; }
+
+  .bar { display:flex; align-items:center; justify-content:space-between; font-size:.8rem; color:var(--muted); margin-bottom:.6rem; }
+  .bar b { color:var(--fg); }
+  .track { height:5px; background:var(--panel); border:1px solid var(--line); border-radius:999px; overflow:hidden; margin-bottom:1.2rem; }
+  .track > i { display:block; height:100%; background:var(--accent); width:0; transition:width .3s ease; }
+
+  .card { background:var(--tile); border:1px solid var(--line); border-radius:18px; padding:1.3rem 1.3rem 1.4rem; box-shadow:var(--shadow); }
+  .deal { display:flex; flex-direction:column; gap:.4rem; margin:.3rem 0 .2rem; }
+  .hand { display:flex; align-items:center; gap:.6rem; }
+  .hand .pos { flex:0 0 auto; min-width:4em; font-size:.62rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700; }
+  .hand .st { flex:0 0 auto; width:1em; text-align:center; font-size:1.05rem; }
+  .hand .st.r { color:var(--suit); }
+  .rw { display:inline-flex; gap:.3rem; }
+  .k { min-width:1.9em; height:2.1em; padding:0 .35em; display:inline-flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:.9rem; font-weight:600; border:1px solid var(--edge); border-radius:6px; background:var(--panel); color:var(--fg); font-variant-numeric:tabular-nums; }
+  .k.hit { border:1.5px solid var(--accent); color:var(--accent); background:var(--accent-soft); }
+  .prompt { font-size:1.05rem; font-weight:600; margin:1.1rem 0 .2rem; }
+  .prompt .lo { color:var(--muted); font-weight:400; }
+
+  .answers { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; margin-top:1rem; }
+  .ans { font:inherit; font-size:.95rem; font-weight:600; color:var(--fg); background:var(--panel); border:1px solid var(--edge); border-radius:12px; padding:.75rem; cursor:pointer; transition:border-color .12s, background .12s; }
+  .ans:hover:not(:disabled) { border-color:var(--accent); }
+  .ans:disabled { cursor:default; }
+  .ans.correct { border-color:var(--good); background:var(--good-soft); color:var(--good); }
+  .ans.wrong { border-color:var(--bad); background:var(--bad-soft); color:var(--bad); }
+
+  .feedback { margin-top:1rem; font-size:.94rem; display:none; }
+  .feedback.show { display:block; }
+  .feedback .verdict { font-weight:700; }
+  .feedback .verdict.ok { color:var(--good); }
+  .feedback .verdict.no { color:var(--bad); }
+  .feedback .why { color:var(--soft); margin-top:.35rem; line-height:1.5; }
+
+  .actions { display:flex; justify-content:flex-end; margin-top:1.2rem; }
+  .next { font:inherit; font-size:.9rem; font-weight:650; color:#fff; background:var(--accent); border:0; border-radius:999px; padding:.6rem 1.4rem; cursor:pointer; display:none; }
+  :root[data-theme="dark"] .next, .next { }
+  @media (prefers-color-scheme:dark){ .next{ color:#0e100d; } }
+  :root[data-theme="dark"] .next{ color:#0e100d; }
+  :root[data-theme="light"] .next{ color:#fff; }
+  .next.show { display:inline-block; }
+
+  .result { text-align:center; }
+  .result .big { font-size:2.6rem; font-weight:700; color:var(--accent); margin:.3rem 0; }
+  .result .msg { color:var(--soft); margin-bottom:1.3rem; }
+  .result button { font:inherit; font-weight:650; color:var(--fg); background:var(--panel); border:1px solid var(--edge); border-radius:999px; padding:.6rem 1.4rem; cursor:pointer; }
+
+  .foot { margin-top:1.4rem; font-size:.82rem; color:var(--muted); text-align:center; }
+  .foot a { color:var(--accent); }
+</style>
+</head>
+<body>
+
+<nav class="topbar"><a class="tb-brand" href="../">&spades; Bridge Notes</a><div class="tb-links"><a href="../second-hand/" data-topic="second-hand">2nd</a><a href="../third-hand/" data-topic="third-hand">3rd</a><a href="../opening-leads/" data-topic="opening-leads">Leads</a><a href="../signals/" data-topic="signals">Signals</a><a href="../quiz/" data-topic="quiz" class="active">Quiz</a></div></nav>
+
+<div class="page">
+  <p class="eyebrow">Bridge Notes &middot; Second-Hand</p>
+  <h1>Quiz</h1>
+  <p class="intro">Thirteen positions, drawn from the verified layouts on the site. Pick your play &mdash; the nine counts as an honor.</p>
+
+  <div class="bar"><span>Question <b id="qn">1</b> of <b id="qt">13</b></span><span>Score <b id="sc">0</b></span></div>
+  <div class="track"><i id="prog"></i></div>
+
+  <div id="stage"></div>
+
+  <p class="foot">Answers follow standard second-hand play. Review the rules on <a href="../second-hand/">Second-Hand Play</a>.</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var Q = [
+    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['K','10','4']}, led:'A low card (the 6) is led', ans:'Play Low', play:'the 4', why:'Nothing forces you up. Keep the king poised over dummy and make declarer guess.' },
+    { d:{s:'♥',c:['K','8','6']}, y:{s:'♥',c:['A','10','7']}, led:'Declarer leads a low card (the 2)', ans:'Play Low', play:'low (the 7)', why:'An ace is for capturing an honor, not a spot card. Ducking keeps it over dummy’s king.' },
+    { d:null, y:{s:'♠',c:['Q','J','10','7']}, led:'A low card is led toward dummy', ans:'Split', play:'the 10', why:'Three touching honors: insert the lowest of the sequence to block a cheap finesse of your middle cards.' },
+    { d:null, y:{s:'♠',c:['Q','J','8','3']}, led:'A low card is led', ans:'Play Low', play:'the 3', why:'Only two honors — splitting wastes one and helps declarer set the suit up.' },
+    { d:{s:'♠',c:['J','10','8','6']}, y:{s:'♠',c:['A','Q','2']}, led:'The jack is led from dummy', ans:'Cover', play:'the ace', why:'With two honors above the card led, take the jack — a trick that would otherwise score.' },
+    { d:{s:'♠',c:['10','5','4']}, y:{s:'♠',c:['K','7','2']}, led:'The 10 is led from dummy', ans:'Cover', play:'the king', why:'The ten is unsupported, so covering promotes your side’s smaller cards.' },
+    { d:{s:'♠',c:['J','10','8']}, y:{s:'♠',c:['K','2']}, led:'The jack is led from dummy', ans:'Play Low', play:'low (the 2)', why:'The jack is supported by the ten — covering just makes that ten good. Play low.' },
+    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, led:'The queen is led from dummy', ans:'Play Low', play:'low', why:'Touching honors — don’t cover the first. Duck the queen; cover the jack next time.' },
+    { d:{s:'♠',c:['Q','J','10','9']}, y:{s:'♠',c:['K','8','4']}, led:'The queen is led from dummy', ans:'Play Low', play:'low (the 4)', why:'A solid run — covering builds J-10-9 into three winners for declarer. Duck; your king wins the third round.' },
+    { d:{s:'♦',c:['A','K','10','9']}, y:{s:'♦',c:['J','4']}, led:'The 10 is led from dummy', ans:'Play Low', play:'the 4', why:'With A-K-10-9 over you, the jack promotes nothing — covering just gives it away.' },
+    { d:{s:'♠',c:['A','J','10','6']}, y:{s:'♠',c:['K','5','2']}, led:'Declarer leads the 9', ans:'Cover', play:'the king', why:'Dummy’s ten backs up the 9, so the cover promotes — and stops the 9 running for a free finesse.' },
+    { d:{s:'♠',c:['A','8','6','4']}, y:{s:'♠',c:['K','7','2']}, led:'Declarer leads the 10', ans:'Play Low', play:'low (the 2)', why:'No touching card in dummy means declarer holds the jack — covering would promote only his hand.' },
+    { d:null, y:{s:'♠',c:['K','10','9','7']}, led:'A low card is led toward dummy', ans:'Split', play:'the 9', why:'Three honors (the nine counts). Insert the lowest of the touching 10-9.' }
+  ];
+  var OPTS = ['Play High', 'Cover', 'Play Low', 'Split'];
+  var i = 0, score = 0, answered = false;
+  var stage = document.getElementById('stage');
+  document.getElementById('qt').textContent = Q.length;
+
+  function isRed (s) { return s === '♥' || s === '♦'; }
+  function handHTML (pos, h) {
+    var cells = h.c.map(function (r) { return '<span class="k">' + r + '</span>'; }).join('');
+    var st = '<span class="st' + (isRed(h.s) ? ' r' : '') + '">' + h.s + '</span>';
+    return '<div class="hand"><span class="pos">' + pos + '</span>' + st + '<span class="rw">' + cells + '</span></div>';
+  }
+
+  function render () {
+    var q = Q[i];
+    document.getElementById('qn').textContent = i + 1;
+    document.getElementById('sc').textContent = score;
+    document.getElementById('prog').style.width = (i / Q.length * 100) + '%';
+    var deal = '<div class="deal">' + (q.d ? handHTML('Dummy', q.d) : '') + handHTML('You', q.y) + '</div>';
+    var btns = OPTS.map(function (o) { return '<button class="ans" type="button" data-o="' + o + '">' + o + '</button>'; }).join('');
+    stage.innerHTML =
+      '<div class="card">' + deal +
+      '<div class="prompt"><span class="lo">' + q.led + '</span> &mdash; your play?</div>' +
+      '<div class="answers">' + btns + '</div>' +
+      '<div class="feedback" id="fb"></div>' +
+      '<div class="actions"><button class="next" id="next" type="button">' + (i === Q.length - 1 ? 'See score' : 'Next') + ' &rarr;</button></div>' +
+      '</div>';
+    answered = false;
+    stage.querySelectorAll('.ans').forEach(function (b) { b.addEventListener('click', choose); });
+    document.getElementById('next').addEventListener('click', nextQ);
+  }
+
+  function choose (e) {
+    if (answered) return;
+    answered = true;
+    var q = Q[i];
+    var chosen = e.currentTarget.getAttribute('data-o');
+    var ok = chosen === q.ans;
+    if (ok) score++;
+    stage.querySelectorAll('.ans').forEach(function (b) {
+      b.disabled = true;
+      var o = b.getAttribute('data-o');
+      if (o === q.ans) b.classList.add('correct');
+      else if (o === chosen) b.classList.add('wrong');
+    });
+    var fb = document.getElementById('fb');
+    fb.innerHTML = (ok
+      ? '<span class="verdict ok">✓ Correct.</span> Play ' + q.play + '.'
+      : '<span class="verdict no">✗ Not quite.</span> The play is <b>' + q.ans + '</b> — ' + q.play + '.')
+      + '<div class="why">' + q.why + '</div>';
+    fb.classList.add('show');
+    document.getElementById('sc').textContent = score;
+    document.getElementById('next').classList.add('show');
+  }
+
+  function nextQ () {
+    i++;
+    if (i < Q.length) { render(); }
+    else { finish(); }
+  }
+
+  function finish () {
+    document.getElementById('prog').style.width = '100%';
+    document.getElementById('qn').textContent = Q.length;
+    var pct = Math.round(score / Q.length * 100);
+    var msg = pct === 100 ? 'Flawless — second hand mastered.' : pct >= 75 ? 'Strong. A couple of exceptions to revisit.' : pct >= 50 ? 'Solid start — review the rules and go again.' : 'Worth another pass through the rules.';
+    stage.innerHTML =
+      '<div class="card result"><div class="eyebrow">Your score</div>' +
+      '<div class="big">' + score + ' / ' + Q.length + '</div>' +
+      '<p class="msg">' + msg + '</p>' +
+      '<button type="button" id="again">Play again</button></div>';
+    document.getElementById('again').addEventListener('click', function () { i = 0; score = 0; render(); });
+  }
+
+  render();
+});
+</script>
+</body>
+</html>
