@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz: choose how many practice hands; verified positions ordered simple to complex with continuations and a full-deal endplay.">
+<meta name="description" content="Second-hand play quiz shown as a classic N/E/S/W table; choose how many practice hands; ordered simple to complex.">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
@@ -94,17 +94,22 @@
   .note b { color:var(--fg); }
   .tag { display:inline-block; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:.15em .6em; margin-bottom:.5rem; }
 
-  .compass-wrap { overflow-x:auto; margin:.2rem -.2rem .1rem; padding:.2rem; }
-  .compass { display:grid; grid-template-columns:1fr 1.05fr 1fr; gap:.45rem; align-items:start; min-width:23rem; }
-  .fh { background:var(--tile); border:1.5px solid var(--edge); border-radius:10px; padding:.6rem .6rem; box-shadow:0 1px 1px rgba(18,20,28,.05); }
-  .fh.me { border-color:var(--accent); background:var(--accent-soft); }
-  .fh .fpos { font-size:.62rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:.3rem; white-space:nowrap; }
-  .fh.me .fpos { color:var(--accent); }
-  .fs { display:block; font-family:var(--mono); font-size:1rem; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; line-height:1.85; letter-spacing:.03em; }
-  .fs .st { display:inline-block; width:1.35em; font-weight:400; }
-  .fs .st.r { color:var(--suit); }
-  .pN { grid-column:2; grid-row:1; } .pW { grid-column:1; grid-row:2; }
-  .pE { grid-column:3; grid-row:2; } .pS { grid-column:2; grid-row:3; }
+  .table-wrap { overflow-x:auto; margin:.5rem -.2rem .2rem; padding:.2rem; }
+  .table { display:grid; grid-template-columns:1fr 1.15fr 1fr; grid-template-areas:". n ." "w c e" ". s ."; gap:.5rem; align-items:center; min-width:23rem; }
+  .s-n { grid-area:n; } .s-e { grid-area:e; } .s-s { grid-area:s; } .s-w { grid-area:w; } .ctr { grid-area:c; }
+  .seat { background:var(--tile); border:1.5px solid var(--edge); border-radius:10px; padding:.55rem .6rem; box-shadow:0 1px 1px rgba(18,20,28,.05); min-height:2.7rem; }
+  .seat.me { border-color:var(--accent); background:var(--accent-soft); }
+  .seat.hidden-seat { background:var(--panel); border-style:dashed; box-shadow:none; }
+  .slab { font-size:.62rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:.28rem; white-space:nowrap; }
+  .seat.me .slab { color:var(--accent); }
+  .sl { display:block; font-family:var(--mono); font-size:1rem; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; line-height:1.8; letter-spacing:.03em; }
+  .sl .st { display:inline-block; width:1.35em; font-weight:400; }
+  .sl .st.r { color:var(--suit); }
+  .conceal { display:inline-block; font-family:var(--mono); color:var(--muted); letter-spacing:.28em; font-size:1.1rem; opacity:.7; }
+  .ctr { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.4rem; text-align:center; padding:.2rem; }
+  .ctrlab { font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700; }
+  .ctr .lc { display:inline-flex; align-items:center; gap:.3rem; }
+  .ctr .lc .st { font-size:1.35rem; } .ctr .lc .st.r { color:var(--suit); }
 
   .hist { margin:.9rem 0 -.2rem; padding:.7rem .85rem; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
   .hist .hh { display:block; font-size:.88rem; color:var(--muted); margin:.12rem 0; }
@@ -218,25 +223,43 @@ document.addEventListener('DOMContentLoaded', function () {
   var stage = document.getElementById('stage');
 
   function isRed (s) { return s === '♥' || s === '♦'; }
-  function handHTML (pos, h) {
-    var cells = h.c.map(function (r) { return '<span class="k">' + r + '</span>'; }).join('');
-    var st = '<span class="st' + (isRed(h.s) ? ' r' : '') + '">' + h.s + '</span>';
-    return '<div class="hand"><span class="pos">' + pos + '</span>' + st + '<span class="rw">' + cells + '</span></div>';
-  }
   function suitLine (sym, cards) {
-    return '<span class="fs"><span class="st' + (isRed(sym) ? ' r' : '') + '">' + sym + '</span>' + cards + '</span>';
+    return '<span class="sl"><span class="st' + (isRed(sym) ? ' r' : '') + '">' + sym + '</span>' + cards + '</span>';
   }
-  function fullHand (pos, cls, h) {
-    return '<div class="fh ' + cls + '"><div class="fpos">' + pos + '</div>' +
-      suitLine('♠', h.s) + suitLine('♥', h.h) + suitLine('♦', h.d) + suitLine('♣', h.c) + '</div>';
+  function fullLines (h) {
+    return suitLine('♠', h.s) + suitLine('♥', h.h) + suitLine('♦', h.d) + suitLine('♣', h.c);
   }
-  function compass (f) {
-    return '<div class="compass-wrap"><div class="compass">' +
-      fullHand('North &middot; Dummy', 'pN', f.n) +
-      fullHand('West', 'pW', f.w) +
-      fullHand('East &middot; You', 'pE me', f.e) +
-      fullHand('South &middot; Decl.', 'pS', f.s) +
-      '</div></div>';
+  function seatBox (area, label, inner, extra) {
+    return '<div class="seat ' + area + (extra || '') + '"><div class="slab">' + label + '</div>' + inner + '</div>';
+  }
+  function conceal (area, label) {
+    return seatBox(area, label, '<span class="conceal">&mdash; &mdash; &mdash;</span>', ' hidden-seat');
+  }
+  // Build the classic N/W-E/S table. Dummy sits North, declarer South; You is the second-hand
+  // seat (East when dummy leads, West when declarer leads). Unknown hands are shown concealed.
+  function tableHTML (q, s, suit) {
+    var led = '<div class="ctr"><div class="ctrlab">' + s.by + ' leads</div>' +
+      '<span class="lc"><span class="st' + (isRed(suit) ? ' r' : '') + '">' + suit + '</span>' +
+      '<span class="k led">' + s.lc + '</span></span></div>';
+    var N, E, S, W;
+    if (q.full) {
+      N = seatBox('s-n', 'North &middot; Dummy', fullLines(q.full.n));
+      W = seatBox('s-w', 'West &middot; Partner', fullLines(q.full.w));
+      E = seatBox('s-e', 'East &middot; You', fullLines(q.full.e), ' me');
+      S = seatBox('s-s', 'South &middot; Decl.', fullLines(q.full.s));
+    } else {
+      var you = suitLine(q.y.s, q.y.c.join(' '));
+      N = q.d ? seatBox('s-n', 'North &middot; Dummy', suitLine(q.d.s, q.d.c.join(' '))) : conceal('s-n', 'North &middot; Dummy');
+      S = conceal('s-s', 'South &middot; Decl.');
+      if (s.by === 'Dummy') {           // North leads → you play second from the East seat
+        E = seatBox('s-e', 'East &middot; You', you, ' me');
+        W = conceal('s-w', 'West &middot; Partner');
+      } else {                           // South (declarer) leads → you play second from the West seat
+        W = seatBox('s-w', 'West &middot; You', you, ' me');
+        E = conceal('s-e', 'East &middot; Partner');
+      }
+    }
+    return '<div class="table-wrap"><div class="table">' + N + W + led + E + S + '</div></div>';
   }
 
   function render () {
@@ -247,12 +270,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var head = '';
     if (q.tag) head += '<span class="tag">' + q.tag + '</span>';
-    if (q.full) {
-      head += compass(q.full) +
-        '<div class="note"><b>Contract:</b> ' + q.full.contract + ' &nbsp;&middot;&nbsp; <b>Opening lead:</b> ' + q.full.lead + '</div>';
-    } else {
-      head += '<div class="deal">' + (q.d ? handHTML('Dummy', q.d) : '') + handHTML('You', q.y) + '</div>';
-    }
+    head += tableHTML(q, s, p.suit);
+    if (q.full) head += '<div class="note"><b>Contract:</b> ' + q.full.contract + ' &nbsp;&middot;&nbsp; <b>Opening lead:</b> ' + q.full.lead + '</div>';
     if (q.note) head += '<div class="note">' + q.note + '</div>';
 
     var hist = '';
@@ -262,12 +281,10 @@ document.addEventListener('DOMContentLoaded', function () {
       }).join('') + '</div>';
     }
 
-    var lst = '<span class="st' + (isRed(p.suit) ? ' r' : '') + '">' + p.suit + '</span>';
-    var trick = '<div class="trick"><span class="tlabel">' + s.by + ' leads</span>' + lst + '<span class="k led">' + s.lc + '</span></div>';
     var btns = OPTS.map(function (o) { return '<button class="ans" type="button" data-o="' + o + '">' + o + '</button>'; }).join('');
     var nextLabel = (i === PLAYS.length - 1) ? 'See score' : (p.last ? 'Next' : 'Continue');
     stage.innerHTML =
-      '<div class="card">' + head + hist + trick +
+      '<div class="card">' + head + hist +
       '<div class="prompt">Your play?</div>' +
       '<div class="answers">' + btns + '</div>' +
       '<div class="feedback" id="fb"></div>' +
