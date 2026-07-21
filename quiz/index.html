@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz shown as a classic N/E/S/W table; choose how many practice hands; ordered simple to complex.">
+<meta name="description" content="Second-hand play quiz as a classic N/E/S/W table; choose how many hands; a full deal seen from your seat, played through card by card.">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
@@ -105,7 +105,7 @@
   .sl { display:block; font-family:var(--mono); font-size:1rem; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; line-height:1.8; letter-spacing:.03em; }
   .sl .st { display:inline-block; width:1.35em; font-weight:400; }
   .sl .st.r { color:var(--suit); }
-  .conceal { display:inline-block; font-family:var(--mono); color:var(--muted); letter-spacing:.28em; font-size:1.1rem; opacity:.7; }
+  .conceal { display:block; font-family:var(--mono); color:var(--muted); letter-spacing:.28em; font-size:1.1rem; line-height:1.8; opacity:.6; }
   .ctr { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.4rem; text-align:center; padding:.2rem; }
   .ctrlab { font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700; }
   .ctr .lc { display:inline-flex; align-items:center; gap:.3rem; }
@@ -122,6 +122,12 @@
   .cnt small { display:block; font-size:.72rem; font-weight:500; color:var(--muted); margin-top:.15rem; }
   .cnt:hover small { color:var(--accent); }
   .result .row { display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
+
+  .walk { margin:.85rem 0 0; padding:.7rem .85rem .7rem 1rem; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
+  .walk .wlab { font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:.35rem; }
+  .walk ol { margin:0; padding-left:1.2rem; }
+  .walk li { color:var(--soft); font-size:.9rem; line-height:1.5; margin:.22rem 0; }
+  .walk li .r { color:var(--suit); }
 </style>
 </head>
 <body>
@@ -131,7 +137,7 @@
 <div class="page">
   <p class="eyebrow">Bridge Notes &middot; Second-Hand</p>
   <h1>Quiz</h1>
-  <p class="intro">Positions from published problems &mdash; Larry Cohen, Richard Pavlicek, Andrew Robson, La Jolla Bridge, and Adventures in Bridge &mdash; cross-checked against this site's rules. Some run several tricks deep, and one shows the full deal. Pick your play; the nine counts as an honor.</p>
+  <p class="intro">Positions from published problems &mdash; Larry Cohen, Richard Pavlicek, Andrew Robson, La Jolla Bridge, and Adventures in Bridge &mdash; cross-checked against this site's rules. Some run several tricks deep, and one is a full deal seen from your seat &mdash; played through card by card. Pick your play; the nine counts as an honor.</p>
 
   <div class="bar"><span>Play <b id="qn">1</b> of <b id="qt">13</b></span><span>Score <b id="sc">0</b></span></div>
   <div class="track"><i id="prog"></i></div>
@@ -199,9 +205,15 @@ document.addEventListener('DOMContentLoaded', function () {
         e:{ s:'3 2', h:'J 7 3', d:'9 8 7 4', c:'J 10 6 4' },
         s:{ s:'A K J 10 6', h:'A Q 8', d:'A J', c:'A 5 2' } },
       tag:'Full deal',
-      note:'Declarer drew trumps and now needs the heart suit. She leads a low heart from dummy toward her hand. If you follow low, she plays the ♥8 — partner (West) must win cheaply and is then endplayed, forced to give a ruff-and-discard or lead a diamond into the A-J.',
+      note:'You are East, defending 6♠ — you can see only dummy and your own hand. Declarer has drawn trumps and now leads a low heart from dummy toward her hand. You are second to play.',
+      line:[
+        'North leads ♥2 · you rise with the ♥J · South covers with the ♥Q · West wins the ♥K.',
+        'With your ♥J gone, declarer can no longer throw West in — West exits safely.',
+        'Later South cashes the ♥A and West’s ♥10 is high: the setting trick. 6♠ is one off.',
+        'Had you ducked: South slips in the ♥8, West wins cheaply and is endplayed — forced to give a ruff-and-discard or lead into declarer’s ♦A-J.'
+      ],
       by:'Dummy', lc:'2', ans:'Play High', play:'the ♥J',
-      why:'Rise with the ♥J — second hand high to rescue partner from the throw-in. Your jack drives out the queen (or wins outright), so the defence is assured two heart tricks and the slam goes down. (La Jolla Bridge)' }
+      why:'Rise with the ♥J — second hand high to rescue partner from the throw-in. Your jack drives out the queen, so the defence is assured two heart tricks. (La Jolla Bridge)' }
   ];
   var OPTS = ['Play High', 'Cover', 'Play Low', 'Split'];
 
@@ -223,6 +235,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var stage = document.getElementById('stage');
 
   function isRed (s) { return s === '♥' || s === '♦'; }
+  function redize (t) { return t.replace(/[♥♦]/g, function (m) { return '<span class="r">' + m + '</span>'; }); }
   function suitLine (sym, cards) {
     return '<span class="sl"><span class="st' + (isRed(sym) ? ' r' : '') + '">' + sym + '</span>' + cards + '</span>';
   }
@@ -232,8 +245,10 @@ document.addEventListener('DOMContentLoaded', function () {
   function seatBox (area, label, inner, extra) {
     return '<div class="seat ' + area + (extra || '') + '"><div class="slab">' + label + '</div>' + inner + '</div>';
   }
-  function conceal (area, label) {
-    return seatBox(area, label, '<span class="conceal">&mdash; &mdash; &mdash;</span>', ' hidden-seat');
+  function conceal (area, label, rows) {
+    var n = rows || 1, dashes = '';
+    for (var k = 0; k < n; k++) dashes += '<span class="conceal">&mdash; &mdash; &mdash;</span>';
+    return seatBox(area, label, dashes, ' hidden-seat');
   }
   // Build the classic N/W-E/S table. Dummy sits North, declarer South; You is the second-hand
   // seat (East when dummy leads, West when declarer leads). Unknown hands are shown concealed.
@@ -243,10 +258,11 @@ document.addEventListener('DOMContentLoaded', function () {
       '<span class="k led">' + s.lc + '</span></span></div>';
     var N, E, S, W;
     if (q.full) {
+      // A defender only sees dummy and their own hand — keep partner and declarer concealed.
       N = seatBox('s-n', 'North &middot; Dummy', fullLines(q.full.n));
-      W = seatBox('s-w', 'West &middot; Partner', fullLines(q.full.w));
       E = seatBox('s-e', 'East &middot; You', fullLines(q.full.e), ' me');
-      S = seatBox('s-s', 'South &middot; Decl.', fullLines(q.full.s));
+      W = conceal('s-w', 'West &middot; Partner', 4);
+      S = conceal('s-s', 'South &middot; Decl.', 4);
     } else {
       var you = suitLine(q.y.s, q.y.c.join(' '));
       N = q.d ? seatBox('s-n', 'North &middot; Dummy', suitLine(q.d.s, q.d.c.join(' '))) : conceal('s-n', 'North &middot; Dummy');
@@ -272,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (q.tag) head += '<span class="tag">' + q.tag + '</span>';
     head += tableHTML(q, s, p.suit);
     if (q.full) head += '<div class="note"><b>Contract:</b> ' + q.full.contract + ' &nbsp;&middot;&nbsp; <b>Opening lead:</b> ' + q.full.lead + '</div>';
-    if (q.note) head += '<div class="note">' + q.note + '</div>';
+    if (q.note) head += '<div class="note">' + redize(q.note) + '</div>';
 
     var hist = '';
     if (p.history.length) {
@@ -298,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function choose (e) {
     if (answered) return;
     answered = true;
-    var s = PLAYS[i].step;
+    var p = PLAYS[i], s = p.step, q = p.q;
     var chosen = e.currentTarget.getAttribute('data-o');
     var ok = chosen === s.ans;
     if (ok) score++;
@@ -308,11 +324,15 @@ document.addEventListener('DOMContentLoaded', function () {
       if (o === s.ans) b.classList.add('correct');
       else if (o === chosen) b.classList.add('wrong');
     });
+    var walk = q.line
+      ? '<div class="walk"><div class="wlab">How it plays</div><ol>' +
+        q.line.map(function (t) { return '<li>' + redize(t) + '</li>'; }).join('') + '</ol></div>'
+      : '';
     var fb = document.getElementById('fb');
     fb.innerHTML = (ok
       ? '<span class="verdict ok">✓ Correct.</span> Play ' + s.play + '.'
       : '<span class="verdict no">✗ Not quite.</span> The play is <b>' + s.ans + '</b> — ' + s.play + '.')
-      + '<div class="why">' + s.why + '</div>';
+      + '<div class="why">' + redize(s.why) + '</div>' + walk;
     fb.classList.add('show');
     document.getElementById('sc').textContent = score;
     document.getElementById('next').classList.add('show');
