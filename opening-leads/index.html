@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Opening leads in bridge (4th vs NT, 3rd/5th vs suits): a bento of card layouts.">
+<meta name="description" content="Opening leads in bridge: navigable bento with filter and sticky nav.">
 <title>Opening Leads</title>
 <style>
   :root {
@@ -24,7 +24,7 @@
   * { box-sizing:border-box; }
   html { -webkit-text-size-adjust:100%; }
   body { margin:0; background:var(--surface); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.56; -webkit-font-smoothing:antialiased; }
-  .page { max-width:49rem; margin:0 auto; padding:clamp(2rem,5vw,3.5rem) 1.1rem 5rem; }
+  .page { max-width:51rem; margin:0 auto; padding:clamp(2rem,5vw,3.5rem) 1.2rem 5rem; }
 
   header { margin-bottom:1.6rem; }
   .eyebrow { display:inline-block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 .7rem; text-decoration:none; }
@@ -36,12 +36,28 @@
   .legend span { display:inline-flex; align-items:center; gap:.4rem; }
   .swatch { width:1.3em; height:1.45em; border-radius:4px; border:1.5px solid var(--accent); background:var(--accent-soft); }
 
-  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.95rem; align-items:start; }
-  .seclabel { grid-column:1 / -1; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin:1.1rem 0 -.15rem; padding-left:.15rem; }
+  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.1rem; align-items:start; }
+  @media (min-width:64rem){ .grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .grid{ grid-template-columns:1fr; } }
+  @media (min-width:64rem){ .grid{ column-count:3; } }
+  @media (max-width:560px){ .grid{ column-count:1; } }
+  .seclabel { grid-column:1 / -1; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin:1.4rem 0 .6rem; padding-left:.15rem; scroll-margin-top:5.6rem; }
   .seclabel .num { color:var(--accent); margin-right:.5em; }
-  .tile { grid-column:span 1; background:var(--tile); border:1px solid var(--line); border-radius:16px; padding:1.1rem 1.15rem; box-shadow:var(--shadow); }
+  .tile { grid-column:auto; background:var(--tile); border:1px solid var(--line); border-radius:16px; padding:1.1rem 1.15rem; box-shadow:var(--shadow); }
   .tile.wide { grid-column:1 / -1; }
   .tile.wide .case { flex:1 1 40%; }
+  .topbar { position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.55rem clamp(1.1rem,4vw,2rem); background:color-mix(in srgb, var(--surface) 88%, transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .tb-brand { font-size:.82rem; font-weight:700; color:var(--fg); text-decoration:none; letter-spacing:.01em; }
+  .tb-links { display:flex; gap:.2rem; min-width:0; overflow-x:auto; }
+  .tb-links a { font-size:.78rem; color:var(--muted); text-decoration:none; padding:.3em .7em; border-radius:999px; white-space:nowrap; }
+  .tb-links a:hover { color:var(--fg); }
+  .tb-links a.active { color:var(--accent); background:var(--accent-soft); }
+  .toolbar { position:sticky; top:2.5rem; z-index:25; display:flex; flex-wrap:wrap; gap:.5rem .9rem; align-items:center; padding:.55rem 0 .5rem; margin-bottom:.5rem; background:color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+  .chips { display:flex; gap:.35rem; flex-wrap:wrap; align-items:center; }
+  .chips .lbl { font-size:.63rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-right:.15rem; }
+  .chip { font:inherit; font-size:.74rem; font-weight:600; color:var(--muted); background:var(--tile); border:1px solid var(--line); border-radius:999px; padding:.28em .72em; cursor:pointer; text-decoration:none; line-height:1.2; }
+  .chip:hover { color:var(--fg); }
+  .chip.active { color:var(--accent); background:var(--accent-soft); border-color:transparent; }
   @media (max-width:600px){ .grid{ grid-template-columns:1fr; } .tile,.tile.wide{ grid-column:auto; } }
 
   .tile-top { display:flex; justify-content:space-between; align-items:flex-start; gap:.7rem; }
@@ -75,9 +91,12 @@
 
   .coda { margin-top:1.6rem; font-size:.85rem; color:var(--muted); text-align:center; }
   .coda a { color:var(--accent); }
+  @media print { .topbar,.toolbar{ display:none; } .grid{ columns:1; } .tile{ box-shadow:none; border-color:#ccc; break-inside:avoid; } body{ background:#fff; } }
 </style>
 </head>
 <body>
+
+<nav class="topbar"><a class="tb-brand" href="../">&spades; Bridge Notes</a><div class="tb-links"><a href="../second-hand/" data-topic="second-hand">2nd</a><a href="../third-hand/" data-topic="third-hand">3rd</a><a href="../opening-leads/" data-topic="opening-leads">Leads</a><a href="../signals/" data-topic="signals">Signals</a></div></nav>
 
 <div class="page">
 
@@ -87,6 +106,8 @@
     <p class="principle"><b>The one card you play blind &mdash; before you see dummy.</b> Good leads come from the auction more than a rulebook, but these get you most of the way. Against notrump you attack; against a suit you play safe.</p>
     <div class="legend"><span><span class="swatch"></span> the card to lead</span></div>
   </header>
+
+  <div class="toolbar"><div class="chips secnav" id="secnav"><span class="lbl">Jump</span></div><div class="chips filter" id="filterbar"><span class="lbl">Filter</span></div></div>
 
   <div class="grid">
 
@@ -206,6 +227,65 @@
     </div>
 
   </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  var path = location.pathname;
+  document.querySelectorAll('.tb-links a').forEach(function (a) {
+    if (path.indexOf(a.getAttribute('data-topic')) !== -1) a.classList.add('active');
+  });
+  var labels = document.querySelectorAll('.seclabel');
+  var secnav = document.getElementById('secnav');
+  var chips = [];
+  labels.forEach(function (lb, i) {
+    lb.id = 'sec' + i;
+    var num = lb.querySelector('.num');
+    var a = document.createElement('a');
+    a.href = '#sec' + i;
+    a.className = 'chip';
+    a.textContent = num ? num.textContent.trim() : String(i + 1);
+    secnav.appendChild(a);
+    chips.push(a);
+  });
+  function spy () {
+    var y = window.scrollY + 130;
+    var act = 0;
+    labels.forEach(function (lb, i) { if (lb.offsetTop <= y) act = i; });
+    chips.forEach(function (c, i) { c.classList.toggle('active', i === act); });
+  }
+  window.addEventListener('scroll', spy, { passive: true });
+  spy();
+  var seen = [];
+  document.querySelectorAll('.tile .v').forEach(function (v) {
+    var t = v.textContent.trim();
+    if (seen.indexOf(t) === -1) seen.push(t);
+  });
+  var fbar = document.getElementById('filterbar');
+  function addChip (label, val, on) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = on ? 'chip active' : 'chip';
+    b.textContent = label;
+    b.setAttribute('data-val', val);
+    fbar.appendChild(b);
+  }
+  addChip('All', '', true);
+  seen.forEach(function (t) { addChip(t, t, false); });
+  fbar.addEventListener('click', function (e) {
+    var btn = e.target.closest('button.chip');
+    if (!btn) return;
+    var val = btn.getAttribute('data-val');
+    fbar.querySelectorAll('button.chip').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    var filtering = val !== '';
+    document.querySelectorAll('.tile').forEach(function (tile) {
+      var v = tile.querySelector('.v');
+      if (!v) return;
+      tile.style.display = filtering ? (v.textContent.trim() === val ? '' : 'none') : '';
+    });
+    document.querySelectorAll('.seclabel').forEach(function (lb) { lb.style.display = filtering ? 'none' : ''; });
+  });
+});
+</script>
 
   <p class="coda"><b>The hard one</b> &mdash; no rule wins every time; let the bidding talk you out of them. Back to <a href="../">Bridge Notes</a>.</p>
 
