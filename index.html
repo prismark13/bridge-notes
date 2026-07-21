@@ -8,15 +8,15 @@
 <title>Second-Hand Play</title>
 <style>
   :root {
-    --bg:#ffffff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --hair:#e4e5ea; --suit:#b23a2c;
+    --bg:#ffffff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --hair:#e4e5ea; --suit:#b23a2c; --accent:#4a57d2;
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;
     --mono:'SFMono-Regular',ui-monospace,Consolas,'Liberation Mono',Menlo,monospace;
   }
   @media (prefers-color-scheme:dark){
-    :root{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --hair:#252832; --suit:#e58379; }
+    :root{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --hair:#252832; --suit:#e58379; --accent:#8b93ff; }
   }
-  :root[data-theme="light"]{ --bg:#fff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --hair:#e4e5ea; --suit:#b23a2c; }
-  :root[data-theme="dark"]{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --hair:#252832; --suit:#e58379; }
+  :root[data-theme="light"]{ --bg:#fff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --hair:#e4e5ea; --suit:#b23a2c; --accent:#4a57d2; }
+  :root[data-theme="dark"]{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --hair:#252832; --suit:#e58379; --accent:#8b93ff; }
 
   * { box-sizing:border-box; }
   html { -webkit-text-size-adjust:100%; }
@@ -35,7 +35,7 @@
 
   section { margin-top:2.4rem; }
   h2 { font-size:1.02rem; font-weight:650; letter-spacing:-.01em; margin:0 0 .1rem; }
-  h2 .num { color:var(--muted); font-weight:500; margin-right:.45em; }
+  h2 .num { color:var(--accent); font-weight:600; margin-right:.45em; }
   .lede { color:var(--muted); font-size:.9rem; margin:.1rem 0 .7rem; }
   h3.sub { font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:1.5rem 0 .1rem; }
 
@@ -44,10 +44,9 @@
   summary::-webkit-details-marker { display:none; }
   summary:hover { color:var(--fg); }
   .s { flex:1 1 auto; font-size:.98rem; }
-  .v { flex:0 0 auto; font-size:.68rem; letter-spacing:.07em; text-transform:uppercase; font-weight:700; color:var(--muted); white-space:nowrap; }
-  details[open] .v { color:var(--fg); }
+  .v { flex:0 0 auto; font-size:.68rem; letter-spacing:.07em; text-transform:uppercase; font-weight:700; color:var(--accent); white-space:nowrap; }
   .chev { flex:0 0 auto; width:.5rem; height:.5rem; border-right:1.6px solid var(--muted); border-bottom:1.6px solid var(--muted); transform:rotate(-45deg); transition:transform .18s ease; margin-right:.2rem; }
-  details[open] .chev { transform:rotate(45deg); }
+  details[open] .chev { transform:rotate(45deg); border-color:var(--accent); }
 
   .body { padding:.1rem .2rem 1.05rem 0; }
   .ex { font-size:.92rem; margin:.2rem 0; color:var(--fg); }
