@@ -4,211 +4,113 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play in bridge defense: the four core rules plus a drillable list with card layouts.">
-<title>Second-Hand Play</title>
+<meta name="description" content="Bridge Notes — a growing set of defensive-play references.">
+<title>Bridge Notes — Defensive Play</title>
 <style>
   :root {
-    --bg:#ffffff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --hair:#e4e5ea; --suit:#b23a2c; --accent:#4a57d2;
+    --bg:#ffffff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --suit:#b23a2c; --accent:#4a57d2;
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;
-    --mono:'SFMono-Regular',ui-monospace,Consolas,'Liberation Mono',Menlo,monospace;
   }
   @media (prefers-color-scheme:dark){
-    :root{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --hair:#252832; --suit:#e58379; --accent:#8b93ff; }
+    :root{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --suit:#e58379; --accent:#8b93ff; }
   }
-  :root[data-theme="light"]{ --bg:#fff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --hair:#e4e5ea; --suit:#b23a2c; --accent:#4a57d2; }
-  :root[data-theme="dark"]{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --hair:#252832; --suit:#e58379; --accent:#8b93ff; }
+  :root[data-theme="light"]{ --bg:#fff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --suit:#b23a2c; --accent:#4a57d2; }
+  :root[data-theme="dark"]{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --suit:#e58379; --accent:#8b93ff; }
 
   * { box-sizing:border-box; }
-  html { -webkit-text-size-adjust:100%; }
   body { margin:0; background:var(--bg); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; }
   .page { max-width:38rem; margin:0 auto; padding:clamp(2.2rem,6vw,4rem) 1.25rem 5rem; }
 
-  header { margin-bottom:2.2rem; }
   .eyebrow { font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 .7rem; }
   h1 { font-size:clamp(1.7rem,5vw,2.15rem); font-weight:650; letter-spacing:-.02em; margin:0 0 .7rem; }
-  .principle { color:var(--muted); font-size:1rem; margin:0; max-width:32rem; }
-  .principle b { color:var(--fg); font-weight:600; }
+  .intro { color:var(--muted); font-size:1rem; margin:0; max-width:33rem; }
+  .intro b { color:var(--fg); font-weight:600; }
 
-  .rulehead { font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:1.9rem 0 .7rem; }
-  ol.basics { list-style:none; counter-reset:b; margin:0; padding:0; display:flex; flex-direction:column; gap:.6rem; }
-  ol.basics li { counter-increment:b; position:relative; padding-left:1.7rem; font-size:.95rem; color:var(--muted); }
-  ol.basics li::before { content:counter(b); position:absolute; left:0; top:.02em; color:var(--accent); font-weight:700; font-size:.85rem; font-variant-numeric:tabular-nums; }
-  ol.basics b { color:var(--fg); font-weight:600; }
+  .sectlabel { font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:2.4rem 0 .3rem; }
 
-  .bar { display:flex; justify-content:flex-end; gap:1.4rem; margin:1.8rem 0 .2rem; }
-  .bar button { font:inherit; font-size:.78rem; color:var(--muted); background:none; border:0; padding:0; cursor:pointer; letter-spacing:.01em; }
-  .bar button:hover { color:var(--fg); }
+  a.topic, div.topic { display:flex; align-items:baseline; gap:.85rem; padding:.95rem .2rem; border-bottom:1px solid var(--line); text-decoration:none; color:inherit; }
+  a.topic { cursor:pointer; }
+  a.topic:hover .t-title { color:var(--accent); }
+  .t-body { flex:1 1 auto; }
+  .t-title { font-size:1rem; font-weight:600; }
+  .t-desc { color:var(--muted); font-size:.88rem; margin-top:.15rem; }
+  .t-tag { flex:0 0 auto; font-size:.6rem; letter-spacing:.07em; text-transform:uppercase; font-weight:700; white-space:nowrap; padding:.2em .5em; border-radius:3px; border:1px solid var(--line); color:var(--muted); align-self:center; }
+  .t-tag.hard { color:var(--accent); border-color:color-mix(in srgb, var(--accent) 40%, transparent); }
+  .chev { flex:0 0 auto; align-self:center; width:.5rem; height:.5rem; border-right:1.6px solid var(--muted); border-bottom:1.6px solid var(--muted); transform:rotate(-45deg); }
+  a.topic:hover .chev { border-color:var(--accent); }
+  div.topic { opacity:.72; }
+  .soon { font-size:.6rem; letter-spacing:.07em; text-transform:uppercase; font-weight:700; color:var(--muted); align-self:center; }
 
-  section { margin-top:2.4rem; }
-  h2 { font-size:1.02rem; font-weight:650; letter-spacing:-.01em; margin:0 0 .1rem; }
-  h2 .num { color:var(--accent); font-weight:600; margin-right:.45em; }
-  .lede { color:var(--muted); font-size:.9rem; margin:.1rem 0 .7rem; }
-  h3.sub { font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:1.5rem 0 .1rem; }
-
-  details.rule { border-bottom:1px solid var(--line); }
-  summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:.9rem; padding:.85rem .2rem; }
-  summary::-webkit-details-marker { display:none; }
-  summary:hover { color:var(--fg); }
-  .s { flex:1 1 auto; font-size:.98rem; }
-  .v { flex:0 0 auto; font-size:.68rem; letter-spacing:.07em; text-transform:uppercase; font-weight:700; color:var(--accent); white-space:nowrap; }
-  .chev { flex:0 0 auto; width:.5rem; height:.5rem; border-right:1.6px solid var(--muted); border-bottom:1.6px solid var(--muted); transform:rotate(-45deg); transition:transform .18s ease; margin-right:.2rem; }
-  details[open] .chev { transform:rotate(45deg); border-color:var(--accent); }
-
-  .body { padding:.1rem .2rem 1.05rem 0; }
-  .ex { font-size:.92rem; margin:.2rem 0; color:var(--fg); }
-  .lbl { color:var(--muted); }
-  .c { font-family:var(--mono); font-size:.82em; letter-spacing:.02em; font-weight:600; white-space:nowrap; }
-  .c .r { color:var(--suit); }
-  .body b { font-weight:650; }
-  .why { font-size:.86rem; color:var(--muted); margin-top:.4rem; }
-
-  .coda { margin-top:2.4rem; font-size:.85rem; color:var(--muted); }
-  .coda b { color:var(--fg); font-weight:600; }
-
-  @media print { .bar{display:none;} .body{display:block!important;} body{background:#fff;color:#000;} }
+  .foot { margin-top:2.6rem; font-size:.85rem; color:var(--muted); }
 </style>
 </head>
 <body>
-
 <div class="page">
 
-  <header>
-    <p class="eyebrow">Bridge &middot; Defensive Card Play</p>
-    <h1>Second-Hand Play</h1>
-    <p class="principle"><b>Second hand low, third hand high.</b> You play before your partner, who plays last &mdash; so spend a high card only when playing low would cost a specific trick. The nine counts as an honor throughout.</p>
+  <p class="eyebrow">Bridge Notes</p>
+  <h1>Defensive Play</h1>
+  <p class="intro">A growing set of references. <b>The rules are the easy part</b> &mdash; the hard part is opening leads, counting the hand, and knowing when a rule doesn't apply. Difficulty is marked below.</p>
 
-    <p class="rulehead">The four rules</p>
-    <ol class="basics">
-      <li><b>Second hand low.</b> Play your smallest on a low card led; your partner plays last.</li>
-      <li><b>Cover to promote.</b> Cover an honor only when it turns one of your small cards into a winner.</li>
-      <li><b>Cover the last of touching honors.</b> Duck the first, cover the second.</li>
-      <li><b>Split three, never two.</b> From three touching honors play the top; from only two, play low.</li>
-    </ol>
-  </header>
+  <p class="sectlabel">Available</p>
 
-  <div class="bar">
-    <button type="button" data-all="open">Open all</button>
-    <button type="button" data-all="close">Close all</button>
+  <a class="topic" href="second-hand/">
+    <div class="t-body">
+      <div class="t-title">Second-Hand Play</div>
+      <div class="t-desc">Play low by default; cover an honor only when it promotes one of your cards.</div>
+    </div>
+    <span class="t-tag">Fundamental</span>
+    <span class="chev"></span>
+  </a>
+
+  <p class="sectlabel">Planned</p>
+
+  <div class="topic">
+    <div class="t-body">
+      <div class="t-title">Third-Hand Play</div>
+      <div class="t-desc">Third hand high; the lowest of touching honors; returning partner's suit.</div>
+    </div>
+    <span class="t-tag">Fundamental</span>
+    <span class="soon">soon</span>
   </div>
 
-  <!-- I -->
-  <section>
-    <h2><span class="num">I</span>A low card is led</h2>
-    <p class="lede">Let declarer commit first.</p>
+  <div class="topic">
+    <div class="t-body">
+      <div class="t-title">Opening Leads</div>
+      <div class="t-desc">The blind guess that decides many hands: fourth-best, sequences, and reading the auction.</div>
+    </div>
+    <span class="t-tag hard">Hard</span>
+    <span class="soon">soon</span>
+  </div>
 
-    <details class="rule">
-      <summary><span class="s">No reason to rise</span><span class="v">Play low</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex"><span class="lbl">Dummy</span> <span class="c">&spades; J 7 6</span> &nbsp; <span class="lbl">you</span> <span class="c">&spades; K 10 4</span> &mdash; on the 6, play the <b>4</b>.</div>
-        <div class="why">Make declarer guess where your king sits; winning now only clears the position for him.</div>
-      </div>
-    </details>
+  <div class="topic">
+    <div class="t-body">
+      <div class="t-title">Signals &amp; Discarding</div>
+      <div class="t-desc">Attitude, count, and suit-preference &mdash; and which card you can spare.</div>
+    </div>
+    <span class="t-tag">Partnership</span>
+    <span class="soon">soon</span>
+  </div>
 
-    <details class="rule">
-      <summary><span class="s">You hold an ace over the lead</span><span class="v">Duck</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex"><span class="lbl">Dummy</span> <span class="c"><span class="r">&hearts;</span> K 8 6</span> &nbsp; <span class="lbl">you</span> <span class="c"><span class="r">&hearts;</span> A 10 7</span> &mdash; on declarer's 2, play <b>low</b>.</div>
-        <div class="why">An ace captures an honor, not a spot card. Grabbing it just promotes dummy's king &mdash; wrong about nine times in ten.</div>
-      </div>
-    </details>
+  <div class="topic">
+    <div class="t-body">
+      <div class="t-title">Counting the Hand</div>
+      <div class="t-desc">The discipline behind everything: declarer's shape, points, and trick count.</div>
+    </div>
+    <span class="t-tag hard">Hardest</span>
+    <span class="soon">soon</span>
+  </div>
 
-    <details class="rule">
-      <summary><span class="s">Three touching honors, not two</span><span class="v">Split</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex">From <span class="c">&spades; Q J 10 7</span> play the <b>queen</b>; from <span class="c">&spades; K 10 9 7</span> the <b>ten</b> &mdash; the top of your touching cards.</div>
-        <div class="ex">From only two honors, <span class="c">&spades; Q J 8 3</span>, play <b>low</b>.</div>
-        <div class="why">Splitting three blocks a cheap finesse of your middle cards; splitting two just hands declarer a tempo.</div>
-      </div>
-    </details>
+  <div class="topic">
+    <div class="t-body">
+      <div class="t-title">Trump Defense &amp; Coups</div>
+      <div class="t-desc">Promotions, uppercuts, forcing declarer, and entry-killing plays.</div>
+    </div>
+    <span class="t-tag hard">Advanced</span>
+    <span class="soon">soon</span>
+  </div>
 
-    <details class="rule">
-      <summary><span class="s">A concrete reason to win</span><span class="v">Rise</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex">Go up only to: cash a winner about to be ruffed or discarded; deny declarer a trick he couldn't otherwise take; or knock out dummy's last entry to a long suit.</div>
-      </div>
-    </details>
-  </section>
-
-  <!-- II -->
-  <section>
-    <h2><span class="num">II</span>An honor is led toward you</h2>
-    <p class="lede">Cover only when it turns one of your smaller cards into a winner.</p>
-
-    <h3 class="sub">Cover when</h3>
-
-    <details class="rule">
-      <summary><span class="s">Two honors above the card led</span><span class="v">Cover, highest</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex"><span class="lbl">Dummy</span> <span class="c">&spades; J 10 8 6</span> &nbsp; <span class="lbl">you</span> <span class="c">&spades; A Q 2</span> &mdash; on the jack, play the <b>ace</b>.</div>
-        <div class="why">You capture a card that would otherwise score; your queen was dominated by declarer's king anyway.</div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">A lone, unsupported honor</span><span class="v">Cover</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex"><span class="lbl">Dummy</span> <span class="c">&spades; 10 5 4</span> &nbsp; <span class="lbl">you</span> <span class="c">&spades; K 7 2</span> &mdash; cover the <b>ten</b>.</div>
-        <div class="ex"><span class="lbl">Dummy</span> <span class="c">&spades; Q 4 2</span> &nbsp; <span class="lbl">you</span> <span class="c">&spades; K 9 5</span> &mdash; cover the <b>queen</b>, forcing the ace and promoting partner's ten with your nine.</div>
-        <div class="why">An unsupported honor has no touching card beside it, so covering promotes your smaller cards.</div>
-      </div>
-    </details>
-
-    <h3 class="sub">Don't cover when</h3>
-
-    <details class="rule">
-      <summary><span class="s">The honor is supported</span><span class="v">Don't cover</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex"><span class="lbl">Dummy</span> <span class="c">&spades; J 10 8</span> &nbsp; <span class="lbl">you</span> <span class="c">&spades; K 2</span> &mdash; the ten sits beside the jack, so covering only makes that ten good. Play <b>low</b>.</div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">Dummy holds a solid run</span><span class="v">Don't cover</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex"><span class="lbl">Dummy</span> <span class="c">&spades; Q J 10 9</span> &nbsp; <span class="lbl">you</span> <span class="c">&spades; K 8 4</span> &mdash; cover and you turn J-10-9 into three winners for declarer. Duck, and your king takes the third round.</div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">Nothing of yours can promote</span><span class="v">Don't cover</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex"><span class="lbl">Small doubleton under strength:</span> <span class="c"><span class="r">&diams;</span> A K 10 9</span> over your <span class="c"><span class="r">&diams;</span> J 4</span> &mdash; the jack promotes nothing; play the <b>4</b>.</div>
-        <div class="ex"><span class="lbl">Length opposite a short dummy:</span> <span class="c">&spades; Q 6</span> over your <span class="c">&spades; K 9 5 4</span> &mdash; covering only builds declarer's long suit and can crash partner's honor.</div>
-        <div class="why">Same when partner is marked short (singleton or void as declarer draws trumps): no card of partner's to promote.</div>
-      </div>
-    </details>
-
-    <h3 class="sub">Timing &amp; who leads it</h3>
-
-    <details class="rule">
-      <summary><span class="s">Touching honors led at you</span><span class="v">Cover the last</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex"><span class="lbl">Dummy</span> <span class="c">&clubs; Q J 9</span> &nbsp; <span class="lbl">you</span> <span class="c">&clubs; K 6 5</span> &mdash; pass the queen, then cover the jack.</div>
-        <div class="ex"><span class="lbl">Double finesse:</span> <span class="c">&clubs; Q J 3</span> in dummy, your <span class="c">&clubs; K 6 2</span>, partner <span class="c">&clubs; 10 9 7 5</span> &mdash; let the queen run, cover the jack, and partner's ten is now high.</div>
-        <div class="why">Cover the first honor instead and dummy's jack simply finesses that ten away.</div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">Declarer (not dummy) leads it</span><span class="v">Read the dummy</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="ex"><span class="lbl">Touching card in dummy &mdash; cover:</span> <span class="c">&spades; A J 10 6</span>, your <span class="c">&spades; K 5 2</span> &mdash; on the 9, cover; dummy's ten backs it up.</div>
-        <div class="ex"><span class="lbl">No touching card &mdash; duck:</span> <span class="c">&spades; A 8 6 4</span>, your <span class="c">&spades; K 7 2</span> &mdash; on the 10, play <b>low</b>; declarer holds the jack.</div>
-      </div>
-    </details>
-  </section>
-
-  <p class="coda"><b>Advanced &mdash; the surround play.</b> With an interior holding like K&#8209;10&#8209;9 over dummy's jack, playing the ten rather than low or the king can trap dummy's honor. Situational; count the suit first.</p>
+  <p class="foot">More pages coming. Each one is a drillable list of rules with card layouts.</p>
 
 </div>
-
-<script>
-  document.querySelectorAll('.bar button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var open = b.getAttribute('data-all') === 'open';
-      document.querySelectorAll('details.rule').forEach(function (d) { d.open = open; });
-    });
-  });
-</script>
 </body>
 </html>
