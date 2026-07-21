@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Third-hand play in bridge defense: third hand high, lowest of touching honors, finessing dummy, and returning partner's suit.">
+<title>Third-Hand Play</title>
+<style>
+  :root {
+    --bg:#ffffff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --hair:#e4e5ea; --suit:#b23a2c; --accent:#4a57d2;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;
+    --mono:'SFMono-Regular',ui-monospace,Consolas,'Liberation Mono',Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --hair:#252832; --suit:#e58379; --accent:#8b93ff; }
+  }
+  :root[data-theme="light"]{ --bg:#fff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --hair:#e4e5ea; --suit:#b23a2c; --accent:#4a57d2; }
+  :root[data-theme="dark"]{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --hair:#252832; --suit:#e58379; --accent:#8b93ff; }
+
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  .page { max-width:38rem; margin:0 auto; padding:clamp(2.2rem,6vw,4rem) 1.25rem 5rem; }
+
+  header { margin-bottom:2.2rem; }
+  .eyebrow { display:inline-block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 .7rem; }
+  a.eyebrow { text-decoration:none; }
+  a.eyebrow:hover { color:var(--accent); }
+  h1 { font-size:clamp(1.7rem,5vw,2.15rem); font-weight:650; letter-spacing:-.02em; margin:0 0 .7rem; }
+  .principle { color:var(--muted); font-size:1rem; margin:0; max-width:32rem; }
+  .principle b { color:var(--fg); font-weight:600; }
+
+  .rulehead { font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:1.9rem 0 .7rem; }
+  ol.basics { list-style:none; counter-reset:b; margin:0; padding:0; display:flex; flex-direction:column; gap:.6rem; }
+  ol.basics li { counter-increment:b; position:relative; padding-left:1.7rem; font-size:.95rem; color:var(--muted); }
+  ol.basics li::before { content:counter(b); position:absolute; left:0; top:.02em; color:var(--accent); font-weight:700; font-size:.85rem; font-variant-numeric:tabular-nums; }
+  ol.basics b { color:var(--fg); font-weight:600; }
+
+  .bar { display:flex; justify-content:flex-end; gap:1.4rem; margin:1.8rem 0 .2rem; }
+  .bar button { font:inherit; font-size:.78rem; color:var(--muted); background:none; border:0; padding:0; cursor:pointer; letter-spacing:.01em; }
+  .bar button:hover { color:var(--fg); }
+
+  section { margin-top:2.4rem; }
+  h2 { font-size:1.02rem; font-weight:650; letter-spacing:-.01em; margin:0 0 .1rem; }
+  h2 .num { color:var(--accent); font-weight:600; margin-right:.45em; }
+  .lede { color:var(--muted); font-size:.9rem; margin:.1rem 0 .7rem; }
+
+  details.rule { border-bottom:1px solid var(--line); }
+  summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:.9rem; padding:.85rem .2rem; }
+  summary::-webkit-details-marker { display:none; }
+  summary:hover { color:var(--fg); }
+  .s { flex:1 1 auto; font-size:.98rem; }
+  .v { flex:0 0 auto; font-size:.68rem; letter-spacing:.07em; text-transform:uppercase; font-weight:700; color:var(--accent); white-space:nowrap; }
+  .chev { flex:0 0 auto; width:.5rem; height:.5rem; border-right:1.6px solid var(--muted); border-bottom:1.6px solid var(--muted); transform:rotate(-45deg); transition:transform .18s ease; margin-right:.2rem; }
+  details[open] .chev { transform:rotate(45deg); border-color:var(--accent); }
+
+  .body { padding:.1rem .2rem 1.05rem 0; }
+  .ex { font-size:.92rem; margin:.2rem 0; color:var(--fg); }
+  .lbl { color:var(--muted); }
+  .c { font-family:var(--mono); font-size:.82em; letter-spacing:.02em; font-weight:600; white-space:nowrap; }
+  .c .r { color:var(--suit); }
+  .body b { font-weight:650; }
+  .why { font-size:.86rem; color:var(--muted); margin-top:.4rem; }
+
+  .coda { margin-top:2.4rem; font-size:.85rem; color:var(--muted); }
+  .coda b { color:var(--fg); font-weight:600; }
+
+  @media print { .bar{display:none;} .body{display:block!important;} body{background:#fff;color:#000;} }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header>
+    <a class="eyebrow" href="../">&lsaquo; Bridge Notes</a>
+    <h1>Third-Hand Play</h1>
+    <p class="principle"><b>Third hand high &mdash; the mirror of second hand low.</b> Partner has led and plays first; your job is to win the trick or force out declarer's honor, then help partner read the suit.</p>
+
+    <p class="rulehead">The four rules</p>
+    <ol class="basics">
+      <li><b>Third hand high.</b> Play your highest to win the trick, or to force out declarer's honor.</li>
+      <li><b>Lowest of touching honors.</b> From a sequence, play the cheapest &mdash; it tells partner you hold the ones above it.</li>
+      <li><b>Finesse against dummy, never partner.</b> If dummy shows an honor and plays low, insert an intermediate; you sit over dummy and capture it later.</li>
+      <li><b>Return partner's suit right.</b> Higher of a doubleton, original fourth-best from length &mdash; so partner can count.</li>
+    </ol>
+  </header>
+
+  <div class="bar">
+    <button type="button" data-all="open">Open all</button>
+    <button type="button" data-all="close">Close all</button>
+  </div>
+
+  <!-- I -->
+  <section>
+    <h2><span class="num">I</span>Partner leads a low card</h2>
+    <p class="lede">Dummy has nothing to worry about &mdash; win it or force declarer.</p>
+
+    <details class="rule">
+      <summary><span class="s">No honor in dummy to beat you</span><span class="v">Play high</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="ex"><span class="lbl">Dummy</span> <span class="c">&spades; 10 4 2</span> &nbsp; <span class="lbl">you</span> <span class="c">&spades; K 8 5</span> &mdash; partner leads the <b>3</b>; play the <b>king</b>.</div>
+        <div class="ex"><span class="lbl">Dummy</span> <span class="c">&spades; 10 4 2</span> &nbsp; <span class="lbl">you</span> <span class="c">&spades; J 7 6 5</span> &mdash; play the <b>jack</b>.</div>
+        <div class="why">Win the trick, or force declarer to spend a higher card so partner's cards grow.</div>
+      </div>
+    </details>
+
+    <details class="rule">
+      <summary><span class="s">You hold touching honors</span><span class="v">Cheapest of equals</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="ex"><span class="lbl">Dummy</span> <span class="c"><span class="r">&hearts;</span> 8 6 5</span> &nbsp; <span class="lbl">you</span> <span class="c"><span class="r">&hearts;</span> K Q 10</span> &mdash; play the <b>queen</b>, not the king.</div>
+        <div class="ex"><span class="lbl">you</span> <span class="c"><span class="r">&hearts;</span> A K 7</span> &mdash; play the <b>king</b>; &nbsp; <span class="lbl">you</span> <span class="c"><span class="r">&hearts;</span> Q J 10 9</span> &mdash; play the <b>9</b>.</div>
+        <div class="why">Playing the cheapest tells partner you hold the honors above it. If your queen forces the ace, partner knows you have the king.</div>
+      </div>
+    </details>
+
+    <details class="rule">
+      <summary><span class="s">You can't win the trick</span><span class="v">Signal</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="ex">Partner's ace wins the trick &mdash; you <span class="c">&spades; K Q 8 2</span> play the <b>8</b> (encouraging); you <span class="c">&spades; 8 4 3</span> play the <b>3</b> (discouraging).</div>
+        <div class="why">When high cards can't help, give an attitude signal &mdash; but never signal with a card that could itself win a trick.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- II -->
+  <section>
+    <h2><span class="num">II</span>Dummy shows an honor</h2>
+    <p class="lede">You sit over dummy, so you can wait and take its honor later.</p>
+
+    <details class="rule">
+      <summary><span class="s">Dummy has an honor and plays low</span><span class="v">Finesse dummy</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="ex"><span class="lbl">Dummy</span> <span class="c"><span class="r">&diams;</span> Q 8 7</span> &nbsp; <span class="lbl">you</span> <span class="c"><span class="r">&diams;</span> A J 3</span> &mdash; partner leads low, dummy plays low; play the <b>jack</b>, keeping the ace over dummy's queen.</div>
+        <div class="ex"><span class="lbl">Dummy</span> <span class="c"><span class="r">&diams;</span> K 10 5</span> &nbsp; <span class="lbl">you</span> <span class="c"><span class="r">&diams;</span> A J 9 4</span> &mdash; play the <b>9</b>.</div>
+        <div class="why">Finesse against <b>dummy's</b> honor only &mdash; never insert hoping to trap partner. Your top card stays poised over dummy for later.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- III -->
+  <section>
+    <h2><span class="num">III</span>Returning partner's suit</h2>
+    <p class="lede">Give partner a card they can count.</p>
+
+    <details class="rule">
+      <summary><span class="s">Which card to return</span><span class="v">Count card</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="ex">From an original four, <span class="c">&clubs; K 7 4 2</span> &mdash; return your <b>original fourth-best</b>, the <b>2</b>.</div>
+        <div class="ex">From an original three, <span class="c">&clubs; A 8 3</span> &mdash; return the <b>higher</b> of the two you have left, the <b>8</b>.</div>
+        <div class="why">The card you return tells partner your original length, so they can place declarer's cards.</div>
+      </div>
+    </details>
+
+    <details class="rule">
+      <summary><span class="s">Which suit to return</span><span class="v">Usually partner's</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="ex">Return partner's suit unless you can see a faster source of tricks, or partner's suit is clearly dead.</div>
+        <div class="why">Partner chose the lead for a reason; overriding it needs a concrete plan.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- IV -->
+  <section>
+    <h2><span class="num">IV</span>Reading the hand</h2>
+    <p class="lede">Count first, then play as cheaply as the count allows.</p>
+
+    <details class="rule">
+      <summary><span class="s">Partner leads fourth-best</span><span class="v">Rule of 11</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="ex"><span class="lbl">Dummy</span> <span class="c">&spades; 10 9 8 4</span> &nbsp; <span class="lbl">you</span> <span class="c">&spades; A K J</span> &mdash; partner leads the <b>5</b>.</div>
+        <div class="ex">11 &minus; 5 = <b>6</b> cards above the five are outside partner's hand &mdash; you see all six (dummy's 10 9 8, your A K J). Declarer has none, so play the <b>jack</b>; it wins and keeps your A K.</div>
+        <div class="why">Subtract the fourth-best lead from 11 to count the higher cards in the other three hands, then spend no more than you must.</div>
+      </div>
+    </details>
+
+    <details class="rule">
+      <summary><span class="s">Doubleton honor over partner's suit</span><span class="v">Unblock</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="ex">Partner leads the <span class="c"><span class="r">&diams;</span> K</span> and you hold <span class="c"><span class="r">&diams;</span> A 6</span> &mdash; overtake with the <b>ace</b> and return the <b>6</b>, so your doubleton doesn't block the run.</div>
+        <div class="why">Overtake a king with A-x, a queen with K-x, a jack with Q-x &mdash; unless dummy has a card that would then be promoted.</div>
+      </div>
+    </details>
+  </section>
+
+  <p class="coda"><b>The pair.</b> Second hand low, third hand high &mdash; two halves of the same idea: let the side that plays last do the deciding. See also <a href="../second-hand/">Second-Hand Play</a>.</p>
+
+</div>
+
+<script>
+  document.querySelectorAll('.bar button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var open = b.getAttribute('data-all') === 'open';
+      document.querySelectorAll('details.rule').forEach(function (d) { d.open = open; });
+    });
+  });
+</script>
+</body>
+</html>
