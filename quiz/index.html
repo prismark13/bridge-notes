@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz as a classic table; dummy always visible; choose how many hands; a full deal played through card by card.">
+<meta name="description" content="Second-hand play quiz: pick difficulty and number of hands; classic table view, played through card by card.">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
@@ -105,6 +105,7 @@
   .sl { display:block; font-family:var(--mono); font-size:1rem; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; line-height:1.8; letter-spacing:.03em; }
   .sl .st { display:inline-block; width:1.35em; font-weight:400; }
   .sl .st.r { color:var(--suit); }
+  .rk.gone { text-decoration:line-through; text-decoration-thickness:2px; color:var(--muted); opacity:.5; }
   .conceal { display:block; font-family:var(--mono); color:var(--muted); letter-spacing:.28em; font-size:1.1rem; line-height:1.8; opacity:.6; }
   .ctr { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.4rem; text-align:center; padding:.2rem; }
   .ctrlab { font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700; }
@@ -118,11 +119,24 @@
   .hist .hk { font-family:var(--mono); color:var(--soft); font-weight:700; font-size:.95em; }
 
   .start .startlead { color:var(--soft); margin:.35rem 0 0; }
-  .cntgrid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin-top:1.2rem; }
-  .cnt { font:inherit; font-size:1.05rem; font-weight:680; color:var(--fg); background:var(--panel); border:1.5px solid var(--edge); border-radius:14px; padding:1rem .9rem; cursor:pointer; transition:border-color .12s, color .12s, background .12s; }
-  .cnt:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-soft); }
-  .cnt small { display:block; font-size:.72rem; font-weight:500; color:var(--muted); margin-top:.15rem; }
-  .cnt:hover small { color:var(--accent); }
+  .diffgrid { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; margin:1.1rem 0 .2rem; }
+  .diff { font:inherit; font-size:1.02rem; font-weight:680; color:var(--fg); background:var(--panel); border:1.5px solid var(--edge); border-radius:14px; padding:.85rem .8rem; cursor:pointer; text-align:left; transition:border-color .12s, color .12s, background .12s; }
+  .diff small { display:block; font-size:.7rem; font-weight:500; color:var(--muted); margin-top:.15rem; }
+  .diff:hover { border-color:var(--accent); }
+  .diff.on { border-color:var(--accent); background:var(--accent-soft); color:var(--accent); }
+  .diff.on small { color:var(--accent); }
+  .sliderbox { margin:1.2rem 0 .2rem; }
+  .sliderhead { display:flex; justify-content:space-between; align-items:baseline; font-size:.82rem; color:var(--muted); }
+  .sliderhead b { color:var(--fg); font-size:1.5rem; font-weight:700; font-variant-numeric:tabular-nums; }
+  .sliderends { display:flex; justify-content:space-between; font-size:.72rem; color:var(--muted); margin-top:.35rem; }
+  input[type=range] { width:100%; margin-top:.6rem; -webkit-appearance:none; appearance:none; height:6px; border-radius:999px; background:var(--panel); border:1px solid var(--line); outline:none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:22px; height:22px; border-radius:50%; background:var(--accent); border:2px solid var(--tile); box-shadow:var(--shadow); cursor:pointer; }
+  input[type=range]::-moz-range-thumb { width:20px; height:20px; border-radius:50%; background:var(--accent); border:2px solid var(--tile); cursor:pointer; }
+  input[type=range]:focus-visible { border-color:var(--accent); }
+  .startbtn { width:100%; margin-top:1.3rem; font:inherit; font-size:1.05rem; font-weight:700; color:#fff; background:var(--accent); border:0; border-radius:14px; padding:.9rem; cursor:pointer; }
+  @media (prefers-color-scheme:dark){ .startbtn{ color:#0e100d; } }
+  :root[data-theme="dark"] .startbtn{ color:#0e100d; }
+  :root[data-theme="light"] .startbtn{ color:#fff; }
   .result .row { display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
 
   .walk { margin:.85rem 0 0; padding:.7rem .85rem .7rem 1rem; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
@@ -189,15 +203,22 @@ document.addEventListener('DOMContentLoaded', function () {
     { d:{s:'♥',c:['10','9','7']}, y:{s:'♥',c:['K','J','4']}, by:'Dummy', lc:'10', ans:'Cover', play:'the king', tag:'Advanced', why:'Two honors above the card led — play the higher (the king), keeping the jack poised over dummy for a second trick. (Pavlicek)' },
     { d:{s:'♠',c:['Q','6']}, y:{s:'♠',c:['K','9','5','4']}, by:'Dummy', lc:'Q', ans:'Play Low', play:'low', tag:'Advanced', why:'A short dummy means declarer is long — covering only builds his suit and can crash partner’s honor. (fine print)' },
 
+    // ── Tier 6b · Rise or duck? (second hand high vs low) ──
+    { d:{s:'♠',c:['K']}, y:{s:'♠',c:['A','9','5','2']}, by:'Declarer', lc:'3', ans:'Play High', play:'the ace', tag:'Advanced', note:'Dummy’s king is a singleton.', why:'Over a singleton honor in dummy, hop up with the ace — dummy must drop its lone king under it. Duck and that king scores a trick it can never make again.' },
+    { d:{s:'♦',c:['K','J','7','4']}, y:{s:'♦',c:['Q','6']}, by:'Declarer', lc:'2', ans:'Play High', play:'the queen', tag:'Advanced', note:'Dummy has no outside entry.', why:'The “left jab”: rise with the queen to force dummy’s king now and kill its only entry — declarer can no longer reach those long diamonds. (Kantar)' },
+    { d:{s:'♠',c:['A','7','4']}, y:{s:'♠',c:['Q','8','3']}, by:'Declarer', lc:'J', ans:'Play Low', play:'low', tag:'Advanced', why:'Declarer leads the jack with dummy’s ace sitting behind you — don’t cover. Covering lets dummy win the ace and finesse partner; duck and your queen stays poised over dummy. (Kantar)' },
+    { d:{s:'♥',c:['J','5','2']}, y:{s:'♥',c:['A','9','3']}, by:'Dummy', lc:'J', ans:'Cover', play:'the ace', tag:'Advanced', note:'Notrump contract.', why:'Jack led from dummy and you hold the ace — at notrump, take it: winning now clears the suit and promotes partner’s honors. (Kantar)' },
+    { d:{s:'♥',c:['J','5','2']}, y:{s:'♥',c:['A','9','3']}, by:'Dummy', lc:'J', ans:'Play Low', play:'low', tag:'Advanced', note:'Suit contract — you hold no ten.', why:'The same holding at a suit contract: duck smoothly. Missing the ten, declarer may misguess and finesse into thin air. (Kantar)' },
+
     // ── Tier 7 · Continuations (several tricks deep) ──
     { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, tag:'Continuation', steps:[
-      { by:'Dummy', lc:'Q', ans:'Play Low', play:'low (duck)', why:'Touching honors — don’t cover the first. Duck the queen smoothly. (Larry Cohen)' },
-      { by:'Dummy', lc:'J', ans:'Cover', play:'the king', why:'Now cover the last honor — the king kills the finesse against partner’s ten. (Larry Cohen)' }
+      { by:'Dummy', lc:'Q', yc:'5', ans:'Play Low', play:'low (duck)', why:'Touching honors — don’t cover the first. Duck the queen smoothly. (Larry Cohen)' },
+      { by:'Dummy', lc:'J', yc:'K', ans:'Cover', play:'the king', why:'Now cover the last honor — the king kills the finesse against partner’s ten. (Larry Cohen)' }
     ] },
     { d:{s:'♠',c:['Q','J','10','4']}, y:{s:'♠',c:['K','7','3']}, tag:'Continuation', steps:[
-      { by:'Dummy', lc:'Q', ans:'Play Low', play:'low', why:'A three-card sequence — never cover the first honor. The queen wins, but your king is intact.' },
-      { by:'Dummy', lc:'J', ans:'Play Low', play:'low', why:'Still duck — the jack is only the second of the three. Covering here just sets up dummy’s ten.' },
-      { by:'Dummy', lc:'10', ans:'Cover', play:'the king', why:'Cover the LAST of the three touching honors — now the king promotes partner’s nine for a trick.' }
+      { by:'Dummy', lc:'Q', yc:'3', ans:'Play Low', play:'low', why:'A three-card sequence — never cover the first honor. The queen wins, but your king is intact.' },
+      { by:'Dummy', lc:'J', yc:'7', ans:'Play Low', play:'low', why:'Still duck — the jack is only the second of the three. Covering here just sets up dummy’s ten.' },
+      { by:'Dummy', lc:'10', yc:'K', ans:'Cover', play:'the king', why:'Cover the LAST of the three touching honors — now the king promotes partner’s nine for a trick.' }
     ] },
 
     // ── Tier 8 · Full deal (the hardest) ──
@@ -217,7 +238,17 @@ document.addEventListener('DOMContentLoaded', function () {
       by:'Dummy', lc:'2', ans:'Play High', play:'the ♥J',
       why:'Rise with the ♥J — second hand high to rescue partner from the throw-in. Your jack drives out the queen, so the defence is assured two heart tricks. (La Jolla Bridge)' }
   ];
+  // Difficulty: hard = advanced / continuation / full-deal; tiers 1–2 easy; the rest medium.
+  Q.forEach(function (q, k) {
+    q.diff = (q.full || q.steps || q.tag === 'Advanced') ? 'hard' : (k < 9 ? 'easy' : 'medium');
+  });
   var OPTS = ['Play High', 'Cover', 'Play Low', 'Split'];
+  // Covering an honour is a form of playing high — accept either answer for the other.
+  function accepts (opt, ans) {
+    if (opt === ans) return true;
+    var hc = { 'Play High':1, 'Cover':1 };
+    return hc[opt] && hc[ans];
+  }
 
   // Flatten a set of positions into a linear list of plays (continuations expand to several).
   function buildPlays (positions) {
@@ -241,6 +272,16 @@ document.addEventListener('DOMContentLoaded', function () {
   function suitLine (sym, cards) {
     return '<span class="sl"><span class="st' + (isRed(sym) ? ' r' : '') + '">' + sym + '</span>' + cards + '</span>';
   }
+  // Render a holding card-by-card, striking through any already played this deal.
+  function suitCards (sym, cards, struck) {
+    var used = (struck || []).slice();
+    var cells = cards.map(function (r) {
+      var k = used.indexOf(r), gone = k !== -1;
+      if (gone) used.splice(k, 1);
+      return '<span class="rk' + (gone ? ' gone' : '') + '">' + r + '</span>';
+    }).join(' ');
+    return '<span class="sl"><span class="st' + (isRed(sym) ? ' r' : '') + '">' + sym + '</span>' + cells + '</span>';
+  }
   function fullLines (h) {
     return suitLine('♠', h.s) + suitLine('♥', h.h) + suitLine('♦', h.d) + suitLine('♣', h.c);
   }
@@ -254,14 +295,16 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   // Build the classic N/W-E/S table. Dummy sits North, declarer South; You is the second-hand
   // seat (East when dummy leads, West when declarer leads). Unknown hands are shown concealed.
-  function tableHTML (q, s, suit) {
+  function tableHTML (q, s, suit, history) {
+    var struckD = history.filter(function (h) { return h.by === 'Dummy'; }).map(function (h) { return h.lc; });
+    var struckY = history.map(function (h) { return h.yc; }).filter(Boolean);
     var led = '<div class="ctr"><div class="ctrlab">' + s.by + ' leads</div>' +
       '<span class="lc"><span class="st' + (isRed(suit) ? ' r' : '') + '">' + suit + '</span>' +
       '<span class="k led">' + s.lc + '</span></span></div>';
     // Abstract combination with no dummy in the problem — show just your hand and the lead, no table.
     if (!q.full && !q.d) {
       return '<div class="table-wrap"><div class="solo">' +
-        seatBox('', 'Your hand', suitLine(q.y.s, q.y.c.join(' ')), ' me') + led + '</div></div>';
+        seatBox('', 'Your hand', suitCards(q.y.s, q.y.c, struckY), ' me') + led + '</div></div>';
     }
 
     var N, E, S, W;
@@ -273,8 +316,8 @@ document.addEventListener('DOMContentLoaded', function () {
       S = conceal('s-s', 'South &middot; Decl.', 4);
     } else {
       // Dummy is always visible; conceal only the two hands a defender can't see.
-      var you = suitLine(q.y.s, q.y.c.join(' '));
-      N = seatBox('s-n', 'North &middot; Dummy', suitLine(q.d.s, q.d.c.join(' ')));
+      var you = suitCards(q.y.s, q.y.c, struckY);
+      N = seatBox('s-n', 'North &middot; Dummy', suitCards(q.d.s, q.d.c, struckD));
       S = conceal('s-s', 'South &middot; Decl.');
       if (s.by === 'Dummy') {           // North leads → you play second from the East seat
         E = seatBox('s-e', 'East &middot; You', you, ' me');
@@ -295,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var head = '';
     if (q.tag) head += '<span class="tag">' + q.tag + '</span>';
-    head += tableHTML(q, s, p.suit);
+    head += tableHTML(q, s, p.suit, p.history);
     if (q.full) head += '<div class="note"><b>Contract:</b> ' + q.full.contract + ' &nbsp;&middot;&nbsp; <b>Opening lead:</b> ' + q.full.lead + '</div>';
     if (q.note) head += '<div class="note">' + redize(q.note) + '</div>';
 
@@ -325,12 +368,12 @@ document.addEventListener('DOMContentLoaded', function () {
     answered = true;
     var p = PLAYS[i], s = p.step, q = p.q;
     var chosen = e.currentTarget.getAttribute('data-o');
-    var ok = chosen === s.ans;
+    var ok = accepts(chosen, s.ans);
     if (ok) score++;
     stage.querySelectorAll('.ans').forEach(function (b) {
       b.disabled = true;
       var o = b.getAttribute('data-o');
-      if (o === s.ans) b.classList.add('correct');
+      if (accepts(o, s.ans)) b.classList.add('correct');
       else if (o === chosen) b.classList.add('wrong');
     });
     var walk = q.line
@@ -367,10 +410,15 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('newset').addEventListener('click', startScreen);
   }
 
-  // Shuffle position indices, take n, then re-sort so the session still ramps easy → hard.
-  function pickPositions (n) {
-    var idx = Q.map(function (_, k) { return k; });
-    if (n >= Q.length) return idx.map(function (k) { return Q[k]; });
+  // Position indices for a difficulty bucket ('random' = all).
+  function poolFor (diff) {
+    var idx = [];
+    Q.forEach(function (q, k) { if (diff === 'random' || q.diff === diff) idx.push(k); });
+    return idx;
+  }
+  // Shuffle the bucket, take n, then re-sort so the session still ramps easy → hard.
+  function pickPositions (n, diff) {
+    var idx = poolFor(diff);
     for (var j = idx.length - 1; j > 0; j--) {
       var r = Math.floor(Math.random() * (j + 1));
       var t = idx[j]; idx[j] = idx[r]; idx[r] = t;
@@ -378,35 +426,58 @@ document.addEventListener('DOMContentLoaded', function () {
     return idx.slice(0, n).sort(function (a, b) { return a - b; }).map(function (k) { return Q[k]; });
   }
 
-  function begin (n) {
-    PLAYS = buildPlays(pickPositions(n));
+  function begin (n, diff) {
+    PLAYS = buildPlays(pickPositions(n, diff));
     document.getElementById('qt').textContent = PLAYS.length;
     i = 0; score = 0; render();
   }
 
+  var selDiff = 'random';
   function startScreen () {
     document.getElementById('qn').textContent = '–';
     document.getElementById('qt').textContent = '–';
     document.getElementById('sc').textContent = '0';
     document.getElementById('prog').style.width = '0%';
-    var full = Q.length;
-    var choices = [
-      { n:5, note:'a quick warm-up' },
-      { n:10, note:'a short session' },
-      { n:20, note:'a full workout' },
-      { n:full, note:'every position, in order' }
+    var diffs = [
+      { d:'random', label:'Random', note:'a mix of everything' },
+      { d:'easy', label:'Easy', note:'second hand low, splitting' },
+      { d:'medium', label:'Medium', note:'covering, reading dummy' },
+      { d:'hard', label:'Hard', note:'rise-or-duck, continuations, full deal' }
     ];
-    var btns = choices.map(function (c) {
-      var label = (c.n >= full) ? 'All ' + full : c.n + ' hands';
-      return '<button class="cnt" type="button" data-n="' + c.n + '">' + label + '<small>' + c.note + '</small></button>';
+    var dbtns = diffs.map(function (x) {
+      return '<button class="diff' + (x.d === selDiff ? ' on' : '') + '" type="button" data-d="' + x.d + '">' +
+        x.label + '<small>' + x.note + '</small></button>';
     }).join('');
     stage.innerHTML =
       '<div class="card start"><div class="eyebrow">Practice set</div>' +
-      '<p class="startlead">How many hands would you like? A fresh mix is dealt each time, ordered easiest first.</p>' +
-      '<div class="cntgrid">' + btns + '</div></div>';
-    stage.querySelectorAll('.cnt').forEach(function (b) {
-      b.addEventListener('click', function () { begin(parseInt(b.getAttribute('data-n'), 10)); });
+      '<p class="startlead">Choose a difficulty and how many hands. A fresh mix is dealt each time, ordered easiest first.</p>' +
+      '<div class="diffgrid">' + dbtns + '</div>' +
+      '<div class="sliderbox"><div class="sliderhead"><span>Hands</span><b id="cntval">10</b></div>' +
+      '<input type="range" id="cnt" min="1" step="1" value="10">' +
+      '<div class="sliderends"><span>1</span><span id="cntmax">–</span></div></div>' +
+      '<button class="startbtn" id="go" type="button">Start &rarr;</button></div>';
+    var slider = document.getElementById('cnt');
+    function refresh () {
+      var max = poolFor(selDiff).length;
+      slider.max = max;
+      document.getElementById('cntmax').textContent = max;
+      var v = parseInt(slider.value, 10);
+      if (!v || v > max) v = Math.min(10, max);
+      if (v < 1) v = 1;
+      slider.value = v;
+      document.getElementById('cntval').textContent = v;
+    }
+    refresh();
+    slider.addEventListener('input', function () { document.getElementById('cntval').textContent = slider.value; });
+    stage.querySelectorAll('.diff').forEach(function (b) {
+      b.addEventListener('click', function () {
+        selDiff = b.getAttribute('data-d');
+        stage.querySelectorAll('.diff').forEach(function (x) { x.classList.remove('on'); });
+        b.classList.add('on');
+        refresh();
+      });
     });
+    document.getElementById('go').addEventListener('click', function () { begin(parseInt(slider.value, 10), selDiff); });
   }
 
   startScreen();
