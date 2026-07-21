@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz: 12 positions from published problems (Cohen, Pavlicek, Adventures in Bridge).">
+<meta name="description" content="Second-hand play quiz: 25 verified positions (Cohen, Pavlicek, Robson, Adventures in Bridge).">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
     --surface:#f2f0e9; --tile:#ffffff; --fg:#16181d; --muted:#5f6672; --line:#e7e4da; --edge:#d3d2c6; --panel:#f3f2ea;
-    --accent:#1f6b49; --accent-soft:#e0efe6; --suit:#b83a2c; --soft:#464c56; --hold:#4e6a78; --hold-soft:#e6eef2;
+    --accent:#1f6b49; --accent-soft:#e0efe6; --suit:#b83a2c; --soft:#464c56; --hold:#4e6a78; --hold-soft:#e6eef2; --led-bg:#e7e9ef; --led-bd:#aab2bf;
     --good:#1f6b49; --good-soft:#e0efe6; --bad:#b0432a; --bad-soft:#f6e6df;
     --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05);
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;
@@ -17,11 +17,11 @@
   }
   @media (prefers-color-scheme:dark){
     :root{ --surface:#0e100d; --tile:#161915; --fg:#f2f3f5; --muted:#9ba2ad; --line:#242a24; --edge:#3a4038; --panel:#1a201a;
-      --accent:#5fc08c; --accent-soft:#16281e; --suit:#ea8072; --soft:#c4cad3; --hold:#86a6b6; --hold-soft:#17242a;
+      --accent:#5fc08c; --accent-soft:#16281e; --suit:#ea8072; --soft:#c4cad3; --hold:#86a6b6; --hold-soft:#17242a; --led-bg:#2b303a; --led-bd:#535c6b;
       --good:#5fc08c; --good-soft:#16281e; --bad:#e0876a; --bad-soft:#2a1912; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
   }
-  :root[data-theme="light"]{ --surface:#f2f0e9; --tile:#fff; --fg:#16181d; --muted:#5f6672; --line:#e7e4da; --edge:#d3d2c6; --panel:#f3f2ea; --accent:#1f6b49; --accent-soft:#e0efe6; --suit:#b83a2c; --soft:#464c56; --hold:#4e6a78; --hold-soft:#e6eef2; --good:#1f6b49; --good-soft:#e0efe6; --bad:#b0432a; --bad-soft:#f6e6df; --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05); }
-  :root[data-theme="dark"]{ --surface:#0e100d; --tile:#161915; --fg:#f2f3f5; --muted:#9ba2ad; --line:#242a24; --edge:#3a4038; --panel:#1a201a; --accent:#5fc08c; --accent-soft:#16281e; --suit:#ea8072; --soft:#c4cad3; --hold:#86a6b6; --hold-soft:#17242a; --good:#5fc08c; --good-soft:#16281e; --bad:#e0876a; --bad-soft:#2a1912; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
+  :root[data-theme="light"]{ --surface:#f2f0e9; --tile:#fff; --fg:#16181d; --muted:#5f6672; --line:#e7e4da; --edge:#d3d2c6; --panel:#f3f2ea; --accent:#1f6b49; --accent-soft:#e0efe6; --suit:#b83a2c; --soft:#464c56; --hold:#4e6a78; --hold-soft:#e6eef2; --led-bg:#e7e9ef; --led-bd:#aab2bf; --good:#1f6b49; --good-soft:#e0efe6; --bad:#b0432a; --bad-soft:#f6e6df; --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05); }
+  :root[data-theme="dark"]{ --surface:#0e100d; --tile:#161915; --fg:#f2f3f5; --muted:#9ba2ad; --line:#242a24; --edge:#3a4038; --panel:#1a201a; --accent:#5fc08c; --accent-soft:#16281e; --suit:#ea8072; --soft:#c4cad3; --hold:#86a6b6; --hold-soft:#17242a; --led-bg:#2b303a; --led-bd:#535c6b; --good:#5fc08c; --good-soft:#16281e; --bad:#e0876a; --bad-soft:#2a1912; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
 
   * { box-sizing:border-box; }
   body { margin:0; background:var(--surface); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.56; -webkit-font-smoothing:antialiased; }
@@ -52,6 +52,11 @@
   .rw { display:inline-flex; gap:.3rem; }
   .k { min-width:1.9em; height:2.1em; padding:0 .35em; display:inline-flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:.9rem; font-weight:600; border:1px solid var(--edge); border-radius:6px; background:var(--panel); color:var(--fg); font-variant-numeric:tabular-nums; }
   .k.hit { border:1.5px solid var(--accent); color:var(--accent); background:var(--accent-soft); }
+  .k.led { background:var(--led-bg); border-color:var(--led-bd); }
+  .trick { display:flex; align-items:center; gap:.5rem; margin:1rem 0 .1rem; }
+  .trick .tlabel { font-size:.92rem; color:var(--muted); font-weight:600; }
+  .trick .st { flex:0 0 auto; width:1em; text-align:center; font-size:1.05rem; }
+  .trick .st.r { color:var(--suit); }
   .prompt { font-size:1.05rem; font-weight:600; margin:1.1rem 0 .2rem; }
   .prompt .lo { color:var(--muted); font-weight:400; }
 
@@ -93,7 +98,7 @@
 <div class="page">
   <p class="eyebrow">Bridge Notes &middot; Second-Hand</p>
   <h1>Quiz</h1>
-  <p class="intro">A dozen positions from published problems &mdash; Larry Cohen, Richard Pavlicek, and Adventures in Bridge. Pick your play; the nine counts as an honor.</p>
+  <p class="intro">Twenty-five positions from published problems &mdash; Larry Cohen, Richard Pavlicek, Andrew Robson, and Adventures in Bridge &mdash; cross-checked against this site's rules. Pick your play; the nine counts as an honor.</p>
 
   <div class="bar"><span>Question <b id="qn">1</b> of <b id="qt">13</b></span><span>Score <b id="sc">0</b></span></div>
   <div class="track"><i id="prog"></i></div>
@@ -106,18 +111,31 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   var Q = [
-    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['K','10','4']}, led:'The 6 is led from dummy', ans:'Play Low', play:'the 4', why:'Second hand low — keep the king poised over dummy and make declarer guess. (Larry Cohen)' },
-    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['K','10','4']}, led:'The jack is led from dummy', ans:'Cover', play:'the king', why:'The jack is unsupported — no touching honor beside it — so cover to promote your ten and partner’s cards. (Larry Cohen)' },
-    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['A','9','2']}, led:'Declarer leads a low card', ans:'Play Low', play:'low (the 2)', why:'Nothing forces the ace — follow low and save it to capture an honor. (Larry Cohen)' },
-    { d:{s:'♥',c:['K','8','6']}, y:{s:'♥',c:['J','9','5','4']}, led:'Declarer leads a low card', ans:'Play Low', play:'low', why:'No honor to contribute — just follow low. (Larry Cohen)' },
-    { d:{s:'♦',c:['A','K','10','9']}, y:{s:'♦',c:['Q','8','7','6','5']}, led:'Declarer leads the jack', ans:'Play Low', play:'low', why:'Dummy’s A-K-10-9 means covering promotes nothing — don’t waste the queen. (Larry Cohen)' },
-    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, led:'The queen is led from dummy', ans:'Play Low', play:'low (duck)', why:'Touching honors — don’t cover the first. Duck the queen. (Larry Cohen)' },
-    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, led:'The jack is led next', ans:'Cover', play:'the king', why:'Now cover — the king kills the finesse against partner’s ten. (Larry Cohen)' },
-    { d:{s:'♦',c:['Q','J','4']}, y:{s:'♦',c:['K','8','7','5']}, led:'The queen is led from dummy', ans:'Play Low', play:'low', why:'The queen is supported by the jack, so covering only sets the jack up. Play low. (Pavlicek)' },
-    { d:{s:'♠',c:['Q','5','3']}, y:{s:'♠',c:['K','8','2']}, led:'The queen is led from dummy', ans:'Cover', play:'the king', why:'An unsupported queen — cover to promote the jack or ten in partner’s hand. (Adventures in Bridge)' },
-    { d:{s:'♠',c:['Q','J','5']}, y:{s:'♠',c:['K','7','3']}, led:'The queen is led from dummy', ans:'Play Low', play:'low', why:'Supported by the jack — don’t cover the first honor; wait. (Adventures in Bridge)' },
-    { d:null, y:{s:'♠',c:['Q','J','10','7']}, led:'A low card is led toward dummy', ans:'Split', play:'the 10', why:'Three touching honors: insert the lowest of the sequence to block a cheap finesse.' },
-    { d:null, y:{s:'♠',c:['K','10','9','7']}, led:'A low card is led toward dummy', ans:'Split', play:'the 9', why:'Three honors (the nine counts) — split with the lowest of the touching 10-9.' }
+    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['K','10','4']}, by:'Dummy', lc:'6', ans:'Play Low', play:'the 4', why:'Second hand low — keep the king over dummy and make declarer guess. (Larry Cohen)' },
+    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['A','9','2']}, by:'Declarer', lc:'3', ans:'Play Low', play:'low (the 2)', why:'Nothing forces the ace — follow low and save it to capture an honor. (Larry Cohen)' },
+    { d:{s:'♥',c:['K','8','6']}, y:{s:'♥',c:['J','9','5','4']}, by:'Declarer', lc:'2', ans:'Play Low', play:'low', why:'No honor to contribute — just follow low. (Larry Cohen)' },
+    { d:{s:'♥',c:['K','8','6']}, y:{s:'♥',c:['A','10','7']}, by:'Declarer', lc:'2', ans:'Play Low', play:'low (the 7)', why:'Don’t grab the ace on air — keep it over dummy’s king. (Larry Cohen)' },
+    { d:null, y:{s:'♠',c:['Q','J','10','7']}, by:'Declarer', lc:'4', ans:'Split', play:'the 10', why:'Three touching honors — insert the lowest of the sequence to block a cheap finesse.' },
+    { d:null, y:{s:'♠',c:['K','10','9','7']}, by:'Declarer', lc:'3', ans:'Split', play:'the 9', why:'Three honors (the nine counts) — split the lowest of the touching 10-9.' },
+    { d:null, y:{s:'♠',c:['Q','J','8','3']}, by:'Declarer', lc:'4', ans:'Play Low', play:'the 3', why:'Only two honors — splitting wastes one and helps declarer set the suit up.' },
+    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['K','10','4']}, by:'Dummy', lc:'J', ans:'Cover', play:'the king', why:'The jack is unsupported — cover to promote your ten and partner’s cards. (Larry Cohen)' },
+    { d:{s:'♠',c:['J','10','8','6']}, y:{s:'♠',c:['A','Q','2']}, by:'Dummy', lc:'J', ans:'Cover', play:'the ace', why:'With two honors above the card led, take the jack — a trick that would otherwise score. (Pavlicek)' },
+    { d:{s:'♥',c:['J','4','3']}, y:{s:'♥',c:['Q','8','6','4']}, by:'Dummy', lc:'J', ans:'Cover', play:'the queen', why:'An unsupported jack — cover with the queen to promote your side’s spot cards. (Pavlicek)' },
+    { d:{s:'♠',c:['10','5','4']}, y:{s:'♠',c:['K','7','2']}, by:'Dummy', lc:'10', ans:'Cover', play:'the king', why:'The ten is unsupported, so covering promotes your side’s smaller cards. (Pavlicek)' },
+    { d:{s:'♠',c:['Q','5','3']}, y:{s:'♠',c:['K','8','2']}, by:'Dummy', lc:'Q', ans:'Cover', play:'the king', why:'An unsupported queen — cover to promote partner’s jack or ten. (Adventures in Bridge)' },
+    { d:{s:'♠',c:['Q','4','2']}, y:{s:'♠',c:['K','9','5']}, by:'Dummy', lc:'Q', ans:'Cover', play:'the king', why:'Cover the unsupported queen — it forces the ace and promotes partner’s ten with your nine. (Andrew Robson)' },
+    { d:{s:'♠',c:['J','10','8']}, y:{s:'♠',c:['K','2']}, by:'Dummy', lc:'J', ans:'Play Low', play:'low (the 2)', why:'The jack is supported by the ten — covering just makes that ten good. (Pavlicek)' },
+    { d:{s:'♠',c:['Q','J','5']}, y:{s:'♠',c:['K','7','3']}, by:'Dummy', lc:'Q', ans:'Play Low', play:'low', why:'Supported by the jack — don’t cover the first honor; wait. (Adventures in Bridge)' },
+    { d:{s:'♦',c:['Q','J','4']}, y:{s:'♦',c:['K','8','7','5']}, by:'Dummy', lc:'Q', ans:'Play Low', play:'low', why:'The queen is supported by the jack, so covering only sets the jack up. (Pavlicek)' },
+    { d:{s:'♠',c:['Q','J','10','9']}, y:{s:'♠',c:['K','8','4']}, by:'Dummy', lc:'Q', ans:'Play Low', play:'low (the 4)', why:'A solid run — covering builds J-10-9 into three winners for declarer. Duck. (site rules)' },
+    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, by:'Dummy', lc:'Q', ans:'Play Low', play:'low (duck)', why:'Touching honors — don’t cover the first. Duck the queen. (Larry Cohen)' },
+    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, by:'Dummy', lc:'J', ans:'Cover', play:'the king', why:'Now cover the last honor — the king kills the finesse against partner’s ten. (Larry Cohen)' },
+    { d:{s:'♦',c:['A','K','10','9']}, y:{s:'♦',c:['J','4']}, by:'Dummy', lc:'10', ans:'Play Low', play:'the 4', why:'With A-K-10-9 over you, the jack promotes nothing — covering just gives it away. (site rules)' },
+    { d:{s:'♦',c:['A','K','10','9']}, y:{s:'♦',c:['Q','8','7','6','5']}, by:'Declarer', lc:'J', ans:'Play Low', play:'low', why:'Dummy’s A-K-10-9 means covering promotes nothing — don’t waste the queen. (Larry Cohen)' },
+    { d:{s:'♠',c:['A','J','10','6']}, y:{s:'♠',c:['K','5','2']}, by:'Declarer', lc:'9', ans:'Cover', play:'the king', why:'Dummy’s ten backs up the 9, so the cover promotes — and stops a free finesse. (Pavlicek)' },
+    { d:{s:'♠',c:['A','8','6','4']}, y:{s:'♠',c:['K','7','2']}, by:'Declarer', lc:'10', ans:'Play Low', play:'low (the 2)', why:'No touching card in dummy means declarer holds the jack — covering promotes only his hand. (Pavlicek)' },
+    { d:null, y:{s:'♦',c:['K','Q','8','3']}, by:'Declarer', lc:'4', ans:'Play Low', play:'the 3', why:'Only two honors (K-Q) — don’t split; follow low.' },
+    { d:null, y:{s:'♠',c:['J','10','9','7']}, by:'Declarer', lc:'4', ans:'Split', play:'the 9', why:'Three touching honors (J-10-9) — split with the lowest.' }
   ];
   var OPTS = ['Play High', 'Cover', 'Play Low', 'Split'];
   var i = 0, score = 0, answered = false;
@@ -137,10 +155,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('sc').textContent = score;
     document.getElementById('prog').style.width = (i / Q.length * 100) + '%';
     var deal = '<div class="deal">' + (q.d ? handHTML('Dummy', q.d) : '') + handHTML('You', q.y) + '</div>';
+    var lst = '<span class="st' + (isRed(q.y.s) ? ' r' : '') + '">' + q.y.s + '</span>';
+    var trick = '<div class="trick"><span class="tlabel">' + q.by + ' leads</span>' + lst + '<span class="k led">' + q.lc + '</span></div>';
     var btns = OPTS.map(function (o) { return '<button class="ans" type="button" data-o="' + o + '">' + o + '</button>'; }).join('');
     stage.innerHTML =
-      '<div class="card">' + deal +
-      '<div class="prompt"><span class="lo">' + q.led + '</span> &mdash; your play?</div>' +
+      '<div class="card">' + deal + trick +
+      '<div class="prompt">Your play?</div>' +
       '<div class="answers">' + btns + '</div>' +
       '<div class="feedback" id="fb"></div>' +
       '<div class="actions"><button class="next" id="next" type="button">' + (i === Q.length - 1 ? 'See score' : 'Next') + ' &rarr;</button></div>' +
