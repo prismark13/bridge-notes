@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz as a classic N/E/S/W table; choose how many hands; a full deal seen from your seat, played through card by card.">
+<meta name="description" content="Second-hand play quiz as a classic table; dummy always visible; choose how many hands; a full deal played through card by card.">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
@@ -110,6 +110,8 @@
   .ctrlab { font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700; }
   .ctr .lc { display:inline-flex; align-items:center; gap:.3rem; }
   .ctr .lc .st { font-size:1.35rem; } .ctr .lc .st.r { color:var(--suit); }
+  .solo { display:flex; flex-direction:column; align-items:center; gap:.7rem; padding:.5rem 0 .3rem; min-width:14rem; }
+  .solo .seat { min-width:11rem; text-align:center; }
 
   .hist { margin:.9rem 0 -.2rem; padding:.7rem .85rem; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
   .hist .hh { display:block; font-size:.88rem; color:var(--muted); margin:.12rem 0; }
@@ -256,16 +258,23 @@ document.addEventListener('DOMContentLoaded', function () {
     var led = '<div class="ctr"><div class="ctrlab">' + s.by + ' leads</div>' +
       '<span class="lc"><span class="st' + (isRed(suit) ? ' r' : '') + '">' + suit + '</span>' +
       '<span class="k led">' + s.lc + '</span></span></div>';
+    // Abstract combination with no dummy in the problem — show just your hand and the lead, no table.
+    if (!q.full && !q.d) {
+      return '<div class="table-wrap"><div class="solo">' +
+        seatBox('', 'Your hand', suitLine(q.y.s, q.y.c.join(' ')), ' me') + led + '</div></div>';
+    }
+
     var N, E, S, W;
     if (q.full) {
-      // A defender only sees dummy and their own hand — keep partner and declarer concealed.
+      // A defender sees dummy and their own hand — only partner and declarer stay concealed.
       N = seatBox('s-n', 'North &middot; Dummy', fullLines(q.full.n));
       E = seatBox('s-e', 'East &middot; You', fullLines(q.full.e), ' me');
       W = conceal('s-w', 'West &middot; Partner', 4);
       S = conceal('s-s', 'South &middot; Decl.', 4);
     } else {
+      // Dummy is always visible; conceal only the two hands a defender can't see.
       var you = suitLine(q.y.s, q.y.c.join(' '));
-      N = q.d ? seatBox('s-n', 'North &middot; Dummy', suitLine(q.d.s, q.d.c.join(' '))) : conceal('s-n', 'North &middot; Dummy');
+      N = seatBox('s-n', 'North &middot; Dummy', suitLine(q.d.s, q.d.c.join(' ')));
       S = conceal('s-s', 'South &middot; Decl.');
       if (s.by === 'Dummy') {           // North leads → you play second from the East seat
         E = seatBox('s-e', 'East &middot; You', you, ' me');
