@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz: verified positions from Cohen, Pavlicek, Robson, La Jolla Bridge and Adventures in Bridge, ordered simple to complex with multi-trick continuations and a full-deal endplay.">
+<meta name="description" content="Second-hand play quiz: choose how many practice hands; verified positions ordered simple to complex with continuations and a full-deal endplay.">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
@@ -46,16 +46,17 @@
   .card { background:var(--tile); border:1px solid var(--line); border-radius:18px; padding:1.3rem 1.3rem 1.4rem; box-shadow:var(--shadow); }
   .deal { display:flex; flex-direction:column; gap:.4rem; margin:.3rem 0 .2rem; }
   .hand { display:flex; align-items:center; gap:.6rem; }
-  .hand .pos { flex:0 0 auto; min-width:4em; font-size:.62rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700; }
-  .hand .st { flex:0 0 auto; width:1em; text-align:center; font-size:1.05rem; }
+  .hand { min-height:2.55em; }
+  .hand .pos { flex:0 0 auto; min-width:4em; font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700; }
+  .hand .st { flex:0 0 auto; width:1.15em; text-align:center; font-size:1.35rem; }
   .hand .st.r { color:var(--suit); }
-  .rw { display:inline-flex; gap:.3rem; }
-  .k { min-width:1.9em; height:2.1em; padding:0 .35em; display:inline-flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:.9rem; font-weight:600; border:1px solid var(--edge); border-radius:6px; background:var(--panel); color:var(--fg); font-variant-numeric:tabular-nums; }
+  .rw { display:inline-flex; gap:.4rem; flex-wrap:wrap; }
+  .k { min-width:2.35em; height:2.55em; padding:0 .45em; display:inline-flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:1.15rem; font-weight:700; border:1.5px solid var(--edge); border-radius:8px; background:var(--tile); color:var(--fg); box-shadow:0 1px 1px rgba(18,20,28,.06); font-variant-numeric:tabular-nums; }
   .k.hit { border:1.5px solid var(--accent); color:var(--accent); background:var(--accent-soft); }
   .k.led { background:var(--led-bg); border-color:var(--led-bd); }
   .trick { display:flex; align-items:center; gap:.5rem; margin:1rem 0 .1rem; }
-  .trick .tlabel { font-size:.92rem; color:var(--muted); font-weight:600; }
-  .trick .st { flex:0 0 auto; width:1em; text-align:center; font-size:1.05rem; }
+  .trick .tlabel { font-size:.98rem; color:var(--muted); font-weight:600; }
+  .trick .st { flex:0 0 auto; width:1.15em; text-align:center; font-size:1.35rem; }
   .trick .st.r { color:var(--suit); }
   .prompt { font-size:1.05rem; font-weight:600; margin:1.1rem 0 .2rem; }
   .prompt .lo { color:var(--muted); font-weight:400; }
@@ -94,20 +95,28 @@
   .tag { display:inline-block; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:.15em .6em; margin-bottom:.5rem; }
 
   .compass-wrap { overflow-x:auto; margin:.2rem -.2rem .1rem; padding:.2rem; }
-  .compass { display:grid; grid-template-columns:1fr 1.05fr 1fr; gap:.45rem; align-items:start; min-width:20rem; }
-  .fh { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:.5rem .55rem; }
+  .compass { display:grid; grid-template-columns:1fr 1.05fr 1fr; gap:.45rem; align-items:start; min-width:23rem; }
+  .fh { background:var(--tile); border:1.5px solid var(--edge); border-radius:10px; padding:.6rem .6rem; box-shadow:0 1px 1px rgba(18,20,28,.05); }
   .fh.me { border-color:var(--accent); background:var(--accent-soft); }
-  .fh .fpos { font-size:.58rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:.2rem; white-space:nowrap; }
+  .fh .fpos { font-size:.62rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:.3rem; white-space:nowrap; }
   .fh.me .fpos { color:var(--accent); }
-  .fs { display:block; font-family:var(--mono); font-size:.82rem; font-variant-numeric:tabular-nums; white-space:nowrap; line-height:1.6; }
-  .fs .st { display:inline-block; width:1.15em; }
+  .fs { display:block; font-family:var(--mono); font-size:1rem; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; line-height:1.85; letter-spacing:.03em; }
+  .fs .st { display:inline-block; width:1.35em; font-weight:400; }
   .fs .st.r { color:var(--suit); }
   .pN { grid-column:2; grid-row:1; } .pW { grid-column:1; grid-row:2; }
   .pE { grid-column:3; grid-row:2; } .pS { grid-column:2; grid-row:3; }
 
   .hist { margin:.9rem 0 -.2rem; padding:.7rem .85rem; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
-  .hist .hh { display:block; font-size:.85rem; color:var(--muted); margin:.12rem 0; }
-  .hist .hk { font-family:var(--mono); color:var(--soft); font-weight:600; }
+  .hist .hh { display:block; font-size:.88rem; color:var(--muted); margin:.12rem 0; }
+  .hist .hk { font-family:var(--mono); color:var(--soft); font-weight:700; font-size:.95em; }
+
+  .start .startlead { color:var(--soft); margin:.35rem 0 0; }
+  .cntgrid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin-top:1.2rem; }
+  .cnt { font:inherit; font-size:1.05rem; font-weight:680; color:var(--fg); background:var(--panel); border:1.5px solid var(--edge); border-radius:14px; padding:1rem .9rem; cursor:pointer; transition:border-color .12s, color .12s, background .12s; }
+  .cnt:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-soft); }
+  .cnt small { display:block; font-size:.72rem; font-weight:500; color:var(--muted); margin-top:.15rem; }
+  .cnt:hover small { color:var(--accent); }
+  .result .row { display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
 </style>
 </head>
 <body>
@@ -191,19 +200,22 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
   var OPTS = ['Play High', 'Cover', 'Play Low', 'Split'];
 
-  // Flatten positions into a linear list of plays (continuations expand to several).
-  var PLAYS = [];
-  Q.forEach(function (q) {
-    var steps = q.steps || [{ by:q.by, lc:q.lc, ans:q.ans, play:q.play, why:q.why }];
-    var suit = q.full ? q.full.ledSuit : q.y.s;
-    steps.forEach(function (s, idx) {
-      PLAYS.push({ q:q, suit:suit, step:s, last:(idx === steps.length - 1), history:steps.slice(0, idx) });
+  // Flatten a set of positions into a linear list of plays (continuations expand to several).
+  function buildPlays (positions) {
+    var arr = [];
+    positions.forEach(function (q) {
+      var steps = q.steps || [{ by:q.by, lc:q.lc, ans:q.ans, play:q.play, why:q.why }];
+      var suit = q.full ? q.full.ledSuit : q.y.s;
+      steps.forEach(function (s, idx) {
+        arr.push({ q:q, suit:suit, step:s, last:(idx === steps.length - 1), history:steps.slice(0, idx) });
+      });
     });
-  });
+    return arr;
+  }
 
+  var PLAYS = [];
   var i = 0, score = 0, answered = false;
   var stage = document.getElementById('stage');
-  document.getElementById('qt').textContent = PLAYS.length;
 
   function isRed (s) { return s === '♥' || s === '♦'; }
   function handHTML (pos, h) {
@@ -304,11 +316,54 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="card result"><div class="eyebrow">Your score</div>' +
       '<div class="big">' + score + ' / ' + PLAYS.length + '</div>' +
       '<p class="msg">' + msg + '</p>' +
-      '<button type="button" id="again">Play again</button></div>';
+      '<div class="row"><button type="button" id="again">Replay these</button><button type="button" id="newset">New set</button></div></div>';
     document.getElementById('again').addEventListener('click', function () { i = 0; score = 0; render(); });
+    document.getElementById('newset').addEventListener('click', startScreen);
   }
 
-  render();
+  // Shuffle position indices, take n, then re-sort so the session still ramps easy → hard.
+  function pickPositions (n) {
+    var idx = Q.map(function (_, k) { return k; });
+    if (n >= Q.length) return idx.map(function (k) { return Q[k]; });
+    for (var j = idx.length - 1; j > 0; j--) {
+      var r = Math.floor(Math.random() * (j + 1));
+      var t = idx[j]; idx[j] = idx[r]; idx[r] = t;
+    }
+    return idx.slice(0, n).sort(function (a, b) { return a - b; }).map(function (k) { return Q[k]; });
+  }
+
+  function begin (n) {
+    PLAYS = buildPlays(pickPositions(n));
+    document.getElementById('qt').textContent = PLAYS.length;
+    i = 0; score = 0; render();
+  }
+
+  function startScreen () {
+    document.getElementById('qn').textContent = '–';
+    document.getElementById('qt').textContent = '–';
+    document.getElementById('sc').textContent = '0';
+    document.getElementById('prog').style.width = '0%';
+    var full = Q.length;
+    var choices = [
+      { n:5, note:'a quick warm-up' },
+      { n:10, note:'a short session' },
+      { n:20, note:'a full workout' },
+      { n:full, note:'every position, in order' }
+    ];
+    var btns = choices.map(function (c) {
+      var label = (c.n >= full) ? 'All ' + full : c.n + ' hands';
+      return '<button class="cnt" type="button" data-n="' + c.n + '">' + label + '<small>' + c.note + '</small></button>';
+    }).join('');
+    stage.innerHTML =
+      '<div class="card start"><div class="eyebrow">Practice set</div>' +
+      '<p class="startlead">How many hands would you like? A fresh mix is dealt each time, ordered easiest first.</p>' +
+      '<div class="cntgrid">' + btns + '</div></div>';
+    stage.querySelectorAll('.cnt').forEach(function (b) {
+      b.addEventListener('click', function () { begin(parseInt(b.getAttribute('data-n'), 10)); });
+    });
+  }
+
+  startScreen();
 });
 </script>
 </body>
