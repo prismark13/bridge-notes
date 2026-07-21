@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz: 25 verified positions (Cohen, Pavlicek, Robson, Adventures in Bridge).">
+<meta name="description" content="Second-hand play quiz: verified positions from Cohen, Pavlicek, Robson, La Jolla Bridge and Adventures in Bridge, including multi-trick continuations and a full-deal endplay.">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
@@ -76,7 +76,6 @@
 
   .actions { display:flex; justify-content:flex-end; margin-top:1.2rem; }
   .next { font:inherit; font-size:.9rem; font-weight:650; color:#fff; background:var(--accent); border:0; border-radius:999px; padding:.6rem 1.4rem; cursor:pointer; display:none; }
-  :root[data-theme="dark"] .next, .next { }
   @media (prefers-color-scheme:dark){ .next{ color:#0e100d; } }
   :root[data-theme="dark"] .next{ color:#0e100d; }
   :root[data-theme="light"] .next{ color:#fff; }
@@ -89,6 +88,26 @@
 
   .foot { margin-top:1.4rem; font-size:.82rem; color:var(--muted); text-align:center; }
   .foot a { color:var(--accent); }
+
+  .note { font-size:.86rem; color:var(--soft); margin:.55rem 0 .1rem; line-height:1.5; }
+  .note b { color:var(--fg); }
+  .tag { display:inline-block; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:.15em .6em; margin-bottom:.5rem; }
+
+  .compass-wrap { overflow-x:auto; margin:.2rem -.2rem .1rem; padding:.2rem; }
+  .compass { display:grid; grid-template-columns:1fr 1.05fr 1fr; gap:.45rem; align-items:start; min-width:20rem; }
+  .fh { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:.5rem .55rem; }
+  .fh.me { border-color:var(--accent); background:var(--accent-soft); }
+  .fh .fpos { font-size:.58rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:.2rem; white-space:nowrap; }
+  .fh.me .fpos { color:var(--accent); }
+  .fs { display:block; font-family:var(--mono); font-size:.82rem; font-variant-numeric:tabular-nums; white-space:nowrap; line-height:1.6; }
+  .fs .st { display:inline-block; width:1.15em; }
+  .fs .st.r { color:var(--suit); }
+  .pN { grid-column:2; grid-row:1; } .pW { grid-column:1; grid-row:2; }
+  .pE { grid-column:3; grid-row:2; } .pS { grid-column:2; grid-row:3; }
+
+  .hist { margin:.9rem 0 -.2rem; padding:.7rem .85rem; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
+  .hist .hh { display:block; font-size:.85rem; color:var(--muted); margin:.12rem 0; }
+  .hist .hk { font-family:var(--mono); color:var(--soft); font-weight:600; }
 </style>
 </head>
 <body>
@@ -98,14 +117,14 @@
 <div class="page">
   <p class="eyebrow">Bridge Notes &middot; Second-Hand</p>
   <h1>Quiz</h1>
-  <p class="intro">Twenty-five positions from published problems &mdash; Larry Cohen, Richard Pavlicek, Andrew Robson, and Adventures in Bridge &mdash; cross-checked against this site's rules. Pick your play; the nine counts as an honor.</p>
+  <p class="intro">Positions from published problems &mdash; Larry Cohen, Richard Pavlicek, Andrew Robson, La Jolla Bridge, and Adventures in Bridge &mdash; cross-checked against this site's rules. Some run several tricks deep, and one shows the full deal. Pick your play; the nine counts as an honor.</p>
 
-  <div class="bar"><span>Question <b id="qn">1</b> of <b id="qt">13</b></span><span>Score <b id="sc">0</b></span></div>
+  <div class="bar"><span>Play <b id="qn">1</b> of <b id="qt">13</b></span><span>Score <b id="sc">0</b></span></div>
   <div class="track"><i id="prog"></i></div>
 
   <div id="stage"></div>
 
-  <p class="foot">Positions from <a href="https://www.larryco.com/bridge-articles/defense-2nd-hand-play">Larry Cohen</a>, <a href="http://www.rpbridge.net/4l00.htm">Richard Pavlicek</a>, and <a href="https://www.advinbridge.com/this-week-in-bridge/498">Adventures in Bridge</a>. Review the rules on <a href="../second-hand/">Second-Hand Play</a>.</p>
+  <p class="foot">Positions from <a href="https://www.larryco.com/bridge-articles/defense-2nd-hand-play">Larry Cohen</a>, <a href="http://www.rpbridge.net/4l00.htm">Richard Pavlicek</a>, <a href="https://lajollabridge.com/LJUnit/Education/Teaching-Points/second-hand-play-and-splitting-honors.htm">La Jolla Bridge</a>, and <a href="https://www.advinbridge.com/this-week-in-bridge/498">Adventures in Bridge</a>. Review the rules on <a href="../second-hand/">Second-Hand Play</a>.</p>
 </div>
 
 <script>
@@ -128,19 +147,50 @@ document.addEventListener('DOMContentLoaded', function () {
     { d:{s:'♠',c:['Q','J','5']}, y:{s:'♠',c:['K','7','3']}, by:'Dummy', lc:'Q', ans:'Play Low', play:'low', why:'Supported by the jack — don’t cover the first honor; wait. (Adventures in Bridge)' },
     { d:{s:'♦',c:['Q','J','4']}, y:{s:'♦',c:['K','8','7','5']}, by:'Dummy', lc:'Q', ans:'Play Low', play:'low', why:'The queen is supported by the jack, so covering only sets the jack up. (Pavlicek)' },
     { d:{s:'♠',c:['Q','J','10','9']}, y:{s:'♠',c:['K','8','4']}, by:'Dummy', lc:'Q', ans:'Play Low', play:'low (the 4)', why:'A solid run — covering builds J-10-9 into three winners for declarer. Duck. (site rules)' },
-    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, by:'Dummy', lc:'Q', ans:'Play Low', play:'low (duck)', why:'Touching honors — don’t cover the first. Duck the queen. (Larry Cohen)' },
-    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, by:'Dummy', lc:'J', ans:'Cover', play:'the king', why:'Now cover the last honor — the king kills the finesse against partner’s ten. (Larry Cohen)' },
     { d:{s:'♦',c:['A','K','10','9']}, y:{s:'♦',c:['J','4']}, by:'Dummy', lc:'10', ans:'Play Low', play:'the 4', why:'With A-K-10-9 over you, the jack promotes nothing — covering just gives it away. (site rules)' },
     { d:{s:'♦',c:['A','K','10','9']}, y:{s:'♦',c:['Q','8','7','6','5']}, by:'Declarer', lc:'J', ans:'Play Low', play:'low', why:'Dummy’s A-K-10-9 means covering promotes nothing — don’t waste the queen. (Larry Cohen)' },
     { d:{s:'♠',c:['A','J','10','6']}, y:{s:'♠',c:['K','5','2']}, by:'Declarer', lc:'9', ans:'Cover', play:'the king', why:'Dummy’s ten backs up the 9, so the cover promotes — and stops a free finesse. (Pavlicek)' },
     { d:{s:'♠',c:['A','8','6','4']}, y:{s:'♠',c:['K','7','2']}, by:'Declarer', lc:'10', ans:'Play Low', play:'low (the 2)', why:'No touching card in dummy means declarer holds the jack — covering promotes only his hand. (Pavlicek)' },
     { d:null, y:{s:'♦',c:['K','Q','8','3']}, by:'Declarer', lc:'4', ans:'Play Low', play:'the 3', why:'Only two honors (K-Q) — don’t split; follow low.' },
-    { d:null, y:{s:'♠',c:['J','10','9','7']}, by:'Declarer', lc:'4', ans:'Split', play:'the 9', why:'Three touching honors (J-10-9) — split with the lowest.' }
+    { d:null, y:{s:'♠',c:['J','10','9','7']}, by:'Declarer', lc:'4', ans:'Split', play:'the 9', why:'Three touching honors (J-10-9) — split with the lowest.' },
+    { d:{s:'♥',c:['10','9','7']}, y:{s:'♥',c:['K','J','4']}, by:'Dummy', lc:'10', ans:'Cover', play:'the king', tag:'Advanced', why:'Two honors above the card led — play the higher (the king), keeping the jack poised over dummy for a second trick. (Pavlicek)' },
+    { d:{s:'♠',c:['Q','6']}, y:{s:'♠',c:['K','9','5','4']}, by:'Dummy', lc:'Q', ans:'Play Low', play:'low', tag:'Advanced', why:'A short dummy means declarer is long — covering only builds his suit and can crash partner’s honor. (fine print)' },
+
+    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, tag:'Continuation', steps:[
+      { by:'Dummy', lc:'Q', ans:'Play Low', play:'low (duck)', why:'Touching honors — don’t cover the first. Duck the queen smoothly. (Larry Cohen)' },
+      { by:'Dummy', lc:'J', ans:'Cover', play:'the king', why:'Now cover the last honor — the king kills the finesse against partner’s ten. (Larry Cohen)' }
+    ] },
+    { d:{s:'♠',c:['Q','J','10','4']}, y:{s:'♠',c:['K','7','3']}, tag:'Continuation', steps:[
+      { by:'Dummy', lc:'Q', ans:'Play Low', play:'low', why:'A three-card sequence — never cover the first honor. The queen wins, but your king is intact.' },
+      { by:'Dummy', lc:'J', ans:'Play Low', play:'low', why:'Still duck — the jack is only the second of the three. Covering here just sets up dummy’s ten.' },
+      { by:'Dummy', lc:'10', ans:'Cover', play:'the king', why:'Cover the LAST of the three touching honors — now the king promotes partner’s nine for a trick.' }
+    ] },
+
+    { full:{ contract:'6♠ by South', lead:'♣Q by West', ledSuit:'♥',
+        n:{ s:'Q 9 7', h:'6 5 4 2', d:'K Q 3', c:'K 8 3' },
+        w:{ s:'8 5 4', h:'K 10 9', d:'10 6 5 2', c:'Q 9 7' },
+        e:{ s:'3 2', h:'J 7 3', d:'9 8 7 4', c:'J 10 6 4' },
+        s:{ s:'A K J 10 6', h:'A Q 8', d:'A J', c:'A 5 2' } },
+      tag:'Full deal',
+      note:'Declarer drew trumps and now needs the heart suit. She leads a low heart from dummy toward her hand. If you follow low, she plays the ♥8 — partner (West) must win cheaply and is then endplayed, forced to give a ruff-and-discard or lead a diamond into the A-J.',
+      by:'Dummy', lc:'2', ans:'Play High', play:'the ♥J',
+      why:'Rise with the ♥J — second hand high to rescue partner from the throw-in. Your jack drives out the queen (or wins outright), so the defence is assured two heart tricks and the slam goes down. (La Jolla Bridge)' }
   ];
   var OPTS = ['Play High', 'Cover', 'Play Low', 'Split'];
+
+  // Flatten positions into a linear list of plays (continuations expand to several).
+  var PLAYS = [];
+  Q.forEach(function (q) {
+    var steps = q.steps || [{ by:q.by, lc:q.lc, ans:q.ans, play:q.play, why:q.why }];
+    var suit = q.full ? q.full.ledSuit : q.y.s;
+    steps.forEach(function (s, idx) {
+      PLAYS.push({ q:q, suit:suit, step:s, last:(idx === steps.length - 1), history:steps.slice(0, idx) });
+    });
+  });
+
   var i = 0, score = 0, answered = false;
   var stage = document.getElementById('stage');
-  document.getElementById('qt').textContent = Q.length;
+  document.getElementById('qt').textContent = PLAYS.length;
 
   function isRed (s) { return s === '♥' || s === '♦'; }
   function handHTML (pos, h) {
@@ -148,22 +198,55 @@ document.addEventListener('DOMContentLoaded', function () {
     var st = '<span class="st' + (isRed(h.s) ? ' r' : '') + '">' + h.s + '</span>';
     return '<div class="hand"><span class="pos">' + pos + '</span>' + st + '<span class="rw">' + cells + '</span></div>';
   }
+  function suitLine (sym, cards) {
+    return '<span class="fs"><span class="st' + (isRed(sym) ? ' r' : '') + '">' + sym + '</span>' + cards + '</span>';
+  }
+  function fullHand (pos, cls, h) {
+    return '<div class="fh ' + cls + '"><div class="fpos">' + pos + '</div>' +
+      suitLine('♠', h.s) + suitLine('♥', h.h) + suitLine('♦', h.d) + suitLine('♣', h.c) + '</div>';
+  }
+  function compass (f) {
+    return '<div class="compass-wrap"><div class="compass">' +
+      fullHand('North &middot; Dummy', 'pN', f.n) +
+      fullHand('West', 'pW', f.w) +
+      fullHand('East &middot; You', 'pE me', f.e) +
+      fullHand('South &middot; Decl.', 'pS', f.s) +
+      '</div></div>';
+  }
 
   function render () {
-    var q = Q[i];
+    var p = PLAYS[i], q = p.q, s = p.step;
     document.getElementById('qn').textContent = i + 1;
     document.getElementById('sc').textContent = score;
-    document.getElementById('prog').style.width = (i / Q.length * 100) + '%';
-    var deal = '<div class="deal">' + (q.d ? handHTML('Dummy', q.d) : '') + handHTML('You', q.y) + '</div>';
-    var lst = '<span class="st' + (isRed(q.y.s) ? ' r' : '') + '">' + q.y.s + '</span>';
-    var trick = '<div class="trick"><span class="tlabel">' + q.by + ' leads</span>' + lst + '<span class="k led">' + q.lc + '</span></div>';
+    document.getElementById('prog').style.width = (i / PLAYS.length * 100) + '%';
+
+    var head = '';
+    if (q.tag) head += '<span class="tag">' + q.tag + '</span>';
+    if (q.full) {
+      head += compass(q.full) +
+        '<div class="note"><b>Contract:</b> ' + q.full.contract + ' &nbsp;&middot;&nbsp; <b>Opening lead:</b> ' + q.full.lead + '</div>';
+    } else {
+      head += '<div class="deal">' + (q.d ? handHTML('Dummy', q.d) : '') + handHTML('You', q.y) + '</div>';
+    }
+    if (q.note) head += '<div class="note">' + q.note + '</div>';
+
+    var hist = '';
+    if (p.history.length) {
+      hist = '<div class="hist">' + p.history.map(function (h, n) {
+        return '<span class="hh">Trick ' + (n + 1) + ': ' + h.by + ' led <span class="hk">' + p.suit + h.lc + '</span> &mdash; you played ' + h.play + '.</span>';
+      }).join('') + '</div>';
+    }
+
+    var lst = '<span class="st' + (isRed(p.suit) ? ' r' : '') + '">' + p.suit + '</span>';
+    var trick = '<div class="trick"><span class="tlabel">' + s.by + ' leads</span>' + lst + '<span class="k led">' + s.lc + '</span></div>';
     var btns = OPTS.map(function (o) { return '<button class="ans" type="button" data-o="' + o + '">' + o + '</button>'; }).join('');
+    var nextLabel = (i === PLAYS.length - 1) ? 'See score' : (p.last ? 'Next' : 'Continue');
     stage.innerHTML =
-      '<div class="card">' + deal + trick +
+      '<div class="card">' + head + hist + trick +
       '<div class="prompt">Your play?</div>' +
       '<div class="answers">' + btns + '</div>' +
       '<div class="feedback" id="fb"></div>' +
-      '<div class="actions"><button class="next" id="next" type="button">' + (i === Q.length - 1 ? 'See score' : 'Next') + ' &rarr;</button></div>' +
+      '<div class="actions"><button class="next" id="next" type="button">' + nextLabel + ' &rarr;</button></div>' +
       '</div>';
     answered = false;
     stage.querySelectorAll('.ans').forEach(function (b) { b.addEventListener('click', choose); });
@@ -173,21 +256,21 @@ document.addEventListener('DOMContentLoaded', function () {
   function choose (e) {
     if (answered) return;
     answered = true;
-    var q = Q[i];
+    var s = PLAYS[i].step;
     var chosen = e.currentTarget.getAttribute('data-o');
-    var ok = chosen === q.ans;
+    var ok = chosen === s.ans;
     if (ok) score++;
     stage.querySelectorAll('.ans').forEach(function (b) {
       b.disabled = true;
       var o = b.getAttribute('data-o');
-      if (o === q.ans) b.classList.add('correct');
+      if (o === s.ans) b.classList.add('correct');
       else if (o === chosen) b.classList.add('wrong');
     });
     var fb = document.getElementById('fb');
     fb.innerHTML = (ok
-      ? '<span class="verdict ok">✓ Correct.</span> Play ' + q.play + '.'
-      : '<span class="verdict no">✗ Not quite.</span> The play is <b>' + q.ans + '</b> — ' + q.play + '.')
-      + '<div class="why">' + q.why + '</div>';
+      ? '<span class="verdict ok">✓ Correct.</span> Play ' + s.play + '.'
+      : '<span class="verdict no">✗ Not quite.</span> The play is <b>' + s.ans + '</b> — ' + s.play + '.')
+      + '<div class="why">' + s.why + '</div>';
     fb.classList.add('show');
     document.getElementById('sc').textContent = score;
     document.getElementById('next').classList.add('show');
@@ -195,18 +278,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function nextQ () {
     i++;
-    if (i < Q.length) { render(); }
+    if (i < PLAYS.length) { render(); }
     else { finish(); }
   }
 
   function finish () {
     document.getElementById('prog').style.width = '100%';
-    document.getElementById('qn').textContent = Q.length;
-    var pct = Math.round(score / Q.length * 100);
+    document.getElementById('qn').textContent = PLAYS.length;
+    var pct = Math.round(score / PLAYS.length * 100);
     var msg = pct === 100 ? 'Flawless — second hand mastered.' : pct >= 75 ? 'Strong. A couple of exceptions to revisit.' : pct >= 50 ? 'Solid start — review the rules and go again.' : 'Worth another pass through the rules.';
     stage.innerHTML =
       '<div class="card result"><div class="eyebrow">Your score</div>' +
-      '<div class="big">' + score + ' / ' + Q.length + '</div>' +
+      '<div class="big">' + score + ' / ' + PLAYS.length + '</div>' +
       '<p class="msg">' + msg + '</p>' +
       '<button type="button" id="again">Play again</button></div>';
     document.getElementById('again').addEventListener('click', function () { i = 0; score = 0; render(); });
