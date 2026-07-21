@@ -8,40 +8,45 @@
 <title>Bridge Notes — Defensive Play</title>
 <style>
   :root {
-    --bg:#ffffff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --suit:#b23a2c; --accent:#4a57d2;
+    --surface:#f1f2f6; --tile:#ffffff; --fg:#16181d; --muted:#6f757e; --line:#e6e8ec; --edge:#d6dae1; --panel:#f4f5f8;
+    --accent:#4a57d2; --accent-soft:#eaecfb; --suit:#c0392b;
+    --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05);
+    --shadow-h:0 2px 6px rgba(18,20,28,.07), 0 14px 30px rgba(18,20,28,.09);
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;
   }
   @media (prefers-color-scheme:dark){
-    :root{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --suit:#e58379; --accent:#8b93ff; }
+    :root{ --surface:#0b0c0f; --tile:#15171c; --fg:#f2f3f5; --muted:#8a919c; --line:#23262e; --edge:#343a45; --panel:#1c1f26;
+      --accent:#8b93ff; --accent-soft:#21243a; --suit:#e97c6f; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); --shadow-h:0 2px 8px rgba(0,0,0,.45), 0 16px 34px rgba(0,0,0,.5); }
   }
-  :root[data-theme="light"]{ --bg:#fff; --fg:#16181d; --muted:#878c95; --line:#ededf1; --panel:#f7f8fa; --suit:#b23a2c; --accent:#4a57d2; }
-  :root[data-theme="dark"]{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#888e98; --line:#20222a; --panel:#15171c; --suit:#e58379; --accent:#8b93ff; }
+  :root[data-theme="light"]{ --surface:#f1f2f6; --tile:#fff; --fg:#16181d; --muted:#6f757e; --line:#e6e8ec; --edge:#d6dae1; --panel:#f4f5f8; --accent:#4a57d2; --accent-soft:#eaecfb; --suit:#c0392b; --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05); --shadow-h:0 2px 6px rgba(18,20,28,.07), 0 14px 30px rgba(18,20,28,.09); }
+  :root[data-theme="dark"]{ --surface:#0b0c0f; --tile:#15171c; --fg:#f2f3f5; --muted:#8a919c; --line:#23262e; --edge:#343a45; --panel:#1c1f26; --accent:#8b93ff; --accent-soft:#21243a; --suit:#e97c6f; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); --shadow-h:0 2px 8px rgba(0,0,0,.45), 0 16px 34px rgba(0,0,0,.5); }
 
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; }
-  .page { max-width:38rem; margin:0 auto; padding:clamp(2.2rem,6vw,4rem) 1.25rem 5rem; }
+  body { margin:0; background:var(--surface); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  .page { max-width:49rem; margin:0 auto; padding:clamp(2.2rem,6vw,4rem) 1.1rem 5rem; }
 
   .eyebrow { font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 .7rem; }
-  h1 { font-size:clamp(1.7rem,5vw,2.15rem); font-weight:650; letter-spacing:-.02em; margin:0 0 .7rem; }
-  .intro { color:var(--muted); font-size:1rem; margin:0; max-width:33rem; }
+  h1 { font-size:clamp(2rem,6vw,2.7rem); font-weight:680; letter-spacing:-.025em; margin:0 0 .7rem; }
+  .intro { color:var(--muted); font-size:1.02rem; margin:0 0 1.9rem; max-width:35rem; }
   .intro b { color:var(--fg); font-weight:600; }
 
-  .sectlabel { font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:2.4rem 0 .3rem; }
+  .seclabel { font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0 0 .75rem; padding-left:.15rem; }
+  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.95rem; margin-bottom:2rem; }
+  @media (max-width:600px){ .grid{ grid-template-columns:1fr; } }
 
-  a.topic, div.topic { display:flex; align-items:baseline; gap:.85rem; padding:.95rem .2rem; border-bottom:1px solid var(--line); text-decoration:none; color:inherit; }
-  a.topic { cursor:pointer; }
-  a.topic:hover .t-title { color:var(--accent); }
-  .t-body { flex:1 1 auto; }
-  .t-title { font-size:1rem; font-weight:600; }
-  .t-desc { color:var(--muted); font-size:.88rem; margin-top:.15rem; }
-  .t-tag { flex:0 0 auto; font-size:.6rem; letter-spacing:.07em; text-transform:uppercase; font-weight:700; white-space:nowrap; padding:.2em .5em; border-radius:3px; border:1px solid var(--line); color:var(--muted); align-self:center; }
-  .t-tag.hard { color:var(--accent); border-color:color-mix(in srgb, var(--accent) 40%, transparent); }
-  .chev { flex:0 0 auto; align-self:center; width:.5rem; height:.5rem; border-right:1.6px solid var(--muted); border-bottom:1.6px solid var(--muted); transform:rotate(-45deg); }
-  a.topic:hover .chev { border-color:var(--accent); }
-  div.topic { opacity:.72; }
-  .soon { font-size:.6rem; letter-spacing:.07em; text-transform:uppercase; font-weight:700; color:var(--muted); align-self:center; }
+  .tile { display:block; background:var(--tile); border:1px solid var(--line); border-radius:16px; padding:1.15rem 1.2rem; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:box-shadow .18s ease, transform .18s ease; }
+  a.tile:hover { box-shadow:var(--shadow-h); transform:translateY(-2px); }
+  a.tile:hover .t-title { color:var(--accent); }
+  .tile.planned { opacity:.62; box-shadow:none; }
+  .tile-top { display:flex; justify-content:space-between; align-items:flex-start; gap:.7rem; }
+  .t-title { font-size:1.05rem; font-weight:660; letter-spacing:-.01em; }
+  .t-desc { color:var(--muted); font-size:.88rem; margin-top:.35rem; }
+  .tag { flex:0 0 auto; font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700; white-space:nowrap; padding:.32em .7em; border-radius:999px; color:var(--muted); background:var(--panel); border:1px solid var(--line); }
+  .tag.hard { color:var(--accent); background:var(--accent-soft); border-color:transparent; }
+  .arrow { margin-top:.7rem; font-size:.78rem; color:var(--accent); font-weight:600; }
+  .soon { margin-top:.7rem; font-size:.64rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--muted); }
 
-  .foot { margin-top:2.6rem; font-size:.85rem; color:var(--muted); }
+  .foot { font-size:.85rem; color:var(--muted); }
 </style>
 </head>
 <body>
@@ -49,67 +54,55 @@
 
   <p class="eyebrow">Bridge Notes</p>
   <h1>Defensive Play</h1>
-  <p class="intro">A growing set of references. <b>The rules are the easy part</b> &mdash; the hard part is opening leads, counting the hand, and knowing when a rule doesn't apply. Difficulty is marked below.</p>
+  <p class="intro">A growing set of references. <b>The rules are the easy part</b> &mdash; the hard part is opening leads, counting the hand, and knowing when a rule doesn't apply. Difficulty is marked on each.</p>
 
-  <p class="sectlabel">Available</p>
+  <p class="seclabel">Available</p>
+  <div class="grid">
 
-  <a class="topic" href="second-hand/">
-    <div class="t-body">
-      <div class="t-title">Second-Hand Play</div>
+    <a class="tile" href="second-hand/">
+      <div class="tile-top"><span class="t-title">Second-Hand Play</span><span class="tag">Fundamental</span></div>
       <div class="t-desc">Play low by default; cover an honor only when it promotes one of your cards.</div>
-    </div>
-    <span class="t-tag">Fundamental</span>
-    <span class="chev"></span>
-  </a>
+      <div class="arrow">Open &rarr;</div>
+    </a>
 
-  <a class="topic" href="third-hand/">
-    <div class="t-body">
-      <div class="t-title">Third-Hand Play</div>
-      <div class="t-desc">Third hand high; the lowest of touching honors; finessing dummy; returning partner's suit.</div>
-    </div>
-    <span class="t-tag">Fundamental</span>
-    <span class="chev"></span>
-  </a>
+    <a class="tile" href="third-hand/">
+      <div class="tile-top"><span class="t-title">Third-Hand Play</span><span class="tag">Fundamental</span></div>
+      <div class="t-desc">Third hand high; lowest of touching honors; finessing dummy; returning partner's suit.</div>
+      <div class="arrow">Open &rarr;</div>
+    </a>
 
-  <a class="topic" href="opening-leads/">
-    <div class="t-body">
-      <div class="t-title">Opening Leads</div>
+    <a class="tile" href="opening-leads/">
+      <div class="tile-top"><span class="t-title">Opening Leads</span><span class="tag hard">Hard</span></div>
       <div class="t-desc">The blind guess that decides many hands: fourth-best, sequences, and reading the auction.</div>
-    </div>
-    <span class="t-tag hard">Hard</span>
-    <span class="chev"></span>
-  </a>
+      <div class="arrow">Open &rarr;</div>
+    </a>
 
-  <a class="topic" href="signals/">
-    <div class="t-body">
-      <div class="t-title">Signals &amp; Discarding</div>
+    <a class="tile" href="signals/">
+      <div class="tile-top"><span class="t-title">Signals &amp; Discarding</span><span class="tag">Partnership</span></div>
       <div class="t-desc">Upside-down attitude &amp; count, suit preference, reverse Smith, and discarding.</div>
-    </div>
-    <span class="t-tag">Partnership</span>
-    <span class="chev"></span>
-  </a>
+      <div class="arrow">Open &rarr;</div>
+    </a>
 
-  <p class="sectlabel">Planned</p>
+  </div>
 
-  <div class="topic">
-    <div class="t-body">
-      <div class="t-title">Counting the Hand</div>
+  <p class="seclabel">Planned</p>
+  <div class="grid">
+
+    <div class="tile planned">
+      <div class="tile-top"><span class="t-title">Counting the Hand</span><span class="tag hard">Hardest</span></div>
       <div class="t-desc">The discipline behind everything: declarer's shape, points, and trick count.</div>
+      <div class="soon">soon</div>
     </div>
-    <span class="t-tag hard">Hardest</span>
-    <span class="soon">soon</span>
-  </div>
 
-  <div class="topic">
-    <div class="t-body">
-      <div class="t-title">Trump Defense &amp; Coups</div>
+    <div class="tile planned">
+      <div class="tile-top"><span class="t-title">Trump Defense &amp; Coups</span><span class="tag hard">Advanced</span></div>
       <div class="t-desc">Promotions, uppercuts, forcing declarer, and entry-killing plays.</div>
+      <div class="soon">soon</div>
     </div>
-    <span class="t-tag hard">Advanced</span>
-    <span class="soon">soon</span>
+
   </div>
 
-  <p class="foot">More pages coming. Each one is a drillable list of rules with card layouts.</p>
+  <p class="foot">Each page is four core rules plus a bento of card layouts &mdash; tailored to your partnership's methods.</p>
 
 </div>
 </body>

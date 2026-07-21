@@ -4,81 +4,75 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Opening leads in bridge (4th vs NT, 3rd/5th vs suits): which suit, which card, reading the auction.">
+<meta name="description" content="Opening leads in bridge (4th vs NT, 3rd/5th vs suits): a bento of card-layout tiles.">
 <title>Opening Leads</title>
 <style>
   :root {
-    --bg:#ffffff; --fg:#16181d; --muted:#7c828c; --line:#ededf1; --edge:#d7dbe0; --panel:#f7f8fa; --suit:#c0392b; --accent:#4a57d2;
+    --surface:#f1f2f6; --tile:#ffffff; --fg:#16181d; --muted:#6f757e; --line:#e6e8ec; --edge:#d6dae1; --panel:#f4f5f8;
+    --accent:#4a57d2; --accent-soft:#eaecfb; --suit:#c0392b;
+    --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05);
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;
     --mono:'SFMono-Regular',ui-monospace,Consolas,'Liberation Mono',Menlo,monospace;
   }
   @media (prefers-color-scheme:dark){
-    :root{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#8a919c; --line:#20222a; --edge:#343a45; --panel:#171a20; --suit:#e97c6f; --accent:#8b93ff; }
+    :root{ --surface:#0b0c0f; --tile:#15171c; --fg:#f2f3f5; --muted:#8a919c; --line:#23262e; --edge:#343a45; --panel:#1c1f26;
+      --accent:#8b93ff; --accent-soft:#21243a; --suit:#e97c6f; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
   }
-  :root[data-theme="light"]{ --bg:#fff; --fg:#16181d; --muted:#7c828c; --line:#ededf1; --edge:#d7dbe0; --panel:#f7f8fa; --suit:#c0392b; --accent:#4a57d2; }
-  :root[data-theme="dark"]{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#8a919c; --line:#20222a; --edge:#343a45; --panel:#171a20; --suit:#e97c6f; --accent:#8b93ff; }
+  :root[data-theme="light"]{ --surface:#f1f2f6; --tile:#fff; --fg:#16181d; --muted:#6f757e; --line:#e6e8ec; --edge:#d6dae1; --panel:#f4f5f8; --accent:#4a57d2; --accent-soft:#eaecfb; --suit:#c0392b; --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05); }
+  :root[data-theme="dark"]{ --surface:#0b0c0f; --tile:#15171c; --fg:#f2f3f5; --muted:#8a919c; --line:#23262e; --edge:#343a45; --panel:#1c1f26; --accent:#8b93ff; --accent-soft:#21243a; --suit:#e97c6f; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
 
   * { box-sizing:border-box; }
   html { -webkit-text-size-adjust:100%; }
-  body { margin:0; background:var(--bg); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; }
-  .page { max-width:38rem; margin:0 auto; padding:clamp(2.2rem,6vw,4rem) 1.25rem 5rem; }
+  body { margin:0; background:var(--surface); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  .page { max-width:49rem; margin:0 auto; padding:clamp(2rem,5vw,3.5rem) 1.1rem 5rem; }
 
-  header { margin-bottom:2.2rem; }
-  .eyebrow { display:inline-block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 .7rem; }
-  a.eyebrow { text-decoration:none; }
+  header { margin-bottom:1.6rem; }
+  .eyebrow { display:inline-block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 .7rem; text-decoration:none; }
   a.eyebrow:hover { color:var(--accent); }
-  h1 { font-size:clamp(1.7rem,5vw,2.15rem); font-weight:650; letter-spacing:-.02em; margin:0 0 .7rem; }
-  .principle { color:var(--muted); font-size:1rem; margin:0; max-width:32rem; }
+  h1 { font-size:clamp(1.9rem,5.5vw,2.5rem); font-weight:680; letter-spacing:-.025em; margin:0 0 .6rem; }
+  .principle { color:var(--muted); font-size:1.02rem; margin:0; max-width:34rem; }
   .principle b { color:var(--fg); font-weight:600; }
+  .legend { display:flex; gap:1.1rem; flex-wrap:wrap; font-size:.72rem; color:var(--muted); margin:1rem 0 0; align-items:center; }
+  .legend span { display:inline-flex; align-items:center; gap:.4rem; }
+  .swatch { width:1.3em; height:1.45em; border-radius:4px; border:1.5px solid var(--accent); background:var(--accent-soft); }
 
-  .rulehead { font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:1.9rem 0 .7rem; }
-  ol.basics { list-style:none; counter-reset:b; margin:0; padding:0; display:flex; flex-direction:column; gap:.6rem; }
-  ol.basics li { counter-increment:b; position:relative; padding-left:1.7rem; font-size:.95rem; color:var(--muted); }
-  ol.basics li::before { content:counter(b); position:absolute; left:0; top:.02em; color:var(--accent); font-weight:700; font-size:.85rem; font-variant-numeric:tabular-nums; }
-  ol.basics b { color:var(--fg); font-weight:600; }
+  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.95rem; align-items:start; }
+  .seclabel { grid-column:1 / -1; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin:1.1rem 0 -.15rem; padding-left:.15rem; }
+  .seclabel .num { color:var(--accent); margin-right:.5em; }
+  .tile { grid-column:span 1; background:var(--tile); border:1px solid var(--line); border-radius:16px; padding:1.1rem 1.15rem; box-shadow:var(--shadow); }
+  .tile.wide { grid-column:1 / -1; }
+  @media (max-width:600px){ .grid{ grid-template-columns:1fr; } .tile,.tile.wide{ grid-column:auto; } }
 
-  .bar { display:flex; justify-content:flex-end; gap:1.4rem; margin:1.8rem 0 .2rem; }
-  .bar button { font:inherit; font-size:.78rem; color:var(--muted); background:none; border:0; padding:0; cursor:pointer; }
-  .bar button:hover { color:var(--fg); }
+  .tile-top { display:flex; justify-content:space-between; align-items:flex-start; gap:.7rem; }
+  .tile .s { font-weight:650; font-size:1rem; line-height:1.25; }
+  .tile .v { flex:0 0 auto; font-size:.63rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:.3em .72em; white-space:nowrap; }
 
-  section { margin-top:2.4rem; }
-  h2 { font-size:1.02rem; font-weight:650; letter-spacing:-.01em; margin:0 0 .1rem; }
-  h2 .num { color:var(--accent); font-weight:600; margin-right:.45em; }
-  .lede { color:var(--muted); font-size:.9rem; margin:.1rem 0 .7rem; }
+  .rules-tile .rh { font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:.85rem; }
+  ol.basics { list-style:none; counter-reset:b; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:.8rem 1.4rem; }
+  ol.basics li { counter-increment:b; position:relative; padding-left:1.7rem; font-size:.9rem; color:var(--muted); }
+  ol.basics li::before { content:counter(b); position:absolute; left:0; top:.02em; color:var(--accent); font-weight:700; font-size:.82rem; }
+  ol.basics b { color:var(--fg); font-weight:650; }
+  @media (max-width:600px){ ol.basics{ grid-template-columns:1fr; } }
 
-  details.rule { border-bottom:1px solid var(--line); }
-  summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:.9rem; padding:.85rem .2rem; }
-  summary::-webkit-details-marker { display:none; }
-  summary:hover { color:var(--fg); }
-  .s { flex:1 1 auto; font-size:.98rem; }
-  .v { flex:0 0 auto; font-size:.68rem; letter-spacing:.07em; text-transform:uppercase; font-weight:700; color:var(--accent); white-space:nowrap; }
-  .chev { flex:0 0 auto; width:.5rem; height:.5rem; border-right:1.6px solid var(--muted); border-bottom:1.6px solid var(--muted); transform:rotate(-45deg); transition:transform .18s ease; margin-right:.2rem; }
-  details[open] .chev { transform:rotate(45deg); border-color:var(--accent); }
-
-  .body { padding:.5rem .2rem 1.2rem 0; }
-  .case + .case { margin-top:.75rem; }
-  .deal { display:flex; flex-direction:column; gap:.32rem; }
-  .hand { display:flex; align-items:center; gap:.6rem; }
-  .hand .pos { flex:0 0 auto; min-width:4.4em; font-size:.62rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:700; }
-  .hand .st { flex:0 0 auto; width:1em; text-align:center; font-size:1rem; line-height:1; }
+  .cases { display:flex; flex-wrap:wrap; gap:.9rem 1.4rem; margin-top:.85rem; }
+  .case { flex:1 1 11rem; }
+  .deal { display:flex; flex-direction:column; gap:.3rem; }
+  .hand { display:flex; align-items:center; gap:.55rem; }
+  .hand .pos { flex:0 0 auto; min-width:4.4em; font-size:.6rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:700; }
+  .hand .st { flex:0 0 auto; width:1em; text-align:center; font-size:.98rem; line-height:1; }
   .hand .st.r { color:var(--suit); }
-  .row { display:inline-flex; gap:.28rem; flex-wrap:wrap; }
-  .k { min-width:1.7em; height:1.9em; padding:0 .32em; display:inline-flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:.82rem; font-weight:600; border:1px solid var(--edge); border-radius:4px; background:var(--panel); color:var(--fg); font-variant-numeric:tabular-nums; }
-  .k.play { border:1.5px solid var(--accent); color:var(--accent); background:color-mix(in srgb, var(--accent) 10%, transparent); }
-  .cap { font-size:.9rem; color:var(--fg); margin-top:.5rem; }
+  .rw { display:inline-flex; gap:.26rem; flex-wrap:wrap; }
+  .k { min-width:1.65em; height:1.85em; padding:0 .3em; display:inline-flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:.8rem; font-weight:600; border:1px solid var(--edge); border-radius:5px; background:var(--panel); color:var(--fg); font-variant-numeric:tabular-nums; }
+  .k.play { border:1.5px solid var(--accent); color:var(--accent); background:var(--accent-soft); }
+  .cap { font-size:.88rem; color:var(--fg); margin-top:.5rem; }
   .cap .lo { color:var(--muted); }
   .cap b { color:var(--accent); font-weight:650; }
-  .why { font-size:.86rem; color:var(--muted); margin-top:.45rem; }
-  .note { font-size:.94rem; color:var(--fg); }
+  .why { font-size:.85rem; color:var(--muted); margin-top:.7rem; }
+  .note { font-size:.9rem; color:var(--fg); margin-top:.5rem; }
   .note b { color:var(--fg); font-weight:650; }
-  .legend { display:flex; gap:1.1rem; flex-wrap:wrap; font-size:.72rem; color:var(--muted); margin:.2rem 0 0; align-items:center; }
-  .legend span { display:inline-flex; align-items:center; gap:.4rem; }
-  .swatch { width:1.3em; height:1.45em; border-radius:3px; border:1.5px solid var(--accent); background:color-mix(in srgb, var(--accent) 10%, transparent); }
 
-  .coda { margin-top:2.4rem; font-size:.85rem; color:var(--muted); }
-  .coda b { color:var(--fg); font-weight:600; }
-
-  @media print { .bar{display:none;} .body{display:block!important;} body{background:#fff;color:#000;} }
+  .coda { margin-top:1.6rem; font-size:.85rem; color:var(--muted); text-align:center; }
+  .coda a { color:var(--accent); }
 </style>
 </head>
 <body>
@@ -89,195 +83,130 @@
     <a class="eyebrow" href="../">&lsaquo; Bridge Notes</a>
     <h1>Opening Leads</h1>
     <p class="principle"><b>The one card you play blind &mdash; before you see dummy.</b> Good leads come from the auction more than a rulebook, but these get you most of the way. Against notrump you attack; against a suit you play safe.</p>
-
-    <p class="rulehead">The four rules</p>
-    <ol class="basics">
-      <li><b>Against notrump, lead length.</b> Build your longest, strongest suit &mdash; fourth-best &mdash; or partner's.</li>
-      <li><b>Against a suit, lead safe and fast.</b> Sequences and partner's suit are your friends; never underlead an ace.</li>
-      <li><b>The card tells the story.</b> Top of a sequence; fourth-best against notrump, third or fifth best against a suit &mdash; so partner can read your hand.</li>
-      <li><b>Read the auction.</b> Lead the unbid suit, avoid the opponents' suits, and go passive against a confident auction.</li>
-    </ol>
-
     <div class="legend"><span><span class="swatch"></span> the card to lead</span></div>
   </header>
 
-  <div class="bar">
-    <button type="button" data-all="open">Open all</button>
-    <button type="button" data-all="close">Close all</button>
+  <div class="grid">
+
+    <div class="tile wide rules-tile">
+      <div class="rh">The four rules</div>
+      <ol class="basics">
+        <li><b>Against notrump, lead length.</b> Your longest, strongest suit &mdash; fourth-best &mdash; or partner's.</li>
+        <li><b>Against a suit, lead safe and fast.</b> Sequences and partner's suit are your friends; never underlead an ace.</li>
+        <li><b>The card tells the story.</b> Top of a sequence; fourth-best vs notrump, third or fifth best vs a suit.</li>
+        <li><b>Read the auction.</b> Lead the unbid suit, avoid the opponents' suits, go passive against a confident auction.</li>
+      </ol>
+    </div>
+
+    <!-- I -->
+    <div class="seclabel"><span class="num">I</span>Which suit &mdash; against notrump</div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">Your longest, strongest suit</span><span class="v">Lead length</span></div>
+      <div class="cases"><div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st">&spades;</span><span class="rw"><span class="k">K</span><span class="k">J</span><span class="k">8</span><span class="k play">4</span><span class="k">2</span></span></div></div><div class="cap">lead the <b>4</b> (fourth-best vs notrump).</div></div></div>
+      <div class="why">Knock out stoppers and cash small cards once the suit is set up.</div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">Partner has bid a suit</span><span class="v">Partner's suit</span></div>
+      <div class="note">Lead partner's suit, usually over your own &mdash; your normal card (top of a sequence, else low). Combining suits beats going it alone.</div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">You hold a strong sequence</span><span class="v">Lead the sequence</span></div>
+      <div class="cases"><div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st">&clubs;</span><span class="rw"><span class="k play">Q</span><span class="k">J</span><span class="k">10</span><span class="k">8</span></span></div></div><div class="cap">lead the <b>queen</b> &mdash; safe, drives out stoppers even if another suit is longer.</div></div></div>
+    </div>
+
+    <!-- II -->
+    <div class="seclabel"><span class="num">II</span>Which suit &mdash; against a suit contract</div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">Top of a sequence</span><span class="v">Sequence</span></div>
+      <div class="cases"><div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&hearts;</span><span class="rw"><span class="k play">K</span><span class="k">Q</span><span class="k">J</span><span class="k">4</span></span></div></div><div class="cap">lead the <b>king</b> &mdash; the safest attacking lead vs a trump contract.</div></div></div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">Partner has bid a suit</span><span class="v">Partner's suit</span></div>
+      <div class="note">Lead partner's suit &mdash; especially if raised. Top of a sequence, high from a doubleton, else low.</div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">A singleton, for a ruff</span><span class="v">Singleton</span></div>
+      <div class="cases"><div class="case"><div class="deal">
+        <div class="hand"><span class="pos">You</span><span class="st r">&diams;</span><span class="rw"><span class="k play">3</span></span></div>
+        <div class="hand"><span class="pos">&amp; trumps</span><span class="st">&spades;</span><span class="rw"><span class="k">A</span></span></div>
+      </div><div class="cap">lead the <b>3</b>, win the trump ace, take your ruff.</div></div></div>
+      <div class="why">A singleton only pays if you have an entry to get in and ruff.</div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">A trump, to cut ruffs</span><span class="v">Trump</span></div>
+      <div class="note">When the auction points to a crossruff, or nothing else is safe, lead a <b>trump</b>. Not from a holding like Q x x that could cost.</div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">Away from an ace or lone honor</span><span class="v">Avoid</span></div>
+      <div class="cases"><div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&diams;</span><span class="rw"><span class="k play">A</span><span class="k">8</span><span class="k">5</span></span></div></div><div class="cap"><b>Never underlead an ace</b> vs a suit &mdash; lead the ace or pick another suit.</div></div></div>
+      <div class="why">Underlead it and you may never score it. Leading away from K x x / Q x x into declarer often gives a trick too.</div>
+    </div>
+
+    <!-- III -->
+    <div class="seclabel"><span class="num">III</span>Which card to lead</div>
+
+    <div class="tile wide">
+      <div class="tile-top"><span class="s">Three or more touching honors</span><span class="v">Top of the sequence</span></div>
+      <div class="cases">
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st">&spades;</span><span class="rw"><span class="k play">K</span><span class="k">Q</span><span class="k">J</span><span class="k">5</span></span></div></div><div class="cap">the <b>K</b>.</div></div>
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&hearts;</span><span class="rw"><span class="k play">Q</span><span class="k">J</span><span class="k">10</span><span class="k">4</span></span></div></div><div class="cap">the <b>Q</b>.</div></div>
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&diams;</span><span class="rw"><span class="k play">J</span><span class="k">10</span><span class="k">9</span><span class="k">6</span></span></div></div><div class="cap">the <b>J</b>.</div></div>
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">Broken</span><span class="st">&clubs;</span><span class="rw"><span class="k">K</span><span class="k play">J</span><span class="k">10</span><span class="k">3</span></span></div></div><div class="cap">interior &mdash; the <b>J</b> (top of the touching part).</div></div>
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">Broken</span><span class="st">&spades;</span><span class="rw"><span class="k play">K</span><span class="k">Q</span><span class="k">10</span><span class="k">4</span></span></div></div><div class="cap">the <b>K</b>.</div></div>
+      </div>
+    </div>
+
+    <div class="tile wide">
+      <div class="tile-top"><span class="s">A long suit with an honor, no sequence</span><span class="v">Length card</span></div>
+      <div class="cases">
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">vs NT</span><span class="st">&spades;</span><span class="rw"><span class="k">K</span><span class="k">J</span><span class="k">8</span><span class="k play">4</span><span class="k">2</span></span></div></div><div class="cap"><b>Fourth-best</b> &mdash; the 4 (Rule of 11).</div></div>
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">vs suit</span><span class="st">&spades;</span><span class="rw"><span class="k">K</span><span class="k">J</span><span class="k play">8</span><span class="k">4</span></span></div></div><div class="cap"><b>Third-best</b> from 3&ndash;4 &mdash; the 8.</div></div>
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">vs suit</span><span class="st">&spades;</span><span class="rw"><span class="k">K</span><span class="k">J</span><span class="k">8</span><span class="k">5</span><span class="k play">2</span></span></div></div><div class="cap"><b>Fifth-best</b> from 5+ &mdash; the 2 (Rule of 12 / 10).</div></div>
+      </div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">A doubleton, or three small</span><span class="v">High / low</span></div>
+      <div class="cases">
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">Two</span><span class="st r">&hearts;</span><span class="rw"><span class="k play">9</span><span class="k">4</span></span></div></div><div class="cap">the <b>9</b> (high, then the 4).</div></div>
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">Three</span><span class="st">&clubs;</span><span class="rw"><span class="k">8</span><span class="k">5</span><span class="k play">2</span></span></div></div><div class="cap">the <b>2</b> (low).</div></div>
+      </div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">From A&#8209;K</span><span class="v">Top honor</span></div>
+      <div class="cases">
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">vs suit</span><span class="st">&spades;</span><span class="rw"><span class="k play">A</span><span class="k">K</span><span class="k">6</span><span class="k">4</span></span></div></div><div class="cap">the <b>ace</b> (attitude) or <b>king</b> (count) &mdash; by agreement.</div></div>
+        <div class="case"><div class="deal"><div class="hand"><span class="pos">Two</span><span class="st">&spades;</span><span class="rw"><span class="k">A</span><span class="k play">K</span></span></div></div><div class="cap">the <b>king</b>, then the ace.</div></div>
+      </div>
+      <div class="why">Vs notrump you usually lead fourth-best from A&#8209;K unless it's a solid sequence.</div>
+    </div>
+
+    <!-- IV -->
+    <div class="seclabel"><span class="num">IV</span>Reading the auction</div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">Choose an unbid suit</span><span class="v">Unbid suit</span></div>
+      <div class="note">After <b>1&spades; &ndash; 2&diams; &ndash; 2&spades; &ndash; 4&spades;</b>, hearts and clubs are unbid &mdash; prefer them over declarer's spades or dummy's diamonds.</div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-top"><span class="s">A confident auction, or a slam</span><span class="v">Passive vs active</span></div>
+      <div class="note">Against a slam or a sure-sounding auction, lead <b>safe</b> &mdash; a trump or a sequence. With strength and time, <b>attack</b> your long suit.</div>
+    </div>
+
   </div>
 
-  <!-- I -->
-  <section>
-    <h2><span class="num">I</span>Which suit &mdash; against notrump</h2>
-    <p class="lede">No trumps to stop you, so build length tricks.</p>
-
-    <details class="rule">
-      <summary><span class="s">Your longest, strongest suit</span><span class="v">Lead length</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="case">
-          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st">&spades;</span><span class="row"><span class="k">K</span><span class="k">J</span><span class="k">8</span><span class="k play">4</span><span class="k">2</span></span></div></div>
-          <div class="cap">lead the <b>4</b> (fourth-best against notrump).</div>
-        </div>
-        <div class="why">In notrump the plan is length: knock out stoppers and cash small cards once the suit is established.</div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">Partner has bid a suit</span><span class="v">Partner's suit</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="note">Lead partner's suit, usually in preference to your own &mdash; your normal card in it (top of a sequence, else low). Partner told you where the strength is; combining suits beats going it alone.</div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">You hold a strong sequence</span><span class="v">Lead the sequence</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="case">
-          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st">&clubs;</span><span class="row"><span class="k play">Q</span><span class="k">J</span><span class="k">10</span><span class="k">8</span></span></div></div>
-          <div class="cap">lead the <b>queen</b> &mdash; safe, and drives out stoppers even if another suit is longer.</div>
-        </div>
-      </div>
-    </details>
-  </section>
-
-  <!-- II -->
-  <section>
-    <h2><span class="num">II</span>Which suit &mdash; against a suit contract</h2>
-    <p class="lede">Trumps loom, so favor safety and quick tricks over slow length.</p>
-
-    <details class="rule">
-      <summary><span class="s">Top of a sequence</span><span class="v">Sequence</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="case">
-          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&hearts;</span><span class="row"><span class="k play">K</span><span class="k">Q</span><span class="k">J</span><span class="k">4</span></span></div></div>
-          <div class="cap">lead the <b>king</b> &mdash; the safest attacking lead against a trump contract.</div>
-        </div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">Partner has bid a suit</span><span class="v">Partner's suit</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="note">Lead partner's suit &mdash; especially if it was raised. Your normal card: top of a sequence, high from a doubleton, else low.</div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">A singleton, for a ruff</span><span class="v">Singleton</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="case">
-          <div class="deal">
-            <div class="hand"><span class="pos">You</span><span class="st r">&diams;</span><span class="row"><span class="k play">3</span></span></div>
-            <div class="hand"><span class="pos">&amp; trumps</span><span class="st">&spades;</span><span class="row"><span class="k">A</span></span></div>
-          </div>
-          <div class="cap">lead the <b>3</b>, win the trump ace, and take your ruff.</div>
-        </div>
-        <div class="why">A singleton only pays if you have an entry (often a trump trick) to get in and ruff. Without one, it just helps declarer.</div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">A trump, to cut ruffs</span><span class="v">Trump</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="note">When the auction points to a crossruff (two fits, a dummy about to ruff), or you have nothing safe elsewhere, lead a <b>trump</b>. Reducing dummy's ruffing power can beat a side-suit trick &mdash; but don't lead a trump from a holding like Q x x that could cost.</div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">Away from an ace or a lone honor</span><span class="v">Avoid</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="case">
-          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&diams;</span><span class="row"><span class="k play">A</span><span class="k">8</span><span class="k">5</span></span></div></div>
-          <div class="cap"><b>Never underlead an ace</b> against a suit &mdash; lead the ace, or pick another suit.</div>
-        </div>
-        <div class="why">Lead the low card and you may never score the ace. Leading away from unsupported honors (K x x, Q x x) into declarer often gives a trick too.</div>
-      </div>
-    </details>
-  </section>
-
-  <!-- III -->
-  <section>
-    <h2><span class="num">III</span>Which card to lead</h2>
-    <p class="lede">Once you've picked the suit, the card is a signal to partner.</p>
-
-    <details class="rule">
-      <summary><span class="s">Three or more touching honors</span><span class="v">Top of the sequence</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st">&spades;</span><span class="row"><span class="k play">K</span><span class="k">Q</span><span class="k">J</span><span class="k">5</span></span></div></div><div class="cap">lead the <b>K</b>.</div></div>
-        <div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&hearts;</span><span class="row"><span class="k play">Q</span><span class="k">J</span><span class="k">10</span><span class="k">4</span></span></div></div><div class="cap">lead the <b>Q</b>.</div></div>
-        <div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&diams;</span><span class="row"><span class="k play">J</span><span class="k">10</span><span class="k">9</span><span class="k">6</span></span></div></div><div class="cap">lead the <b>J</b>.</div></div>
-        <div class="case"><div class="deal"><div class="hand"><span class="pos">Broken</span><span class="st">&clubs;</span><span class="row"><span class="k">K</span><span class="k play">J</span><span class="k">10</span><span class="k">3</span></span></div></div><div class="cap">interior sequence &mdash; lead the <b>J</b> (top of the touching part).</div></div>
-        <div class="case"><div class="deal"><div class="hand"><span class="pos">Broken</span><span class="st">&spades;</span><span class="row"><span class="k play">K</span><span class="k">Q</span><span class="k">10</span><span class="k">4</span></span></div></div><div class="cap">lead the <b>K</b>.</div></div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">A long suit with an honor, no sequence</span><span class="v">Length card</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="case">
-          <div class="deal"><div class="hand"><span class="pos">vs NT</span><span class="st">&spades;</span><span class="row"><span class="k">K</span><span class="k">J</span><span class="k">8</span><span class="k play">4</span><span class="k">2</span></span></div></div>
-          <div class="cap"><b>Fourth-best</b> &mdash; the 4. Partner uses the Rule of 11.</div>
-        </div>
-        <div class="case">
-          <div class="deal"><div class="hand"><span class="pos">vs suit</span><span class="st">&spades;</span><span class="row"><span class="k">K</span><span class="k">J</span><span class="k play">8</span><span class="k">4</span></span></div></div>
-          <div class="cap"><b>Third-best</b> from three or four &mdash; the 8.</div>
-        </div>
-        <div class="case">
-          <div class="deal"><div class="hand"><span class="pos">vs suit</span><span class="st">&spades;</span><span class="row"><span class="k">K</span><span class="k">J</span><span class="k">8</span><span class="k">5</span><span class="k play">2</span></span></div></div>
-          <div class="cap"><b>Fifth-best</b> from five or more &mdash; the 2. Partner uses the Rule of 12 (third) or 10 (fifth).</div>
-        </div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">A doubleton, or three small</span><span class="v">High / low</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="case"><div class="deal"><div class="hand"><span class="pos">Doubleton</span><span class="st r">&hearts;</span><span class="row"><span class="k play">9</span><span class="k">4</span></span></div></div><div class="cap">lead the <b>9</b> (high, then the 4 &mdash; a high-low showing the doubleton).</div></div>
-        <div class="case"><div class="deal"><div class="hand"><span class="pos">Three small</span><span class="st">&clubs;</span><span class="row"><span class="k">8</span><span class="k">5</span><span class="k play">2</span></span></div></div><div class="cap">lead the <b>2</b> (low).</div></div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">From A&#8209;K</span><span class="v">Top honor</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="case"><div class="deal"><div class="hand"><span class="pos">vs suit</span><span class="st">&spades;</span><span class="row"><span class="k play">A</span><span class="k">K</span><span class="k">6</span><span class="k">4</span></span></div></div><div class="cap">lead the <b>ace</b> (attitude) or the <b>king</b> (count) &mdash; agree which with partner.</div></div>
-        <div class="case"><div class="deal"><div class="hand"><span class="pos">Doubleton</span><span class="st">&spades;</span><span class="row"><span class="k">A</span><span class="k play">K</span></span></div></div><div class="cap">lead the <b>king</b>, then the ace.</div></div>
-        <div class="why">Against notrump you usually lead fourth-best from A&#8209;K unless the suit is a solid sequence.</div>
-      </div>
-    </details>
-  </section>
-
-  <!-- IV -->
-  <section>
-    <h2><span class="num">IV</span>Reading the auction</h2>
-    <p class="lede">The bidding is the biggest clue you get &mdash; use it.</p>
-
-    <details class="rule">
-      <summary><span class="s">Choose an unbid suit</span><span class="v">Unbid suit</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="note">After <b>1&spades; &ndash; 2&diams; &ndash; 2&spades; &ndash; 4&spades;</b>, hearts and clubs are unbid &mdash; prefer one of those over declarer's spades or dummy's diamonds. Leading the opponents' suits usually helps them.</div>
-      </div>
-    </details>
-
-    <details class="rule">
-      <summary><span class="s">A confident auction, or a slam</span><span class="v">Passive vs active</span><span class="chev"></span></summary>
-      <div class="body">
-        <div class="note">When the opponents bid a slam or sound sure of themselves, lead <b>safe</b> &mdash; a trump or a sequence &mdash; and don't hand over a trick. When you have strength and time, <b>attack</b> your long suit instead.</div>
-      </div>
-    </details>
-  </section>
-
-  <p class="coda"><b>The hard one.</b> No rule wins every time &mdash; the auction, the vulnerability, and your own hand all pull at the choice. Treat these as the default and let the bidding talk you out of them. Back to <a href="../">Bridge Notes</a>.</p>
+  <p class="coda"><b>The hard one</b> &mdash; no rule wins every time; let the bidding talk you out of them. Back to <a href="../">Bridge Notes</a>.</p>
 
 </div>
-
-<script>
-  document.querySelectorAll('.bar button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var open = b.getAttribute('data-all') === 'open';
-      document.querySelectorAll('details.rule').forEach(function (d) { d.open = open; });
-    });
-  });
-</script>
 </body>
 </html>
