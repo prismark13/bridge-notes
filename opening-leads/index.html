@@ -4,33 +4,33 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Opening leads in bridge (4th vs NT, 3rd/5th vs suits): a bento of card-layout tiles.">
+<meta name="description" content="Opening leads in bridge (4th vs NT, 3rd/5th vs suits): a bento of card layouts.">
 <title>Opening Leads</title>
 <style>
   :root {
-    --surface:#f1f2f6; --tile:#ffffff; --fg:#16181d; --muted:#6f757e; --line:#e6e8ec; --edge:#d6dae1; --panel:#f4f5f8;
-    --accent:#4a57d2; --accent-soft:#eaecfb; --suit:#c0392b;
+    --surface:#f1f2f6; --tile:#ffffff; --fg:#16181d; --muted:#5f6672; --line:#e6e8ec; --edge:#ccd2da; --panel:#f4f5f8;
+    --accent:#4a57d2; --accent-soft:#eaecfb; --suit:#b83a2c; --soft:#464c56; --hold:#1d7a67; --hold-soft:#e0f0ec; --led-bg:#e7e9ef; --led-bd:#aab2bf;
     --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05);
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;
     --mono:'SFMono-Regular',ui-monospace,Consolas,'Liberation Mono',Menlo,monospace;
   }
   @media (prefers-color-scheme:dark){
-    :root{ --surface:#0b0c0f; --tile:#15171c; --fg:#f2f3f5; --muted:#8a919c; --line:#23262e; --edge:#343a45; --panel:#1c1f26;
-      --accent:#8b93ff; --accent-soft:#21243a; --suit:#e97c6f; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
+    :root{ --surface:#0b0c0f; --tile:#15171c; --fg:#f2f3f5; --muted:#9ba2ad; --line:#23262e; --edge:#3b414d; --panel:#1c1f26;
+      --accent:#8b93ff; --accent-soft:#21243a; --suit:#ea8072; --soft:#c4cad3; --hold:#5fc9ac; --hold-soft:#14271f; --led-bg:#2b303a; --led-bd:#535c6b; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
   }
-  :root[data-theme="light"]{ --surface:#f1f2f6; --tile:#fff; --fg:#16181d; --muted:#6f757e; --line:#e6e8ec; --edge:#d6dae1; --panel:#f4f5f8; --accent:#4a57d2; --accent-soft:#eaecfb; --suit:#c0392b; --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05); }
-  :root[data-theme="dark"]{ --surface:#0b0c0f; --tile:#15171c; --fg:#f2f3f5; --muted:#8a919c; --line:#23262e; --edge:#343a45; --panel:#1c1f26; --accent:#8b93ff; --accent-soft:#21243a; --suit:#e97c6f; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
+  :root[data-theme="light"]{ --surface:#f1f2f6; --tile:#fff; --fg:#16181d; --muted:#5f6672; --line:#e6e8ec; --edge:#ccd2da; --panel:#f4f5f8; --accent:#4a57d2; --accent-soft:#eaecfb; --suit:#b83a2c; --soft:#464c56; --hold:#1d7a67; --hold-soft:#e0f0ec; --led-bg:#e7e9ef; --led-bd:#aab2bf; --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05); }
+  :root[data-theme="dark"]{ --surface:#0b0c0f; --tile:#15171c; --fg:#f2f3f5; --muted:#9ba2ad; --line:#23262e; --edge:#3b414d; --panel:#1c1f26; --accent:#8b93ff; --accent-soft:#21243a; --suit:#ea8072; --soft:#c4cad3; --hold:#5fc9ac; --hold-soft:#14271f; --led-bg:#2b303a; --led-bd:#535c6b; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
 
   * { box-sizing:border-box; }
   html { -webkit-text-size-adjust:100%; }
-  body { margin:0; background:var(--surface); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  body { margin:0; background:var(--surface); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.56; -webkit-font-smoothing:antialiased; }
   .page { max-width:49rem; margin:0 auto; padding:clamp(2rem,5vw,3.5rem) 1.1rem 5rem; }
 
   header { margin-bottom:1.6rem; }
   .eyebrow { display:inline-block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 .7rem; text-decoration:none; }
   a.eyebrow:hover { color:var(--accent); }
   h1 { font-size:clamp(1.9rem,5.5vw,2.5rem); font-weight:680; letter-spacing:-.025em; margin:0 0 .6rem; }
-  .principle { color:var(--muted); font-size:1.02rem; margin:0; max-width:34rem; }
+  .principle { color:var(--soft); font-size:1.04rem; margin:0; max-width:34rem; }
   .principle b { color:var(--fg); font-weight:600; }
   .legend { display:flex; gap:1.1rem; flex-wrap:wrap; font-size:.72rem; color:var(--muted); margin:1rem 0 0; align-items:center; }
   .legend span { display:inline-flex; align-items:center; gap:.4rem; }
@@ -41,11 +41,13 @@
   .seclabel .num { color:var(--accent); margin-right:.5em; }
   .tile { grid-column:span 1; background:var(--tile); border:1px solid var(--line); border-radius:16px; padding:1.1rem 1.15rem; box-shadow:var(--shadow); }
   .tile.wide { grid-column:1 / -1; }
+  .tile.wide .case { flex:1 1 40%; }
   @media (max-width:600px){ .grid{ grid-template-columns:1fr; } .tile,.tile.wide{ grid-column:auto; } }
 
   .tile-top { display:flex; justify-content:space-between; align-items:flex-start; gap:.7rem; }
-  .tile .s { font-weight:650; font-size:1rem; line-height:1.25; }
+  .tile .s { font-weight:660; font-size:1.03rem; line-height:1.28; letter-spacing:-.005em; }
   .tile .v { flex:0 0 auto; font-size:.63rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:.3em .72em; white-space:nowrap; }
+  .tile .v.hold { color:var(--hold); background:var(--hold-soft); }
 
   .rules-tile .rh { font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:.85rem; }
   ol.basics { list-style:none; counter-reset:b; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:.8rem 1.4rem; }
@@ -58,17 +60,17 @@
   .case { flex:1 1 11rem; }
   .deal { display:flex; flex-direction:column; gap:.3rem; }
   .hand { display:flex; align-items:center; gap:.55rem; }
-  .hand .pos { flex:0 0 auto; min-width:4.4em; font-size:.6rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:700; }
+  .hand .pos { flex:0 0 auto; min-width:4.4em; font-size:.58rem; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); font-weight:600; }
   .hand .st { flex:0 0 auto; width:1em; text-align:center; font-size:.98rem; line-height:1; }
   .hand .st.r { color:var(--suit); }
   .rw { display:inline-flex; gap:.26rem; flex-wrap:wrap; }
-  .k { min-width:1.65em; height:1.85em; padding:0 .3em; display:inline-flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:.8rem; font-weight:600; border:1px solid var(--edge); border-radius:5px; background:var(--panel); color:var(--fg); font-variant-numeric:tabular-nums; }
+  .k { min-width:1.65em; height:1.85em; padding:0 .3em; display:inline-flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:.82rem; font-weight:600; border:1px solid var(--edge); border-radius:5px; background:var(--panel); color:var(--fg); font-variant-numeric:tabular-nums; }
   .k.play { border:1.5px solid var(--accent); color:var(--accent); background:var(--accent-soft); }
   .cap { font-size:.88rem; color:var(--fg); margin-top:.5rem; }
   .cap .lo { color:var(--muted); }
   .cap b { color:var(--accent); font-weight:650; }
-  .why { font-size:.85rem; color:var(--muted); margin-top:.7rem; }
-  .note { font-size:.9rem; color:var(--fg); margin-top:.5rem; }
+  .why { font-size:.88rem; color:var(--soft); margin-top:.7rem; line-height:1.5; }
+  .note { font-size:.92rem; color:var(--soft); margin-top:.5rem; line-height:1.5; }
   .note b { color:var(--fg); font-weight:650; }
 
   .coda { margin-top:1.6rem; font-size:.85rem; color:var(--muted); text-align:center; }
@@ -145,7 +147,7 @@
     </div>
 
     <div class="tile">
-      <div class="tile-top"><span class="s">Away from an ace or lone honor</span><span class="v">Avoid</span></div>
+      <div class="tile-top"><span class="s">Away from an ace or lone honor</span><span class="v hold">Avoid</span></div>
       <div class="cases"><div class="case"><div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&diams;</span><span class="rw"><span class="k play">A</span><span class="k">8</span><span class="k">5</span></span></div></div><div class="cap"><b>Never underlead an ace</b> vs a suit &mdash; lead the ace or pick another suit.</div></div></div>
       <div class="why">Underlead it and you may never score it. Leading away from K x x / Q x x into declarer often gives a trick too.</div>
     </div>
