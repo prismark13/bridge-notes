@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Defensive signals in bridge: upside-down attitude and count, suit preference, reverse Smith echo, and discarding.">
+<title>Signals &amp; Discarding</title>
+<style>
+  :root {
+    --bg:#ffffff; --fg:#16181d; --muted:#7c828c; --line:#ededf1; --edge:#d7dbe0; --panel:#f7f8fa; --suit:#c0392b; --accent:#4a57d2;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;
+    --mono:'SFMono-Regular',ui-monospace,Consolas,'Liberation Mono',Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#8a919c; --line:#20222a; --edge:#343a45; --panel:#171a20; --suit:#e97c6f; --accent:#8b93ff; }
+  }
+  :root[data-theme="light"]{ --bg:#fff; --fg:#16181d; --muted:#7c828c; --line:#ededf1; --edge:#d7dbe0; --panel:#f7f8fa; --suit:#c0392b; --accent:#4a57d2; }
+  :root[data-theme="dark"]{ --bg:#0e0f12; --fg:#f2f3f5; --muted:#8a919c; --line:#20222a; --edge:#343a45; --panel:#171a20; --suit:#e97c6f; --accent:#8b93ff; }
+
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family:var(--sans); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  .page { max-width:38rem; margin:0 auto; padding:clamp(2.2rem,6vw,4rem) 1.25rem 5rem; }
+
+  header { margin-bottom:2.2rem; }
+  .eyebrow { display:inline-block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 .7rem; }
+  a.eyebrow { text-decoration:none; }
+  a.eyebrow:hover { color:var(--accent); }
+  h1 { font-size:clamp(1.7rem,5vw,2.15rem); font-weight:650; letter-spacing:-.02em; margin:0 0 .7rem; }
+  .principle { color:var(--muted); font-size:1rem; margin:0; max-width:32rem; }
+  .principle b { color:var(--fg); font-weight:600; }
+
+  .rulehead { font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:1.9rem 0 .7rem; }
+  ol.basics { list-style:none; counter-reset:b; margin:0; padding:0; display:flex; flex-direction:column; gap:.6rem; }
+  ol.basics li { counter-increment:b; position:relative; padding-left:1.7rem; font-size:.95rem; color:var(--muted); }
+  ol.basics li::before { content:counter(b); position:absolute; left:0; top:.02em; color:var(--accent); font-weight:700; font-size:.85rem; font-variant-numeric:tabular-nums; }
+  ol.basics b { color:var(--fg); font-weight:600; }
+
+  .callout { margin:1.5rem 0 0; padding:.85rem 1rem; border:1px solid var(--line); border-radius:8px; background:var(--panel); font-size:.9rem; color:var(--fg); }
+  .callout b { color:var(--accent); font-weight:650; }
+  .callout .lbl { color:var(--muted); }
+
+  .bar { display:flex; justify-content:flex-end; gap:1.4rem; margin:1.8rem 0 .2rem; }
+  .bar button { font:inherit; font-size:.78rem; color:var(--muted); background:none; border:0; padding:0; cursor:pointer; }
+  .bar button:hover { color:var(--fg); }
+
+  section { margin-top:2.4rem; }
+  h2 { font-size:1.02rem; font-weight:650; letter-spacing:-.01em; margin:0 0 .1rem; }
+  h2 .num { color:var(--accent); font-weight:600; margin-right:.45em; }
+  .lede { color:var(--muted); font-size:.9rem; margin:.1rem 0 .7rem; }
+
+  details.rule { border-bottom:1px solid var(--line); }
+  summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:.9rem; padding:.85rem .2rem; }
+  summary::-webkit-details-marker { display:none; }
+  summary:hover { color:var(--fg); }
+  .s { flex:1 1 auto; font-size:.98rem; }
+  .v { flex:0 0 auto; font-size:.68rem; letter-spacing:.07em; text-transform:uppercase; font-weight:700; color:var(--accent); white-space:nowrap; }
+  .chev { flex:0 0 auto; width:.5rem; height:.5rem; border-right:1.6px solid var(--muted); border-bottom:1.6px solid var(--muted); transform:rotate(-45deg); transition:transform .18s ease; margin-right:.2rem; }
+  details[open] .chev { transform:rotate(45deg); border-color:var(--accent); }
+
+  .body { padding:.5rem .2rem 1.2rem 0; }
+  .case + .case { margin-top:.85rem; }
+  .deal { display:flex; flex-direction:column; gap:.32rem; }
+  .hand { display:flex; align-items:center; gap:.6rem; }
+  .hand .pos { flex:0 0 auto; min-width:4.6em; font-size:.62rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:700; }
+  .hand .st { flex:0 0 auto; width:1em; text-align:center; font-size:1rem; line-height:1; }
+  .hand .st.r { color:var(--suit); }
+  .row { display:inline-flex; gap:.28rem; flex-wrap:wrap; }
+  .k { min-width:1.7em; height:1.9em; padding:0 .32em; display:inline-flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:.82rem; font-weight:600; border:1px solid var(--edge); border-radius:4px; background:var(--panel); color:var(--fg); font-variant-numeric:tabular-nums; }
+  .k.play { border:1.5px solid var(--accent); color:var(--accent); background:color-mix(in srgb, var(--accent) 10%, transparent); }
+  .cap { font-size:.9rem; color:var(--fg); margin-top:.5rem; }
+  .cap .lo { color:var(--muted); }
+  .cap b { color:var(--accent); font-weight:650; }
+  .why { font-size:.86rem; color:var(--muted); margin-top:.45rem; }
+  .note { font-size:.94rem; color:var(--fg); }
+  .note b { color:var(--fg); font-weight:650; }
+  .legend { display:flex; gap:1.1rem; flex-wrap:wrap; font-size:.72rem; color:var(--muted); margin:.2rem 0 0; align-items:center; }
+  .legend span { display:inline-flex; align-items:center; gap:.4rem; }
+  .swatch { width:1.3em; height:1.45em; border-radius:3px; border:1.5px solid var(--accent); background:color-mix(in srgb, var(--accent) 10%, transparent); }
+
+  .coda { margin-top:2.4rem; font-size:.85rem; color:var(--muted); }
+  .coda b { color:var(--fg); font-weight:600; }
+
+  @media print { .bar{display:none;} .body{display:block!important;} body{background:#fff;color:#000;} }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header>
+    <a class="eyebrow" href="../">&lsaquo; Bridge Notes</a>
+    <h1>Signals &amp; Discarding</h1>
+    <p class="principle"><b>How you and partner talk through the cards.</b> You play <b>upside-down</b>: a <b>low</b> card means yes, a <b>high</b> card means no. Count and suit-preference fill in the rest.</p>
+
+    <p class="rulehead">The four rules</p>
+    <ol class="basics">
+      <li><b>Upside-down attitude &mdash; low likes it.</b> A low card encourages the suit; a high card says drop it.</li>
+      <li><b>Upside-down count &mdash; low-high is even.</b> Your first card low shows an even number; high shows odd.</li>
+      <li><b>Suit preference points to a suit.</b> When attitude and count don't apply, a high spot calls for the higher suit, a low spot for the lower.</li>
+      <li><b>Discard to keep what matters.</b> Your first discard is a signal; keep length with dummy and never bare an honor.</li>
+    </ol>
+
+    <div class="callout"><span class="lbl">Which signal, when:</span> partner leads &rarr; <b>attitude</b> &nbsp;&middot;&nbsp; declarer leads &rarr; <b>count</b> &nbsp;&middot;&nbsp; declarer's first suit at NT &rarr; <b>reverse Smith</b> &nbsp;&middot;&nbsp; neither applies &rarr; <b>suit preference</b>.</div>
+
+    <div class="legend"><span><span class="swatch"></span> the card you play</span></div>
+  </header>
+
+  <div class="bar">
+    <button type="button" data-all="open">Open all</button>
+    <button type="button" data-all="close">Close all</button>
+  </div>
+
+  <!-- I -->
+  <section>
+    <h2><span class="num">I</span>Attitude &mdash; on partner's lead</h2>
+    <p class="lede">Do you want this suit continued? Low says yes.</p>
+
+    <details class="rule">
+      <summary><span class="s">You like the suit</span><span class="v">Low = yes</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="case">
+          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&hearts;</span><span class="row"><span class="k">Q</span><span class="k">4</span><span class="k play">2</span></span></div></div>
+          <div class="cap"><span class="lo">partner leads the K</span> &mdash; play the <b>2</b> (low = encourage; you hold the queen).</div>
+        </div>
+        <div class="why">Upside-down: your lowest card is the loud &ldquo;keep going.&rdquo;</div>
+      </div>
+    </details>
+
+    <details class="rule">
+      <summary><span class="s">You don't like it</span><span class="v">High = no</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="case">
+          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&hearts;</span><span class="row"><span class="k play">8</span><span class="k">7</span><span class="k">3</span></span></div></div>
+          <div class="cap"><span class="lo">partner leads the K</span> &mdash; play the <b>8</b> (high = discourage; nothing here for you).</div>
+        </div>
+        <div class="why">A high spot tells partner to look elsewhere for tricks.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- II -->
+  <section>
+    <h2><span class="num">II</span>Count &mdash; on declarer's lead</h2>
+    <p class="lede">Help partner count the hand: low-high shows even, high-low shows odd.</p>
+
+    <details class="rule">
+      <summary><span class="s">Show an even number</span><span class="v">Low first</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="case">
+          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st">&clubs;</span><span class="row"><span class="k">9</span><span class="k">6</span><span class="k">4</span><span class="k play">2</span></span></div></div>
+          <div class="cap">four cards &mdash; play the <b>2</b> first, then up: low-high = <b>even</b>.</div>
+        </div>
+        <div class="case">
+          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&diams;</span><span class="row"><span class="k">7</span><span class="k play">3</span></span></div></div>
+          <div class="cap">doubleton &mdash; play the <b>3</b> then the 7: low-high = <b>even</b>.</div>
+        </div>
+        <div class="why">The reverse of standard count, where a doubleton goes high-low.</div>
+      </div>
+    </details>
+
+    <details class="rule">
+      <summary><span class="s">Show an odd number</span><span class="v">High first</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="case">
+          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st r">&hearts;</span><span class="row"><span class="k play">8</span><span class="k">5</span><span class="k">2</span></span></div></div>
+          <div class="cap">three cards &mdash; play the <b>8</b> first, then down: high-low = <b>odd</b>.</div>
+        </div>
+        <div class="why">Give count with spot cards when it can't cost you a trick.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- III -->
+  <section>
+    <h2><span class="num">III</span>Suit preference</h2>
+    <p class="lede">When you can't want or count the suit, the size of the card points to another suit.</p>
+
+    <details class="rule">
+      <summary><span class="s">Point partner to a suit</span><span class="v">High = higher suit</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="case">
+          <div class="deal"><div class="hand"><span class="pos">Ruff with</span><span class="st r">&diams;</span><span class="row"><span class="k play">9</span><span class="k">2</span></span></div></div>
+          <div class="cap">giving partner a ruff &mdash; lead the <b>9</b> (high) to ask for the <b>higher</b> side suit back.</div>
+        </div>
+        <div class="case">
+          <div class="deal"><div class="hand"><span class="pos">Ruff with</span><span class="st r">&diams;</span><span class="row"><span class="k">9</span><span class="k play">2</span></span></div></div>
+          <div class="cap">or lead the <b>2</b> (low) to ask for the <b>lower</b> side suit.</div>
+        </div>
+        <div class="why">Suit preference stays standard &mdash; it isn't upside-down. Common uses: the card you give partner to ruff, or a spot card when attitude and count are already known.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- IV -->
+  <section>
+    <h2><span class="num">IV</span>Reverse Smith echo</h2>
+    <p class="lede">At notrump, your order on declarer's first suit comments on the opening lead.</p>
+
+    <details class="rule">
+      <summary><span class="s">Did you like partner's lead?</span><span class="v">Low-high = liked it</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="case">
+          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st">&spades;</span><span class="row"><span class="k">8</span><span class="k">5</span><span class="k play">2</span></span></div></div>
+          <div class="cap"><span class="lo">declarer leads spades</span> &mdash; play the <b>2</b> first (low-high) to say &ldquo;I liked your lead, keep it up.&rdquo;</div>
+        </div>
+        <div class="case">
+          <div class="deal"><div class="hand"><span class="pos">You</span><span class="st">&spades;</span><span class="row"><span class="k play">8</span><span class="k">5</span><span class="k">2</span></span></div></div>
+          <div class="cap">or the <b>8</b> first (high-low) to say &ldquo;find a switch.&rdquo;</div>
+        </div>
+        <div class="why">Given at notrump on the first suit declarer plays, it tells partner whether to continue the opening-lead suit once they get in. <b>Reverse</b> Smith &mdash; low-high encourages &mdash; matches your upside-down carding.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- V -->
+  <section>
+    <h2><span class="num">V</span>Discarding</h2>
+    <p class="lede">Your first discard talks; after that, safety first.</p>
+
+    <details class="rule">
+      <summary><span class="s">Your first discard signals attitude</span><span class="v">Low = want it</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="case">
+          <div class="deal"><div class="hand"><span class="pos">Discard</span><span class="st">&clubs;</span><span class="row"><span class="k">9</span><span class="k">6</span><span class="k play">3</span></span></div></div>
+          <div class="cap">throw the <b>3</b> (low) to say &ldquo;<b>lead clubs</b>&rdquo;; a high club would deny it.</div>
+        </div>
+        <div class="why">Same upside-down attitude, applied to the suit you throw. Discard from a suit you can spare.</div>
+      </div>
+    </details>
+
+    <details class="rule">
+      <summary><span class="s">Keep what matters</span><span class="v">Safety first</span><span class="chev"></span></summary>
+      <div class="body">
+        <div class="note">Keep length with dummy so you're not squeezed, hold on to guards (don't bare a king or unguard a queen), and keep parity with declarer's long suit. If a signal would cost a trick or a stopper, skip it &mdash; just pitch safe cards.</div>
+      </div>
+    </details>
+  </section>
+
+  <p class="coda"><b>Trust the signal.</b> Upside-down works only if you both read it &mdash; a low card is the yes. See the <a href="../third-hand/">Third-Hand Play</a> page for signalling when you follow to partner's lead. Back to <a href="../">Bridge Notes</a>.</p>
+
+</div>
+
+<script>
+  document.querySelectorAll('.bar button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var open = b.getAttribute('data-all') === 'open';
+      document.querySelectorAll('details.rule').forEach(function (d) { d.open = open; });
+    });
+  });
+</script>
+</body>
+</html>
