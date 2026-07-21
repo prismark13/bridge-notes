@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz: 13 verified positions, pick your play.">
+<meta name="description" content="Second-hand play quiz: 12 positions from published problems (Cohen, Pavlicek, Adventures in Bridge).">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
@@ -93,32 +93,31 @@
 <div class="page">
   <p class="eyebrow">Bridge Notes &middot; Second-Hand</p>
   <h1>Quiz</h1>
-  <p class="intro">Thirteen positions, drawn from the verified layouts on the site. Pick your play &mdash; the nine counts as an honor.</p>
+  <p class="intro">A dozen positions from published problems &mdash; Larry Cohen, Richard Pavlicek, and Adventures in Bridge. Pick your play; the nine counts as an honor.</p>
 
   <div class="bar"><span>Question <b id="qn">1</b> of <b id="qt">13</b></span><span>Score <b id="sc">0</b></span></div>
   <div class="track"><i id="prog"></i></div>
 
   <div id="stage"></div>
 
-  <p class="foot">Answers follow standard second-hand play. Review the rules on <a href="../second-hand/">Second-Hand Play</a>.</p>
+  <p class="foot">Positions from <a href="https://www.larryco.com/bridge-articles/defense-2nd-hand-play">Larry Cohen</a>, <a href="http://www.rpbridge.net/4l00.htm">Richard Pavlicek</a>, and <a href="https://www.advinbridge.com/this-week-in-bridge/498">Adventures in Bridge</a>. Review the rules on <a href="../second-hand/">Second-Hand Play</a>.</p>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   var Q = [
-    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['K','10','4']}, led:'A low card (the 6) is led', ans:'Play Low', play:'the 4', why:'Nothing forces you up. Keep the king poised over dummy and make declarer guess.' },
-    { d:{s:'♥',c:['K','8','6']}, y:{s:'♥',c:['A','10','7']}, led:'Declarer leads a low card (the 2)', ans:'Play Low', play:'low (the 7)', why:'An ace is for capturing an honor, not a spot card. Ducking keeps it over dummy’s king.' },
-    { d:null, y:{s:'♠',c:['Q','J','10','7']}, led:'A low card is led toward dummy', ans:'Split', play:'the 10', why:'Three touching honors: insert the lowest of the sequence to block a cheap finesse of your middle cards.' },
-    { d:null, y:{s:'♠',c:['Q','J','8','3']}, led:'A low card is led', ans:'Play Low', play:'the 3', why:'Only two honors — splitting wastes one and helps declarer set the suit up.' },
-    { d:{s:'♠',c:['J','10','8','6']}, y:{s:'♠',c:['A','Q','2']}, led:'The jack is led from dummy', ans:'Cover', play:'the ace', why:'With two honors above the card led, take the jack — a trick that would otherwise score.' },
-    { d:{s:'♠',c:['10','5','4']}, y:{s:'♠',c:['K','7','2']}, led:'The 10 is led from dummy', ans:'Cover', play:'the king', why:'The ten is unsupported, so covering promotes your side’s smaller cards.' },
-    { d:{s:'♠',c:['J','10','8']}, y:{s:'♠',c:['K','2']}, led:'The jack is led from dummy', ans:'Play Low', play:'low (the 2)', why:'The jack is supported by the ten — covering just makes that ten good. Play low.' },
-    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, led:'The queen is led from dummy', ans:'Play Low', play:'low', why:'Touching honors — don’t cover the first. Duck the queen; cover the jack next time.' },
-    { d:{s:'♠',c:['Q','J','10','9']}, y:{s:'♠',c:['K','8','4']}, led:'The queen is led from dummy', ans:'Play Low', play:'low (the 4)', why:'A solid run — covering builds J-10-9 into three winners for declarer. Duck; your king wins the third round.' },
-    { d:{s:'♦',c:['A','K','10','9']}, y:{s:'♦',c:['J','4']}, led:'The 10 is led from dummy', ans:'Play Low', play:'the 4', why:'With A-K-10-9 over you, the jack promotes nothing — covering just gives it away.' },
-    { d:{s:'♠',c:['A','J','10','6']}, y:{s:'♠',c:['K','5','2']}, led:'Declarer leads the 9', ans:'Cover', play:'the king', why:'Dummy’s ten backs up the 9, so the cover promotes — and stops the 9 running for a free finesse.' },
-    { d:{s:'♠',c:['A','8','6','4']}, y:{s:'♠',c:['K','7','2']}, led:'Declarer leads the 10', ans:'Play Low', play:'low (the 2)', why:'No touching card in dummy means declarer holds the jack — covering would promote only his hand.' },
-    { d:null, y:{s:'♠',c:['K','10','9','7']}, led:'A low card is led toward dummy', ans:'Split', play:'the 9', why:'Three honors (the nine counts). Insert the lowest of the touching 10-9.' }
+    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['K','10','4']}, led:'The 6 is led from dummy', ans:'Play Low', play:'the 4', why:'Second hand low — keep the king poised over dummy and make declarer guess. (Larry Cohen)' },
+    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['K','10','4']}, led:'The jack is led from dummy', ans:'Cover', play:'the king', why:'The jack is unsupported — no touching honor beside it — so cover to promote your ten and partner’s cards. (Larry Cohen)' },
+    { d:{s:'♠',c:['J','7','6']}, y:{s:'♠',c:['A','9','2']}, led:'Declarer leads a low card', ans:'Play Low', play:'low (the 2)', why:'Nothing forces the ace — follow low and save it to capture an honor. (Larry Cohen)' },
+    { d:{s:'♥',c:['K','8','6']}, y:{s:'♥',c:['J','9','5','4']}, led:'Declarer leads a low card', ans:'Play Low', play:'low', why:'No honor to contribute — just follow low. (Larry Cohen)' },
+    { d:{s:'♦',c:['A','K','10','9']}, y:{s:'♦',c:['Q','8','7','6','5']}, led:'Declarer leads the jack', ans:'Play Low', play:'low', why:'Dummy’s A-K-10-9 means covering promotes nothing — don’t waste the queen. (Larry Cohen)' },
+    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, led:'The queen is led from dummy', ans:'Play Low', play:'low (duck)', why:'Touching honors — don’t cover the first. Duck the queen. (Larry Cohen)' },
+    { d:{s:'♣',c:['Q','J','9']}, y:{s:'♣',c:['K','6','5']}, led:'The jack is led next', ans:'Cover', play:'the king', why:'Now cover — the king kills the finesse against partner’s ten. (Larry Cohen)' },
+    { d:{s:'♦',c:['Q','J','4']}, y:{s:'♦',c:['K','8','7','5']}, led:'The queen is led from dummy', ans:'Play Low', play:'low', why:'The queen is supported by the jack, so covering only sets the jack up. Play low. (Pavlicek)' },
+    { d:{s:'♠',c:['Q','5','3']}, y:{s:'♠',c:['K','8','2']}, led:'The queen is led from dummy', ans:'Cover', play:'the king', why:'An unsupported queen — cover to promote the jack or ten in partner’s hand. (Adventures in Bridge)' },
+    { d:{s:'♠',c:['Q','J','5']}, y:{s:'♠',c:['K','7','3']}, led:'The queen is led from dummy', ans:'Play Low', play:'low', why:'Supported by the jack — don’t cover the first honor; wait. (Adventures in Bridge)' },
+    { d:null, y:{s:'♠',c:['Q','J','10','7']}, led:'A low card is led toward dummy', ans:'Split', play:'the 10', why:'Three touching honors: insert the lowest of the sequence to block a cheap finesse.' },
+    { d:null, y:{s:'♠',c:['K','10','9','7']}, led:'A low card is led toward dummy', ans:'Split', play:'the 9', why:'Three honors (the nine counts) — split with the lowest of the touching 10-9.' }
   ];
   var OPTS = ['Play High', 'Cover', 'Play Low', 'Split'];
   var i = 0, score = 0, answered = false;
