@@ -67,6 +67,8 @@
   .tile .s { font-weight:660; font-size:1.03rem; line-height:1.28; letter-spacing:-.005em; }
   .tile .v { flex:0 0 auto; font-size:.63rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:.3em .72em; white-space:nowrap; }
   .tile .v.hold { color:var(--hold); background:var(--hold-soft); }
+  .tile.default { position:relative; border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), var(--shadow); }
+  .tile.default::before { content:'The default'; position:absolute; top:-.6rem; left:1.05rem; font-size:.56rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--accent); background:var(--tile); padding:0 .4em; }
 
   /* four rules tile */
   .rules-tile .rh { font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:.85rem; }
@@ -133,7 +135,7 @@
     <!-- I -->
     <div class="seclabel"><span class="num">I</span>A low card is led</div>
 
-    <div class="tile">
+    <div class="tile default">
       <div class="tile-top"><span class="s">No reason to rise</span><span class="v hold">Play low</span></div>
       <div class="cases"><div class="case"><div class="deal">
         <div class="hand"><span class="pos">Dummy</span><span class="st">&spades;</span><span class="rw"><span class="k">J</span><span class="k">7</span><span class="k led">6</span></span></div>
