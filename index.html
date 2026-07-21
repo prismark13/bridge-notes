@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play in bridge defense: a clean, drillable list of rules with card layouts.">
+<meta name="description" content="Second-hand play in bridge defense: the four core rules plus a drillable list with card layouts.">
 <title>Second-Hand Play</title>
 <style>
   :root {
@@ -28,6 +28,12 @@
   h1 { font-size:clamp(1.7rem,5vw,2.15rem); font-weight:650; letter-spacing:-.02em; margin:0 0 .7rem; }
   .principle { color:var(--muted); font-size:1rem; margin:0; max-width:32rem; }
   .principle b { color:var(--fg); font-weight:600; }
+
+  .rulehead { font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:1.9rem 0 .7rem; }
+  ol.basics { list-style:none; counter-reset:b; margin:0; padding:0; display:flex; flex-direction:column; gap:.6rem; }
+  ol.basics li { counter-increment:b; position:relative; padding-left:1.7rem; font-size:.95rem; color:var(--muted); }
+  ol.basics li::before { content:counter(b); position:absolute; left:0; top:.02em; color:var(--accent); font-weight:700; font-size:.85rem; font-variant-numeric:tabular-nums; }
+  ol.basics b { color:var(--fg); font-weight:600; }
 
   .bar { display:flex; justify-content:flex-end; gap:1.4rem; margin:1.8rem 0 .2rem; }
   .bar button { font:inherit; font-size:.78rem; color:var(--muted); background:none; border:0; padding:0; cursor:pointer; letter-spacing:.01em; }
@@ -70,6 +76,14 @@
     <p class="eyebrow">Bridge &middot; Defensive Card Play</p>
     <h1>Second-Hand Play</h1>
     <p class="principle"><b>Second hand low, third hand high.</b> You play before your partner, who plays last &mdash; so spend a high card only when playing low would cost a specific trick. The nine counts as an honor throughout.</p>
+
+    <p class="rulehead">The four rules</p>
+    <ol class="basics">
+      <li><b>Second hand low.</b> Play your smallest on a low card led; your partner plays last.</li>
+      <li><b>Cover to promote.</b> Cover an honor only when it turns one of your small cards into a winner.</li>
+      <li><b>Cover the last of touching honors.</b> Duck the first, cover the second.</li>
+      <li><b>Split three, never two.</b> From three touching honors play the top; from only two, play low.</li>
+    </ol>
   </header>
 
   <div class="bar">
