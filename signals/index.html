@@ -4,22 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Defensive signals in bridge: navigable bento with filter and sticky nav.">
+<meta name="description" content="Defensive signals in bridge (card-table green): nav, filter, print.">
 <title>Signals &amp; Discarding</title>
 <style>
   :root {
-    --surface:#f1f2f6; --tile:#ffffff; --fg:#16181d; --muted:#5f6672; --line:#e6e8ec; --edge:#ccd2da; --panel:#f4f5f8;
-    --accent:#4a57d2; --accent-soft:#eaecfb; --suit:#b83a2c; --soft:#464c56; --hold:#1d7a67; --hold-soft:#e0f0ec; --led-bg:#e7e9ef; --led-bd:#aab2bf;
+    --surface:#f2f0e9; --tile:#ffffff; --fg:#16181d; --muted:#5f6672; --line:#e7e4da; --edge:#d3d2c6; --panel:#f3f2ea;
+    --accent:#1f6b49; --accent-soft:#e0efe6; --suit:#b83a2c; --soft:#464c56; --hold:#4e6a78; --hold-soft:#e6eef2; --led-bg:#e7e9ef; --led-bd:#aab2bf;
     --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05);
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;
     --mono:'SFMono-Regular',ui-monospace,Consolas,'Liberation Mono',Menlo,monospace;
   }
   @media (prefers-color-scheme:dark){
-    :root{ --surface:#0b0c0f; --tile:#15171c; --fg:#f2f3f5; --muted:#9ba2ad; --line:#23262e; --edge:#3b414d; --panel:#1c1f26;
-      --accent:#8b93ff; --accent-soft:#21243a; --suit:#ea8072; --soft:#c4cad3; --hold:#5fc9ac; --hold-soft:#14271f; --led-bg:#2b303a; --led-bd:#535c6b; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
+    :root{ --surface:#0e100d; --tile:#161915; --fg:#f2f3f5; --muted:#9ba2ad; --line:#242a24; --edge:#3a4038; --panel:#1a201a;
+      --accent:#5fc08c; --accent-soft:#16281e; --suit:#ea8072; --soft:#c4cad3; --hold:#86a6b6; --hold-soft:#17242a; --led-bg:#2b303a; --led-bd:#535c6b; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
   }
-  :root[data-theme="light"]{ --surface:#f1f2f6; --tile:#fff; --fg:#16181d; --muted:#5f6672; --line:#e6e8ec; --edge:#ccd2da; --panel:#f4f5f8; --accent:#4a57d2; --accent-soft:#eaecfb; --suit:#b83a2c; --soft:#464c56; --hold:#1d7a67; --hold-soft:#e0f0ec; --led-bg:#e7e9ef; --led-bd:#aab2bf; --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05); }
-  :root[data-theme="dark"]{ --surface:#0b0c0f; --tile:#15171c; --fg:#f2f3f5; --muted:#9ba2ad; --line:#23262e; --edge:#3b414d; --panel:#1c1f26; --accent:#8b93ff; --accent-soft:#21243a; --suit:#ea8072; --soft:#c4cad3; --hold:#5fc9ac; --hold-soft:#14271f; --led-bg:#2b303a; --led-bd:#535c6b; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
+  :root[data-theme="light"]{ --surface:#f2f0e9; --tile:#fff; --fg:#16181d; --muted:#5f6672; --line:#e7e4da; --edge:#d3d2c6; --panel:#f3f2ea; --accent:#1f6b49; --accent-soft:#e0efe6; --suit:#b83a2c; --soft:#464c56; --hold:#4e6a78; --hold-soft:#e6eef2; --led-bg:#e7e9ef; --led-bd:#aab2bf; --shadow:0 1px 2px rgba(18,20,28,.05), 0 6px 18px rgba(18,20,28,.05); }
+  :root[data-theme="dark"]{ --surface:#0e100d; --tile:#161915; --fg:#f2f3f5; --muted:#9ba2ad; --line:#242a24; --edge:#3a4038; --panel:#1a201a; --accent:#5fc08c; --accent-soft:#16281e; --suit:#ea8072; --soft:#c4cad3; --hold:#86a6b6; --hold-soft:#17242a; --led-bg:#2b303a; --led-bd:#535c6b; --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.35); }
 
   * { box-sizing:border-box; }
   html { -webkit-text-size-adjust:100%; }
