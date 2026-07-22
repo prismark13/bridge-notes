@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz: full deals played card by card, including hold-up and crocodile coup.">
+<meta name="description" content="Second-hand play quiz: full deals played card by card — endplay, crocodile coup, hold-up, entry-killing.">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
@@ -280,6 +280,23 @@ document.addEventListener('DOMContentLoaded', function () {
           cards:{ s:{s:'♣',r:'2'}, w:{s:'♣',r:'6'}, n:{s:'♣',r:'9'}, e:{s:'♣',r:'4'} }, win:'n' },
         { note:'Dummy leads a club honour; you hold up the ♣A a second time.', cards:{ n:{s:'♣',r:'K'}, e:{s:'♣',r:'8'}, s:{s:'♣',r:'3'}, w:{s:'♣',r:'7'} }, win:'n' },
         { note:'On the third club you take the ♣A — and declarer is out of clubs. Dummy’s ♣J-10 are high but stranded: the only entry, the ♠Q, is dead behind partner’s ♠A. 3NT fails.', cards:{ n:{s:'♣',r:'Q'}, e:{s:'♥',r:'2'}, s:{s:'♣',r:'5'}, w:{s:'♣',r:'A'} }, win:'w' }
+      ] },
+    { full:{ you:'w', contract:'6♠ by South', lead:'♥K by West', ledSuit:'♦',
+        n:{ s:['7','5'], h:['8','6','4','2'], d:['K'], c:['A','K','Q','J','9','8'] },
+        w:{ s:['9','8'], h:['K','Q','J'], d:['A','Q','8','5'], c:['10','7','6','5'] },
+        e:{ s:['4','3','2'], h:['10','9','7'], d:['10','7','6','3'], c:['4','3','2'] },
+        s:{ s:['A','K','Q','J','10','6'], h:['A','5','3'], d:['J','9','4','2'], c:[] } },
+      tag:'Full deal',
+      note:'You are West, defending 6♠. Dummy’s six clubs are solid — but declarer is void in clubs, and dummy’s ONLY entry is the singleton ♦K. Watch the diamonds.',
+      why:'Rise with the ♦A. Dummy’s bare ♦K is the sole path to those clubs; crash it under your ace and the six-card suit is dead — declarer can never reach it and the slam collapses. Duck, and the ♦K wins, dummy cashes six clubs, and 6♠ rolls home.',
+      moves:[
+        { note:'You lead the ♥K; declarer wins the ♥A.', cards:{ w:{s:'♥',r:'K'}, n:{s:'♥',r:'2'}, e:{s:'♥',r:'7'}, s:{s:'♥',r:'A'} }, win:'s' },
+        { note:'Declarer cashes the ♠A.', cards:{ s:{s:'♠',r:'A'}, w:{s:'♠',r:'9'}, n:{s:'♠',r:'5'}, e:{s:'♠',r:'2'} }, win:'s' },
+        { note:'The ♠K — you follow with your last trump.', cards:{ s:{s:'♠',r:'K'}, w:{s:'♠',r:'8'}, n:{s:'♠',r:'7'}, e:{s:'♠',r:'3'} }, win:'s' },
+        { note:'The ♠Q draws the last trump; out of spades, you pitch a club.', cards:{ s:{s:'♠',r:'Q'}, w:{s:'♣',r:'5'}, n:{s:'♥',r:'4'}, e:{s:'♠',r:'4'} }, win:'s' },
+        { decision:true, lead:'s', suit:'♦', lc:'2', ans:'Play High', play:'the ♦A',
+          note:'You rise with the ♦A and dummy’s singleton ♦K crashes under it. The king gone and declarer void in clubs, dummy’s A-K-Q-J-9-8 can never be reached — the slam dies.',
+          cards:{ s:{s:'♦',r:'2'}, w:{s:'♦',r:'A'}, n:{s:'♦',r:'K'}, e:{s:'♦',r:'3'} }, win:'w' }
       ] }
   ];
   // Difficulty: hard = advanced / continuation / full-deal; tiers 1–2 easy; the rest medium.
