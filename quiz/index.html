@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz: pick difficulty and number of hands; classic table view, played through card by card.">
+<meta name="description" content="Second-hand play quiz: pick difficulty and number of hands; full deal played out trick by trick.">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
@@ -223,20 +223,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ── Tier 8 · Full deal (the hardest) ──
     { full:{ contract:'6♠ by South', lead:'♣Q by West', ledSuit:'♥',
-        n:{ s:'Q 9 7', h:'6 5 4 2', d:'K Q 3', c:'K 8 3' },
-        w:{ s:'8 5 4', h:'K 10 9', d:'10 6 5 2', c:'Q 9 7' },
-        e:{ s:'3 2', h:'J 7 3', d:'9 8 7 4', c:'J 10 6 4' },
-        s:{ s:'A K J 10 6', h:'A Q 8', d:'A J', c:'A 5 2' } },
+        n:{ s:['Q','9','7'], h:['6','5','4','2'], d:['K','Q','3'], c:['K','8','3'] },
+        w:{ s:['8','5','4'], h:['K','10','9'], d:['10','6','5','2'], c:['Q','9','7'] },
+        e:{ s:['3','2'], h:['J','7','3'], d:['9','8','7','4'], c:['J','10','6','4'] },
+        s:{ s:['A','K','J','10','6'], h:['A','Q','8'], d:['A','J'], c:['A','5','2'] } },
       tag:'Full deal',
       note:'You are East, defending 6♠ — you can see only dummy and your own hand. Declarer has drawn trumps and now leads a low heart from dummy toward her hand. You are second to play.',
-      line:[
-        'North leads ♥2 · you rise with the ♥J · South covers with the ♥Q · West wins the ♥K.',
-        'With your ♥J gone, declarer can no longer throw West in — West exits safely.',
-        'Later South cashes the ♥A and West’s ♥10 is high: the setting trick. 6♠ is one off.',
-        'Had you ducked: South slips in the ♥8, West wins cheaply and is endplayed — forced to give a ruff-and-discard or lead into declarer’s ♦A-J.'
-      ],
       by:'Dummy', lc:'2', ans:'Play High', play:'the ♥J',
-      why:'Rise with the ♥J — second hand high to rescue partner from the throw-in. Your jack drives out the queen, so the defence is assured two heart tricks. (La Jolla Bridge)' }
+      why:'Rise with the ♥J — second hand high to rescue partner from the throw-in. Duck and South slips in the ♥8, West wins cheaply and is endplayed. (La Jolla Bridge)',
+      tricks:[
+        { n:'2', e:'J', s:'Q', w:'K', win:'W', note:'North leads ♥2 · you rise ♥J · South covers ♥Q · West wins ♥K — the endplay is broken.' },
+        { n:'4', e:'7', s:'A', w:'9', win:'S', note:'Declarer regains the lead and cashes the ♥A; West follows the 9.' },
+        { n:'5', e:'3', s:'8', w:'10', win:'W', note:'South leads the ♥8, but West’s ♥10 is high — the setting trick. 6♠ is one off.' }
+      ] }
   ];
   // Difficulty: hard = advanced / continuation / full-deal; tiers 1–2 easy; the rest medium.
   Q.forEach(function (q, k) {
@@ -265,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var PLAYS = [];
   var i = 0, score = 0, answered = false;
+  var foPlayed = -1, foDecisionOK = false;   // full-deal play-out state
   var stage = document.getElementById('stage');
 
   function isRed (s) { return s === '♥' || s === '♦'; }
@@ -330,11 +330,75 @@ document.addEventListener('DOMContentLoaded', function () {
     return '<div class="table-wrap"><div class="table">' + N + W + led + E + S + '</div></div>';
   }
 
+  // A full four-suit hand, striking any hearts already played in the walk-through.
+  function fullLinesX (h, struckH) {
+    return suitCards('♠', h.s, []) + suitCards('♥', h.h, struckH || []) +
+      suitCards('♦', h.d, []) + suitCards('♣', h.c, []);
+  }
+
+  function chooseFull (e) {
+    var q = PLAYS[i].q;
+    var chosen = e.currentTarget.getAttribute('data-o');
+    foDecisionOK = accepts(chosen, q.ans);
+    if (foDecisionOK) score++;
+    document.getElementById('sc').textContent = score;
+    foPlayed = 1;              // your play completes trick 1
+    renderFull(PLAYS[i]);
+  }
+
+  // Full-deal problem: decide, then reveal all four hands and play it out trick by trick.
+  function renderFull (p) {
+    var q = p.q, f = q.full, T = q.tricks, answered = foPlayed >= 1;
+    var sH = { n:[], e:[], s:[], w:[] };
+    for (var t = 0; t < foPlayed; t++) {
+      sH.n.push(T[t].n); sH.e.push(T[t].e); sH.s.push(T[t].s); sH.w.push(T[t].w);
+    }
+    var N = seatBox('s-n', 'North &middot; Dummy', fullLinesX(f.n, sH.n));
+    var E = seatBox('s-e', 'East &middot; You', fullLinesX(f.e, sH.e), ' me');
+    var W = answered ? seatBox('s-w', 'West &middot; Partner', fullLinesX(f.w, sH.w)) : conceal('s-w', 'West &middot; Partner', 4);
+    var S = answered ? seatBox('s-s', 'South &middot; Decl.', fullLinesX(f.s, sH.s)) : conceal('s-s', 'South &middot; Decl.', 4);
+    var center = answered
+      ? '<div class="ctr"><div class="ctrlab">Trick ' + foPlayed + ' of ' + T.length + '</div></div>'
+      : '<div class="ctr"><div class="ctrlab">Dummy leads</div><span class="lc"><span class="st r">♥</span><span class="k led">2</span></span></div>';
+    var html = '<span class="tag">' + q.tag + '</span>' +
+      '<div class="table-wrap"><div class="table">' + N + W + center + E + S + '</div></div>' +
+      '<div class="note"><b>Contract:</b> ' + f.contract + ' &nbsp;&middot;&nbsp; <b>Opening lead:</b> ' + f.lead + '</div>';
+
+    if (!answered) {
+      html += '<div class="note">' + redize(q.note) + '</div>' +
+        '<div class="prompt">Your play?</div>' +
+        '<div class="answers">' + OPTS.map(function (o) { return '<button class="ans" type="button" data-o="' + o + '">' + o + '</button>'; }).join('') + '</div>';
+    } else {
+      var lines = '';
+      for (var u = 0; u < foPlayed; u++) lines += '<li>' + redize(T[u].note) + '</li>';
+      html += '<div class="feedback show">' +
+        (foDecisionOK ? '<span class="verdict ok">✓ Correct.</span> Play ' + q.play + '.'
+                      : '<span class="verdict no">✗ Not quite.</span> The play is <b>' + q.ans + '</b> — ' + q.play + '.') +
+        '<div class="why">' + redize(q.why) + '</div>' +
+        '<div class="walk"><div class="wlab">Playing it out</div><ol>' + lines + '</ol></div></div>';
+      var more = foPlayed < T.length;
+      html += '<div class="actions">' + (more
+        ? '<button class="next show" id="playnext" type="button">Play next trick &rarr;</button>'
+        : '<button class="next show" id="next" type="button">' + (i === PLAYS.length - 1 ? 'See score' : 'Next') + ' &rarr;</button>') + '</div>';
+    }
+    stage.innerHTML = '<div class="card">' + html + '</div>';
+
+    if (!answered) {
+      stage.querySelectorAll('.ans').forEach(function (b) { b.addEventListener('click', chooseFull); });
+    } else if (foPlayed < T.length) {
+      document.getElementById('playnext').addEventListener('click', function () { foPlayed++; renderFull(p); });
+    } else {
+      document.getElementById('next').addEventListener('click', nextQ);
+    }
+  }
+
   function render () {
     var p = PLAYS[i], q = p.q, s = p.step;
     document.getElementById('qn').textContent = i + 1;
     document.getElementById('sc').textContent = score;
     document.getElementById('prog').style.width = (i / PLAYS.length * 100) + '%';
+
+    if (q.full) { foPlayed = -1; foDecisionOK = false; renderFull(p); return; }
 
     var head = '';
     if (q.tag) head += '<span class="tag">' + q.tag + '</span>';
