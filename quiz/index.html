@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Second-hand play quiz: pick difficulty and hands; full deals played card by card, including the crocodile coup.">
+<meta name="description" content="Second-hand play quiz: full deals played card by card, including hold-up and crocodile coup.">
 <title>Second-Hand Quiz</title>
 <style>
   :root {
@@ -264,6 +264,22 @@ document.addEventListener('DOMContentLoaded', function () {
           note:'You rise with the ♦A, swallowing partner’s singleton ♦K.',
           cards:{ s:{s:'♦',r:'7'}, w:{s:'♦',r:'A'}, n:{s:'♦',r:'4'}, e:{s:'♦',r:'K'} }, win:'w' },
         { note:'You cash the ♦Q — now high — for the defence’s second trick. Declarer is held to three: the contract fails.', cards:{ w:{s:'♦',r:'Q'}, n:{s:'♦',r:'9'}, e:{s:'♥',r:'3'}, s:{s:'♦',r:'10'} }, win:'w' }
+      ] },
+    { full:{ you:'w', contract:'3NT by South', lead:'♦Q by West', ledSuit:'♣',
+        n:{ s:['Q','8','2'], h:['J','4','3'], d:['9','3'], c:['K','Q','J','10','9'] },
+        w:{ s:['10','9','4'], h:['Q','10','6'], d:['Q','J','10','5'], c:['A','7','6'] },
+        e:{ s:['A','J','5'], h:['8','7','5','2'], d:['8','7','6','2'], c:['8','4'] },
+        s:{ s:['K','7','6','3'], h:['A','K','9'], d:['A','K','4'], c:['5','3','2'] } },
+      tag:'Full deal',
+      note:'You are West, defending 3NT. You led the ♦Q and declarer won. Now the clubs decide it — dummy’s K-Q-J-10-9 is the threat, and dummy has no certain outside entry.',
+      why:'Hold up the ♣A. Grab it early and declarer, back on lead, runs dummy’s clubs for the contract. Duck twice and win the third — now declarer has no club left to reach dummy, and the ♠Q entry is dead behind partner’s ♠A. Dummy’s long clubs wither and 3NT fails.',
+      moves:[
+        { note:'You lead the ♦Q; declarer wins the ♦A.', cards:{ w:{s:'♦',r:'Q'}, n:{s:'♦',r:'3'}, e:{s:'♦',r:'2'}, s:{s:'♦',r:'A'} }, win:'s' },
+        { decision:true, lead:'s', suit:'♣', lc:'2', ans:'Play Low', play:'low — hold up the ace',
+          note:'Declarer leads a low club toward dummy; you hold up, letting dummy win cheaply.',
+          cards:{ s:{s:'♣',r:'2'}, w:{s:'♣',r:'6'}, n:{s:'♣',r:'9'}, e:{s:'♣',r:'4'} }, win:'n' },
+        { note:'Dummy leads a club honour; you hold up the ♣A a second time.', cards:{ n:{s:'♣',r:'K'}, e:{s:'♣',r:'8'}, s:{s:'♣',r:'3'}, w:{s:'♣',r:'7'} }, win:'n' },
+        { note:'On the third club you take the ♣A — and declarer is out of clubs. Dummy’s ♣J-10 are high but stranded: the only entry, the ♠Q, is dead behind partner’s ♠A. 3NT fails.', cards:{ n:{s:'♣',r:'Q'}, e:{s:'♥',r:'2'}, s:{s:'♣',r:'5'}, w:{s:'♣',r:'A'} }, win:'w' }
       ] }
   ];
   // Difficulty: hard = advanced / continuation / full-deal; tiers 1–2 easy; the rest medium.
